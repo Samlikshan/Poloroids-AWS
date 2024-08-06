@@ -12,7 +12,7 @@ connectDB()
 
 let indexRouter = require('./routes/index');
 let authRouter = require('./routes/authRoute');
-
+let adminRoute = require('./routes/adminRoute')
 
 let app = express();
 
@@ -37,7 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
-
+app.use('/admin', adminRoute);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
