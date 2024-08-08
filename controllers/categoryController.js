@@ -4,32 +4,36 @@ const Category = require('../models/categoryModel')
 
 const categories = async (req,res,next) =>{
     let categories = await Category.find({})
-    res.send(categories)
+    res.render('adminCategory',{categories})
 }
 
 const getEditCategories = async (req,res,next) => {
     let id = req.params.id
     let category = await Category.findById({_id:id})
-    console.log(category)
-    res.send(category)
+    console.log(category);
+    
+    res.render('editCategory',category)
 }
 
 const postEditCategories = async (req,res,next) => {
+    let {categoryName,subCategories} = req.body
+    if(subCategories == undefined){
+        subCategories = []
+    }
     let id = req.params.id
-    console.log(req.body,id)
-    await Category.updateOne({_id:id},{$set:{subCategories:req.body.subCategories,updatedAt:Date()}})
-    res.send("category changed")
+    await Category.updateOne({_id:id},{$set:{categoryName:categoryName,subCategories:subCategories,updatedAt:Date()}})
+    res.redirect('/admin/categories')
 }
 
 const getAddCategory = async (req,res,next) =>{
-    res.send("fields for adding category")
+    res.render('addCategory')
 } 
 
 const postAddCategory = async (req,res,next) => {
     let category = req.body
-    console.log(category.subCategories)
-    await Category.create({categoryName:category.name,subCategories:category.subCategories})
-    res.send("Category added")
+    
+    await Category.create({categoryName:category.categoryName,subCategories:category.subCategories})
+    res.redirect('/admin/categories')
 }
 
 module.exports = {

@@ -1,0 +1,47 @@
+<link rel="stylesheet" href="/stylesheets/editCategory.css">
+<script src="/javascripts/editCategory.js"></script>
+<div class="container">
+    <div class="sidebar">
+        <ul class="menu">
+            <li><a href="/admin/">Dashboard</a></li>
+            <li><a href="#products">Products</a></li>
+            <li><a href="/admin/users">Users</a></li>
+            <li><a href="#orders">Orders</a></li>
+            <li><a href="/admin/categories" class="active">Category</a></li>
+            <li><a href="#offers">Offers</a></li>
+            <li><a href="#coupons">Coupons</a></li>
+            <li><a href="#banner">Banner</a></li>
+        </ul>
+        <ul class="bottom">
+            <li><a href="#reset">Reset Password</a></li>
+            <li><a href="#logout">Logout</a></li>
+        </ul>
+    </div>
+
+   <div class="main-content">
+    <h1>Categories</h1>
+    <div class="category-container">
+        <form id="categoryForm" class="add-category-form" action="/admin/edit-category/{{id}}" method="post">
+            
+            <input type="text" id="categoryName" name="categoryName" value="{{this.categoryName}}">
+            <!-- Preloaded subcategories -->
+            <div id="preloadedKeyFields">
+                {{#each subCategories}}
+                <div class="key-field">
+                    <input type="text" name="subCategories" value="{{this}}">
+                    <button type="button" class="delete-btn" onclick="removeField(this)">&#10006;</button>
+                </div>
+                {{/each}}
+            </div>
+
+            <!-- Container for dynamically added subcategories -->
+            <div id="dynamicKeyFields"></div>
+
+            <button type="button" id="addKeyBtn" class="add-button" onclick="addField()">+</button>
+            <div class="form-buttons">
+                <button type="submit" class="save-btn">Save</button>
+                <a href="/admin/categories"><button type="button" class="cancel-btn">Cancel</button></a>    
+            </div>
+        </form>
+    </div>
+</div>

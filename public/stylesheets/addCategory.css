@@ -1,0 +1,114 @@
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #f1f1f1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    box-shadow: 2px 0 5px 0 rgba(0,0,0,0.1);
+    position: fixed;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar a {
+    display: block;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: black;
+    text-decoration: none;
+}
+
+.sidebar a:hover, .sidebar .active {
+    background-color: #ccc;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 220px;
+    overflow-y: auto;
+    width: calc(100% - 220px);
+}
+
+.add-category-form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    width: 300px;
+}
+
+.add-category-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: bold;
+}
+
+.add-category-form input {
+    width: calc(100% - 40px);
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.key-field {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.key-field input {
+    flex-grow: 1;
+}
+
+.add-button, .delete-btn {
+    background-color: #ccc;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.add-button {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.delete-btn {
+    margin-left: 10px;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.save-btn, .cancel-btn {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    background-color: #ccc;
+    font-size: 16px;
+    border-radius: 4px;
+}
+
+.save-btn:hover, .cancel-btn:hover {
+    background-color: #bbb;
+}

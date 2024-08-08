@@ -1,0 +1,107 @@
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #f1f1f1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    box-shadow: 2px 0 5px 0 rgba(0,0,0,0.1);
+    position: fixed; /* Keeps sidebar in place */
+    height: 100%;
+    overflow-y: auto; /* Allows scrolling within the sidebar if needed */
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar a {
+    display: block;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: black;
+    text-decoration: none;
+}
+
+.sidebar a:hover, .sidebar .active {
+    background-color: #ccc;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 220px; /* Adjusted to align with sidebar width */
+    overflow-y: auto;
+    width: calc(100% - 220px); /* Adjusts width to fill remaining space */
+}
+
+/* Remaining styles are the same */
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 220px; /* Adjusted to align with sidebar width */
+    overflow-y: auto;
+}
+
+.add-category {
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    background-color: #ccc;
+    border: none;
+    font-size: 16px;
+}
+
+.category-container {
+    overflow-y: auto; /* Allows scrolling within the container */
+    max-height: calc(100vh - 150px); /* Adjust height based on your layout */
+}
+
+.category-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-around;
+}
+
+.category {
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    width: 200px;
+    border-radius: 8px;
+}
+
+.category h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.category ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.category li {
+    margin-bottom: 8px;
+}
+
+.add-button {
+    background-color: #fff;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.add-button:hover {
+    background-color: #e9e9e9;
+}
