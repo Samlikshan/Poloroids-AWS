@@ -1,0 +1,50 @@
+<link rel="stylesheet" href="/stylesheets/adminUsers.css">
+<script src="/javascripts/adminUsers.js"></script>
+
+<div class="container">
+    <div class="sidebar">
+        <ul class="menu">
+            <li><a href="/admin/">Dashboard</a></li>
+            <li><a href="#products">Products</a></li>
+            <li><a href="/admin/users" class="active">Users</a></li>
+            <li><a href="#orders">Orders</a></li>
+            <li><a href="/admin/category">Category</a></li>
+            <li><a href="#offers">Offers</a></li>
+            <li><a href="#coupons">Coupons</a></li>
+            <li><a href="#banner">Banner</a></li>
+        </ul>
+        <ul class="bottom">
+            <li><a href="#reset">Reset Password</a></li>
+            <li><a href="#logout">Logout</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <h1>Users</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>UserId</th>
+                    <th>Users</th>
+                    <th>Email Address</th>
+                    <th>Order count</th>
+                    <th>Status</th>
+                    <th>Change Status</th>
+                </tr>
+            </thead>
+            {{#each users}}
+            <tbody>
+                <tr>
+                    <td>01</td>
+                    <td>{{username}}</td>
+                    <td>{{email}}</td>
+                    <td>01</td>
+                    <td class="status">{{isActive}}</td>
+                    <td><a href="/admin/users/{{_id}}"><button class="status-button">Deactivate</button></a></td>
+                </tr>
+            </tbody>
+            {{/each}}
+        </table>
+
+    </div>
+</div>

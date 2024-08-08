@@ -2,14 +2,13 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer')
 
+const getDashboard = require('../controllers/dashbaordController')
 const { listUsers, blockUser, userDetails } = require('../controllers/userController')
 const { categories, getEditCategories,postEditCategories, getAddCategory, postAddCategory } = require('../controllers/categoryController');
 const { showProducts, getEditProducts, postEditProducts, getAddProduct, postAddProduct, disableProduct } = require('../controllers/productController');
 
 
-router.get('/', (req, res) => {
-    res.send('welcome to admin dashboard')
-})
+
 
 //Auth Management
 router.get('/login')
@@ -17,6 +16,10 @@ router.post('/signup')
 router.post('/verification')
 router.get('/reset-password')
 router.post('/reset-password')
+
+//dashboard
+router.get('/',getDashboard)
+
 
 //users management
 router.get('/users', listUsers)

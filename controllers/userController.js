@@ -3,12 +3,17 @@ const User = require('../models/userModel')
 
 const listUsers = async (req,res)=>{
     let users = await User.find()
-    console.log(users)
+    res.render('adminUsers',{users})
 }
 
-const blockUser = async (req,res) => {
+const blockUser = async (req, res) => {
     let id = req.params.id
-    await User.updateOne({_id:id},{$set:{isActive:false}})
+    let user = await User.findById({ _id: id })
+    if (user.isActive) {
+        await User.updateOne({ _id: id }, { $set: { isActive: false } })
+    } else (
+        await User.updateOne({ _id: id }, { $set: { isActive: true } })
+    )
     res.redirect('/admin/users')
 }
 
@@ -18,7 +23,7 @@ const userDetails = async (req,res) => {
     // let address = await Address.findOne({_id:id})
 }
 
-module.exports = {
+module.exports = {  
     listUsers,
     blockUser,
     userDetails

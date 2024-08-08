@@ -1,7 +1,7 @@
 let express = require('express');
-const { getSignup, postSingup, getVerify, postVerify, resendOtp, getLogin, postLogin, getForgotPassword, postForgotPassword, getForgotPasswordVerification, postForgotPasswordVerification, getResetPassword, postResetPassword,  } = require('../controllers/authController');
-const { route } = require('.');
 let router = express.Router();
+const { route } = require('.');
+const { getSignup, postSingup, getVerify, postVerify, resendOtp, getLogin, postLogin, getForgotPassword, postForgotPassword, getForgotPasswordVerification, postForgotPasswordVerification, getResetPassword, postResetPassword,  } = require('../controllers/authController');
 
 
 router.get('/signup',getSignup);
