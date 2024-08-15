@@ -1,0 +1,128 @@
+body, html {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    height: 100%;
+    overflow: hidden; /* Prevent scrolling on the entire body */
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 220px;
+    background-color: #f1f1f1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    box-shadow: 2px 0 5px 0 rgba(0,0,0,0.1);
+    position: fixed; /* Keeps sidebar in place */
+    height: 100%;
+    overflow-y: auto; /* Allows scrolling within the sidebar if needed */
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar a {
+    display: block;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: black;
+    text-decoration: none;
+}
+
+.sidebar a:hover, .sidebar .active {
+    background-color: #ccc;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 240px; /* Adjusted to align with sidebar width */
+    overflow-y: auto;
+    width: calc(100% - 240px); /* Adjusts width to fill remaining space */
+}
+
+.main-content h1 {
+    margin-top: 0;
+}
+
+.search-add {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-add input[type="text"] {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.add-button {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.add-button:hover {
+    background-color: #444;
+}
+
+.product-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.product-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    position: relative; /* For positioning the disable button */
+    text-decoration: none; /* Remove underline from links */
+    color: inherit; /* Inherit text color */
+}
+
+.product-item:hover {
+    background-color: #f1f1f1; /* Add a hover effect */
+}
+
+.product-item img {
+    width: 100px;
+    height: 100px;
+    margin-right: 20px;
+}
+
+.product-details {
+    flex-grow: 1;
+}
+
+.disable-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.disable-button:hover {
+    background-color: darkred;
+}

@@ -1,0 +1,37 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    background-color: #E8E8E8;
+}
+
+.container {
+    display: flex;
+    height: 100vh; /* Full viewport height */
+    padding: 20px; /* Same padding as the sidebar */
+    box-sizing: border-box;
+}
+
+.sidebar {
+    width: 220px;
+    background-color: #ffff;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 12.5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #A5A5A5;
+}   
+
+.content {
+    flex-grow: 1; /* Take up the remaining space */
+    background-color: #ffffff; /* White background for content area */
+    padding: 20px;
+    margin-left: 20px; /* Keep the same distance as the sidebar from the edge */
+    border-radius: 12.5px; /* Rounded corners to match the sidebar */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow for a floating effect */
+    overflow: auto; /* Ensure content doesn't overflow */
+}

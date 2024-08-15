@@ -1,0 +1,59 @@
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 10px;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #cfcfcf;
+    font-size: 1.5em;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    width: 100%;
+    border-radius: 8px;
+    background-color: #F5F5F5;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.sidebar ul li a.active,
+.sidebar ul li a:hover {
+    background-color: #4a4a4a;
+    color: #fff;
+}
+
+.sidebar ul li.reset-password a {
+    font-size: 1em;
+    font-weight: 700;
+}
+
+.logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    width: 100%;
+    border-radius: 8px;
+    background-color: #A5A5A5;
+    transition: background-color 0.3s, color 0.3s;
+    margin-bottom: 10px;
+}
+
+.logout:hover {
+    background-color: #a92222;
+    color: #fff;
+}
+
+.logout-icon {
+    margin-right: 8px;
+    width: 23px;
+    height: 23px;
+    fill: #A5A5A5;
+}

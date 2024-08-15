@@ -23,6 +23,12 @@ h1 {
     font-size: 2.5em;
 }
 
+.error{
+    font-size: 1em;
+    font-weight: 800;
+    /* padding-bottom: 5px; */
+}
+
 form {
     display: flex;
     flex-direction: column;
@@ -62,7 +68,7 @@ input::placeholder {
     line-height: 24px;
 }
 
-.resend-text a {
+.resend-text  a{
     color: #191919;
     text-decoration: none;
     font-size: 0.875rem;
@@ -71,6 +77,13 @@ input::placeholder {
 .resend-text a:hover {
     text-decoration: none;
 }
+
+.disabled {
+    color: grey !important;
+    cursor: not-allowed;
+    text-decoration: none;
+}
+
 
 button {
     display: flex;

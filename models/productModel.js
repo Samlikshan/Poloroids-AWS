@@ -4,16 +4,18 @@ const ObjectId = Schema.ObjectId
 
 const productSchema = new Schema({
     productName:{type:String, unique:true},
-    productDescription:{type:String, required:true},
-    price:{type:Number,required:true},
-    productImages:{type:Array,required:true},
-    brand:{type:String},
+    productDescription:{type:String,},
+    price:{type:Number,},
+    // productImages:{type:Array},
+    mainImage:{type:String},
+    additionalImages:{type:Array},
+    brand:{type:String,},
     type:{type:String},
     gear:{type:String},
     sensorSize:{type:String},
-    stock:{type:Number,required:true},
+    stock:{type:Number},
     reviewId:{type:ObjectId},
-    availability:{type:Boolean,default:true},
+    availability:{type:Boolean,default:false},
     createdAt:{type:Date,default:Date.now},
     updatedAt:{type:Date, default:null}
 })

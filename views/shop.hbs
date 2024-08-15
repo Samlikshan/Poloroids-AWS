@@ -1,0 +1,109 @@
+<link rel="stylesheet" href="/stylesheets/shop.css">
+<script src="/javascripts/shops.js"></script>
+<nav class="navbar">
+        <div class="navbar-left">
+            <div class="nav-title">Polaroids</div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/shop" class="active">Shop</a></li>
+            </ul>
+        </div>
+        <div class="nav-icons">
+            <div class="search-container">
+                <input type="text" class="search-bar" placeholder="Search">
+                <img src="images/icons/Search.svg" alt="Search" class="search-icon">
+            </div>
+            <img src="images/icons/Wishlist.svg" alt="Wishlist" class="icon">
+            <img src="images/icons/Cart.svg" alt="Cart" class="icon">
+            <a href="/account"><img src="images/icons/Account.svg" alt="Account" class="icon"></a>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="breadcrumbs">
+            <a href="/">Home</a> > <a href="/shop">Shop</a>
+        </div>
+        <div class="header">
+            <!-- <h1>Categories</h1> -->
+            <div class="sort-by">
+                Sort by: <a href="#">Price</a>
+            </div>
+        </div>
+        <div class="content">
+            <aside class="sidebar">
+                <div class="category">
+                    <h2>Categories</h2>
+                    <ul>
+                        <li><a href="#">All Products</a></li>
+                        <li><a href="#">Camera</a></li>
+                        <li><a href="#">Lenses</a></li>
+                        <li><a href="#">Accessories</a></li>
+                    </ul>
+                </div>
+                <div class="brand">
+                    <h2>Brand</h2>
+                    <ul>
+                        <li><a href="#">Canon</a></li>
+                        <li><a href="#">FujiFilm</a></li>
+                        <li><a href="#">Leica</a></li>
+                        <li><a href="#">Nikon</a></li>
+                        <li><a href="#">Poloroids</a></li>
+                        <li><a href="#">Sony</a></li>
+                    </ul>
+                </div>
+                <div class="sensor-size">
+                    <h2>Sensor Size</h2>
+                    <ul>
+                        <li><a href="#">Full Frame (35mm)</a></li>
+                        <li><a href="#">APS-C</a></li>
+                        <li><a href="#">Micro Four Thirds</a></li>
+                        <li><a href="#">1-inch</a></li>
+                        <li><a href="#">Medium Format</a></li>
+                    </ul>
+                </div>
+                <div class="prices">
+                    <h2>Prices</h2>
+                    <ul>
+                        <li><a href="#">$499-$999</a></li>
+                        <li><a href="#">$999-$1499</a></li>
+                        <li><a href="#">$1499-$1999</a></li>
+                        <li><a href="#">$1999-$2499</a></li>
+                        <li><a href="#">$2499-$2999</a></li>
+                        <li><a href="#">$2999-$3499</a></li>
+                    </ul>
+                </div>
+            </aside>
+            <main class="main-content">
+                <div class="cards">
+                    {{#each products}}
+                    <div class="card">
+                        <div class="badge">New</div>
+                        <img src="{{productImages.[0]}}" alt="Product Image"
+                            class="product-image">
+                        <img src="images/icons/Wishlist.svg" alt="Wishlist Icon" class="wishlist-icon">
+                        <div class="card-content-wrapper">
+                            <p class="stock-status">in stock</p>
+                            <h2>{{productName}}</h2>
+                            <div class="rating">
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
+                            </div>
+                            <p class="price">$ {{price}}.00</p>
+                            <a href="/admin/shops/add-to-cart/:{{_id}}"><button>Add to Cart</button></a>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+                <div class="pagination">
+                    <a href="#">1</a>
+                    <a href="#" class="active">2</a>
+                    <a href="#">3</a>
+                    <a href="#">4</a>
+                    <a href="#">...</a>
+                    <a href="#">10</a>
+                </div> 
+            </main>
+        </div>
+    </div>

@@ -1,0 +1,22 @@
+<link rel="stylesheet" href="/stylesheets/admin/Login.css">
+
+    <div class="login-container">
+        <h1>Login</h1>
+        <p class="error"></p>
+        <form id="admin-loginForm">
+            <input type="text" id="username" name="username" placeholder="Username" required>
+            <input type="password" id="password" name="password" placeholder="password" required>
+            <div class="forgot-text">
+                <a href="/admin/forgot">Forgot password?</a>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+        <hr>
+        {{!-- <div class="google-login">
+            <a href="#" class="google-icon">
+                <span>G</span>
+            </a>
+        </div> --}}
+    </div>
+
+<script src="/javascripts/admin/login.js"></script>

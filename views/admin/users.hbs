@@ -1,0 +1,38 @@
+<link rel="stylesheet" href="/stylesheets/admin/users.css">
+
+<div class="header">
+    <h1>User Management</h1>
+    <div class="search-container">
+        <input type="text" class="search-input" placeholder="Search...">
+    </div>
+</div>
+<table class="user-table">
+    <thead>
+        <tr>
+            <th>User ID</th>
+            <th>Username</th>
+            <th>Email Address</th>
+            <th>Order count</th>
+            <th>Status</th>
+            <th>Change Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each users}}
+        <tr>
+            <td><a href="user-details.html?id=1">01</a></td>
+            <td><a href="user-details.html?id=1">{{username}}</a></td>
+            <td><a href="mailto:name@gmail.com">{{email}}</a></td>
+            <td><a href="order-history.html?id=1">01</a></td>
+            <td><a href="user-details.html?id=1" class="status">{{#if isActive}}Active{{else}}Inactive{{/if}}
+                    </a></td>
+            <td><a href="/admin/users/{{_id}}"><button class="status-btn" data-status="{{isActive}}">
+        {{#if isActive}}Deactivate{{else}}Activate{{/if}}
+    </button></a></td>
+        </tr>
+        {{/each}}
+
+    </tbody>
+</table>
+
+<script src="/javascripts/admin/users.js"></script>

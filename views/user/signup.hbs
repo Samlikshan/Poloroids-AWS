@@ -1,0 +1,30 @@
+<link rel="stylesheet" href="/stylesheets/user/signup.css">
+
+
+<div class="signup-container">
+    <h1>Sign Up</h1>
+    {{!-- {{#if error}}
+    <p class="error">{{error.message}}</p>
+    {{/if}} --}}
+    <p class="error"></p>
+    {{!-- <form action="/auth/signup" method="POST"> --}}
+        <form id="signupForm">
+            <input type="text" id="username" name="username" placeholder="Username" required>
+            <input type="email" id="email" name="email" placeholder="Email" required>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+            <div class="account-text">
+                <span>Already have an account?</span>
+                <a href="/auth/login">Login</a>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+        <hr>
+        <div class="google-signup">
+            <a href="/auth/google" class="google-icon">
+                <span>G</span>
+            </a>
+        </div>
+</div>
+
+<script src="/javascripts/user/signup.js"></script>

@@ -1,56 +1,111 @@
-let createError = require('http-errors');
-let express = require('express');
-let path = require('path');
-let cookieParser = require('cookie-parser');
-let logger = require('morgan');
-let connectDB = require('./config/db')
-let session = require('express-session')
+require('dotenv').config();
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const connectDB = require('./config/db');
+const session = require('express-session');
+const nocache = require('nocache');
+const cors = require('cors');
+const Handlebars = require('handlebars');
+const exphbs = require('express-handlebars');
+const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
 
-require('dotenv').config()
+connectDB();
 
-connectDB()
+const indexRouter = require('./routes/userRoutes');
+const authRouter = require('./routes/authRoute');
+const adminRoute = require('./routes/adminRoute');
 
-let indexRouter = require('./routes/index');
-let authRouter = require('./routes/authRoute');
-let adminRoute = require('./routes/adminRoute')
+const app = express();
 
-let app = express();
+// CORS configuration
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Authorization', 'Content-Type'],
+  credentials: true
+}));
 
+// No-cache configuration
+app.use(nocache());
+
+// Session configuration
 app.use(session({
   secret: "somesecretkey",
   resave: false,
   saveUninitialized: true,
-  cookie: {
-    expire: session
-  }
-}))
+  cookie: { maxAge: 24 * 60 * 60 * 1000 }
+}));
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
+// Set up Handlebars view engine with layout and partials directories
+app.engine('hbs', exphbs.engine({
+  extname: '.hbs',
+  layoutsDir: path.join(__dirname, 'views/layouts'),
+  partialsDir: path.join(__dirname, 'views/partials'),
+  defaultLayout: 'user', // Default layout if not overridden
+  helpers: {
+    json: function (context) {
+      return JSON.stringify(context);
+    }
+  },
+  handlebars: allowInsecurePrototypeAccess(Handlebars)
+}));
+
+
+
+// const hbs = exphbs.create({
+//   defaultLayout: 'user',
+//   extname: '.hbs',
+//   layoutsDir: path.join(__dirname, 'views/layouts'),
+//   partialsDir: path.join(__dirname, 'views/partials'),
+//   helpers: {
+//     json: function (context) {
+//       return JSON.stringify(context);
+//     }
+//   }
+// });
+
 app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, 'views'));
 
+// Middleware to dynamically set the layout based on the route
+app.use((req, res, next) => {
+  if (req.path.startsWith('/admin/auth') || req.path === '/admin/login') {
+    res.locals.layout = 'auth'; // Use auth layout for specific admin auth routes
+  } else if (req.path.startsWith('/admin')) {
+    res.locals.layout = 'admin'; // Use admin layout for other admin routes
+  } else if (req.path.startsWith('/auth')) {
+    res.locals.layout = 'auth'; // Use auth layout for user auth routes
+  } else {
+    res.locals.layout = 'user'; // Use user layout for other routes
+  }
+  next();
+});
+
+// Middleware setup
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Route handlers
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/admin', adminRoute);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
+// Catch 404 and forward to error handler
+app.use((req, res, next) => {
   next(createError(404));
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
+// Error handler
+app.use((err, req, res, next) => {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
   res.status(err.status || 500);
   res.render('error');
 });

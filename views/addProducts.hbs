@@ -1,0 +1,60 @@
+<link rel="stylesheet" href="/stylesheets/addProducts.css">
+<div class="container">
+    <div class="sidebar">
+        <ul class="menu">
+            <li><a href="#dashboard">Dashboard</a></li>
+            <li><a href="/admin/products">Products</a></li>
+            <li><a href="#users">Users</a></li>
+            <li><a href="#orders">Orders</a></li>
+            <li><a href="#category">Category</a></li>
+            <li><a href="#offers">Offers</a></li>
+            <li><a href="#coupons">Coupons</a></li>
+            <li><a href="#banner">Banner</a></li>
+        </ul>
+        <ul class="bottom">
+            <li><a href="#reset">Reset Password</a></li>
+            <li><a href="#logout">Logout</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <h1>Add Product</h1>
+        <form action="/admin/add-product" method="post" enctype="multipart/form-data">
+            <label for="product-name">Product Name</label>
+            <input type="text" id="product-name" name="productName">
+
+            <label for="description">Description</label>
+            <textarea  id="description" name="description"></textarea>
+
+            <label for="price">Price</label>
+            <input type="number" id="price" name="price">
+
+            <label for="productImage">Upload Image</label>
+            <input type="file" id="productImage" name="productImage">
+
+            <label for="productImage">Upload Image 1</label>
+            <input type="file" id="productImage" name="productImage">
+
+            <label for="productImage">Upload Image 2</label>
+            <input type="file" id="productImage" name="productImage">
+
+            <label for="productImage">Upload Image 3</label>
+            <input type="file" id="productImage" name="productImage">
+
+            <label for="brand">Brand</label>
+            <input type="text" id="brand" name="brand">
+
+            <label for="type">Type</label>
+            <input type="text" id="type" name="type">
+            <label for="gear">Gear</label>
+            <input type="text" id="gear" name="gear">
+
+            <label for="Sensor Size">Sensor Size</label>
+            <input type="text" id="Sensor Size" name="sensorSize">
+
+            <label for="stock">Stock</label>
+            <input type="number" id="stock" name="stock">
+
+            <button type="submit">Add</button>
+        </form>
+    </div>
+</div>

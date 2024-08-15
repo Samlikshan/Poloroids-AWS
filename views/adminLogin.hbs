@@ -1,16 +1,13 @@
-<link rel="stylesheet" href="/stylesheets/adminLogin">
+<link rel="stylesheet" href="/stylesheets/adminLogin.css">
 
     <div class="login-container">
         <h1>Login</h1>
-        <form action="/auth/login" method="post">
+        <p class="error"></p>
+        <form id="admin-loginForm">
             <input type="text" id="username" name="username" placeholder="Username" required>
             <input type="password" id="password" name="password" placeholder="password" required>
             <div class="forgot-text">
-                <a href="/auth/forgot">Forgot password?</a>
-            </div>
-            <div class="account-text">
-                <span>Don't have an account?</span>
-                <a href="/auth/signup">Sign Up</a>
+                <a href="/admin/forgot">Forgot password?</a>
             </div>
             <button type="submit">Submit</button>
         </form>
@@ -21,3 +18,5 @@
             </a>
         </div>
     </div>
+
+<script src="/javascripts/adminLogin.js"></script>

@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="/stylesheets/admin/products.css">
+
+<h1>Products List</h1>
+<div class="add-product-button">
+    <a href="/admin/add-product"><button class="add-product-btn">Add Product</button></a>
+</div>
+<div class="products-list">
+    {{#each products}}
+    <div class="product-card">
+        <img src="{{mainImage}}" alt="Product Image" class="product-image">
+        <div class="product-info">
+            <h2>{{productName}}</h2>
+            <p><strong>Brand:</strong> {{brand}}</p>
+            <p><strong>Type:</strong> {{type}}</p>
+            <p><strong>Gear:</strong> {{gear}}</p>
+            {{!-- <p><strong>Sensor Size:</strong> {{sensorSize}}</p> --}}
+            <p><strong>Quantity:</strong> {{stock}}</p>
+            <p><strong>Price:</strong> {{price}}</p>
+            <p><strong>Availability:</strong><span class="availability"> {{#if availability}}Active{{else}}Inactive{{/if}}</span></p>
+            <div class="product-actions">
+                <a href="/admin/edit-product/{{_id}}"><button class="edit-btn">Edit</button></a>
+                <a href="/admin/disable-product/{{_id}}">
+                    <button class="status-btn" data-status="{{availability}}">
+                        {{#if availability}}Deactivate{{else}}Activate{{/if}}
+                    </button>
+                </a>
+
+
+
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</div>
+
+<script src="/javascripts/admin/products.js"></script>

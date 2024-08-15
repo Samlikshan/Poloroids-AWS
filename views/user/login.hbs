@@ -1,0 +1,27 @@
+<link rel="stylesheet" href="/stylesheets/user/login.css">
+<div class="login-container">
+    <h1>Login</h1>
+    {{!-- {{#if error}}
+    <p class="error">{{error.message}}</p>
+    {{/if}} --}}
+    <p class="error"></p>
+    <form id="loginForm">
+        <input type="text" id="username" name="username" placeholder="Username" required>
+        <input type="password" id="password" name="password" placeholder="password" required>
+        <div class="forgot-text">
+            <a href="/auth/forgot">Forgot password?</a>
+        </div>
+        <div class="account-text">
+            <span>Don't have an account?</span>
+            <a href="/auth/signup">Sign Up</a>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+    <hr>
+    <div class="google-login">
+        <a href="/auth/google" class="google-icon">
+            <span>G</span>
+        </a>
+    </div>
+</div>
+<script src="/javascripts/user/login.js"></script>

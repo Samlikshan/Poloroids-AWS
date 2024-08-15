@@ -2,7 +2,11 @@
 
     <div class="login-container">
         <h1>Login</h1>
-        <form action="/auth/login" method="post">
+        {{!-- {{#if error}}
+            <p class="error">{{error.message}}</p>
+        {{/if}}  --}}
+        <p class="error"></p>
+        <form id="loginForm">
             <input type="text" id="username" name="username" placeholder="Username" required>
             <input type="password" id="password" name="password" placeholder="password" required>
             <div class="forgot-text">
@@ -16,8 +20,10 @@
         </form>
         <hr>
         <div class="google-login">
-            <a href="#" class="google-icon">
+            <a href="/auth/google/callback" class="google-icon">
                 <span>G</span>
             </a>
         </div>
     </div>
+
+<script src="/javascripts/login.js"></script>

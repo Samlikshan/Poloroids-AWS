@@ -1,0 +1,195 @@
+<link rel="stylesheet" href="/stylesheets/admin/categories.css">
+<div class="header">
+    <h1>Categories</h1>
+</div>
+<div class="categories-grid">
+    <div class="category-card">
+        <h2>Brand</h2>
+        {{#each brand}}
+        <ul>
+            <li>
+                <span class="category-name">{{this.categoryName}}</span>
+                <a href="#" class="status-link" data-id="{{this._id}}" data-type="Brand"
+                    onclick="toggleStatus(event, '{{this._id}}', '{{this.isActive}}', 'Brand')">
+                    {{#if this.isActive}}Deactivate{{else}}Activate{{/if}}
+                </a>
+            </li>
+        </ul>
+        {{/each}}
+        <button class="add-item-btn" onclick="openModal('Brand', '{{json brand}}')">+</button>
+    </div>
+
+    <div class="category-card">
+        <h2>Type</h2>
+        {{#each type}}
+        <ul>
+            <li>
+                <span class="category-name">{{this.categoryName}}</span>
+                <a href="#" class="status-link" data-id="{{this._id}}" data-type="Type"
+                    onclick="toggleStatus(event, '{{this._id}}', '{{this.isActive}}', 'Type')">
+                    {{#if this.isActive}}Deactivate{{else}}Activate{{/if}}
+                </a>
+            </li>
+        </ul>
+        {{/each}}
+        <button class="add-item-btn" onclick="openModal('Type', '{{json type}}')">+</button>
+    </div>
+
+    <div class="category-card">
+        <h2>Gear</h2>
+        {{#each gear}}
+        <ul>
+            <li>
+                <span class="category-name">{{this.categoryName}}</span>
+                <a href="#" class="status-link" data-id="{{this._id}}" data-type="Gear"
+                    onclick="toggleStatus(event, '{{this._id}}', '{{this.isActive}}', 'Gear')">
+                    {{#if this.isActive}}Deactivate{{else}}Activate{{/if}}
+                </a>
+            </li>
+        </ul>
+        {{/each}}
+        <button class="add-item-btn" onclick="openModal('Gear', '{{json gear}}')">+</button>
+    </div>
+
+
+</div>
+
+
+
+<div id="categoryModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle">Add Sub-Category</h2>
+        <form id="categoryForm" onsubmit="saveCategories(event)" action="/admin/add-category" method="post">
+            <input type="hidden" id="categoryType" name="categoryType" value="">
+            <div id="keyFields">
+                <!-- Dynamic fields will be added here -->
+            </div>
+            <button type="button" class="add-field-btn" onclick="addField()">+</button>
+            <button type="submit" class="save-btn">Save</button>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    function openModal(categoryType) {
+        document.getElementById('modalTitle').textContent = 'Add Sub-Category to ' + categoryType;
+        document.getElementById('categoryType').value = categoryType;
+        const keyFields = document.getElementById('keyFields');
+        keyFields.innerHTML = ''; // Clear existing fields
+
+        // Clear any previous error messages
+        const existingError = document.querySelector('.error-message');
+        if (existingError) existingError.remove();
+
+        // Add empty fields for new categories
+        addField();
+
+        document.getElementById('categoryModal').style.display = 'block';
+    }
+
+    function addField(value = '') {
+        const keyFields = document.getElementById('keyFields');
+        const fieldDiv = document.createElement('div');
+        fieldDiv.className = 'form-group';
+
+        fieldDiv.innerHTML = `
+        <input type="text" name="categoryName[]" value="${value}" placeholder="Enter value" required/>
+        <button type="button" class="remove-btn" onclick="removeField(this)">x</button>
+    `;
+
+        keyFields.appendChild(fieldDiv);
+    }
+
+    function removeField(button) {
+        button.parentNode.remove();
+    }
+
+    function closeModal() {
+        document.getElementById('categoryModal').style.display = 'none';
+    }
+    function saveCategories(event) {
+        event.preventDefault(); // Prevent the form from submitting in the traditional way
+
+        const fields = document.querySelectorAll('input[name="categoryName[]"]');
+        const categories = Array.from(fields)
+            .map(field => field.value.trim())
+            .filter(value => value) // Remove empty values
+            .map(value => ({ categoryName: value }));
+
+        if (categories.length === 0) {
+            // Handle the case where no valid categories are provided
+            const errorMessage = document.createElement('p');
+            errorMessage.textContent = 'Please enter at least one valid category.';
+            errorMessage.className = 'error-message';
+            document.getElementById('keyFields').appendChild(errorMessage);
+            return;
+        }
+
+        fetch('/admin/add-category', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                categoryType: document.getElementById('categoryType').value,
+                categories: categories
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    // Show error message in the modal
+                    const errorMessage = document.createElement('p');
+                    errorMessage.textContent = data.message;
+                    errorMessage.className = 'error-message'; // Style this as needed
+                    document.getElementById('keyFields').appendChild(errorMessage);
+                } else {
+                    // Close the modal and possibly update UI
+                    closeModal();
+                    // Optionally, refresh the categories list
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                const errorMessage = document.createElement('p');
+                errorMessage.textContent = 'An error occurred while saving the category.';
+                errorMessage.className = 'error-message';
+                document.getElementById('keyFields').appendChild(errorMessage);
+            });
+    }
+    function toggleStatus(event, id, isActive, categoryType) {
+        event.preventDefault(); // Prevent the default link behavior
+
+        // Determine the new status
+        const newStatus = isActive ? 'Deactivate' : 'Activate';
+
+        fetch('/admin/toggle-status', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: id,
+                status: newStatus,
+                categoryType: categoryType // Include the category type
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update the link text based on new status
+                    const link = event.target;
+                    link.textContent = newStatus;
+                } else {
+                    console.error('Error:', data.message);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+
+</script>

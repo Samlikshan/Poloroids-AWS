@@ -1,0 +1,96 @@
+<link rel="stylesheet" href="/stylesheets/home.css">
+<script src="/javascripts/home.js"></script>
+<nav class="navbar">
+        <div class="navbar-left">
+            <div class="brand">Polaroids</div>
+            <ul class="nav-links">
+                <li><a href="/" class="active">Home</a></li>
+                <li><a href="/shop">Shop</a></li>
+            </ul>
+        </div>
+        <div class="nav-icons">
+            <div class="search-container">
+                <input type="text" class="search-bar" placeholder="Search">
+                <img src="images/icons/Search.svg" alt="Search" class="search-icon">
+            </div>
+            <img src="images/icons/Wishlist.svg" alt="Wishlist" class="icon wishlist-icon">
+            <img src="images/icons/Cart.svg" alt="Cart" class="icon">
+            <a href="/account"><img src="images/icons/Account.svg" alt="Account" class="icon"></a>
+        </div>
+    </nav>
+
+
+<body>
+    <section class="banner">
+        <div class="banner-slides">
+            <div class="banner-slide">
+                <a href="#">
+                    <img src="images/banners/Fujifilm_X100VI_Front.jpeg" alt="Product 1">
+                </a>
+            </div>
+            <div class="banner-slide">
+                <a href="#">
+                    <img src="images/banners/pexels-burak-argun-386428941-20094298.jpg" alt="Product 2">
+                </a>
+            </div>
+        </div>
+        <div class="banner-dots">
+            <span class="dot" data-slide="0"></span>
+            <span class="dot" data-slide="1"></span>
+        </div>
+    </section>
+    <div class="container">
+        <h1>New Arrivals</h1>
+        <div class="cards">
+            {{#each products}}
+            <div class="card">
+                <img src="{{productImages.[0]}}" alt="Product Image" class="product-image">
+                <img src="images/icons/Wishlist.svg" alt="Wishlist Icon" class="wishlist-icon">
+                <div class="card-content-wrapper">
+                    <p class="stock-status">in stock</p>
+                    <h2 class="product-name">{{productName}}</h2>
+                    <div class="rating">
+                        <span class="star">&#9733;</span>
+                        <span class="star">&#9733;</span>
+                        <span class="star">&#9733;</span>
+                        <span class="star">&#9733;</span>
+                        <span class="star">&#9733;</span>
+                    </div>
+                    <div class="price">$ {{price}}.00</div>
+                    <button>Add to Cart</button>
+                </div>
+            </div>
+            {{/each}}
+                
+        </div>
+    </div>
+        
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section brand-section">
+                <h2 class="footer-heading">Polaroids</h2>
+            </div>
+            <div class="footer-section about-us">
+                <h3 class="footer-subheading">About Us</h3>
+                <p>We are dedicated to capturing memories with our high-quality Polaroid cameras and accessories.</p>
+            </div>
+            <div class="footer-section quick-links">
+                <h3 class="footer-subheading">Quick Links</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Shop</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section customer-services">
+                <h3 class="footer-subheading">Customer Services</h3>
+                <ul>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Returns</a></li>
+                    <li><a href="#">Shipping</a></li>
+                    <li><a href="#">Support</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>

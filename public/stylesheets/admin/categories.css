@@ -1,0 +1,273 @@
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 2em;
+    color: #4a4a4a;
+    font-weight: 900;
+}
+
+.add-category-btn {
+    width: 40px;
+    height: 40px;
+    background-color: #ffff;
+    color: black;
+    border: none;
+    border-radius: 7.5px;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two columns, each taking up equal space */
+    gap: 20px; /* Spacing between the grid items */
+}
+
+.category-card {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 12.5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.category-card h2 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #4a4a4a;
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+.category-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category-card ul li {
+    margin-bottom: 5px;
+    color: #4a4a4a;
+    font-weight: 600;
+}
+
+.add-item-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    background-color:transparent;
+    color: #4a4a4a;
+    border: none;
+    /* border-radius: 50%; */
+    font-size: 20px;
+    cursor: pointer;
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); */
+}
+
+
+@media (max-width: 768px) {
+    .categories-grid {
+        grid-template-columns: 1fr; /* Switch to one column layout on smaller screens */
+    }
+}
+
+
+/* Modal Styles */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0, 0, 0, 0.4); 
+}
+
+.modal-content {
+    background-color: #ffffff;
+    margin: 10% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%; 
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.close-btn {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: #000000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Form Field Styles */
+.key-field {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.key-field input[type="text"] {
+    padding: 10px;
+    border-radius: 7.5px;
+    border: 1px solid #ccc;
+    flex-grow: 1;
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+.delete-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    width: 30px;
+}
+
+.add-btn {
+    background-color: #4a4a4a;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 7.5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+/* Trigger Button Styles */
+.open-modal-btn {
+    background-color: #4a4a4a;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+/* Existing Categories Layout */
+.categories-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
+
+.category-box {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12.5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: calc(50% - 20px); /* 50% width for 2-column layout */
+    position: relative;
+}
+
+/* Basic styling for the form */
+.form-container {
+    width: 300px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 12.5px;
+    background-color: #f5f5f5;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.form-container h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.5em;
+    color: #4a4a4a;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.form-group input[type="text"] {
+    flex-grow: 1;
+    padding: 8px 10px;
+    font-size: 1em;
+    border-radius: 7.5px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+}
+
+.add-field-btn, .remove-btn {
+    background-color: #4a4a4a;
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 7.5px;
+    cursor: pointer;
+    font-weight: 900;
+    transition: background-color 0.3s;
+}
+
+.add-field-btn:hover, .remove-btn:hover {
+    background-color: #a5a5a5;
+}
+
+
+.category-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category-card ul li {
+    display: flex;
+    justify-content: space-between; /* Space between the name and the link */
+    margin-bottom: 5px;
+    color: #4a4a4a;
+    font-weight: 600;
+    align-items: center;
+}
+
+.category-name {
+    flex-grow: 1; /* Take up the remaining space */
+}
+
+.status-link {
+    color: #4a4a4a;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.status-link:hover {
+    text-decoration: underline;
+}

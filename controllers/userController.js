@@ -3,7 +3,7 @@ const User = require('../models/userModel')
 
 const listUsers = async (req,res)=>{
     let users = await User.find()
-    res.render('adminUsers',{users})
+    res.render('admin/users',{users})
 }
 
 const blockUser = async (req, res) => {

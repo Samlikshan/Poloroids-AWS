@@ -1,0 +1,57 @@
+<link rel="stylesheet" href="/stylesheets/home.css">
+<section class="banner">
+    <div class="banner-slides">
+        <div class="banner-slide">
+            <a href="#">
+                <img src="images/banners/Fujifilm_X100VI_Front.jpeg" alt="Product 1">
+            </a>
+        </div>
+        <div class="banner-slide">
+            <a href="#">
+                <img src="images/banners/pexels-burak-argun-386428941-20094298.jpg" alt="Product 2">
+            </a>
+        </div>
+    </div>
+    <div class="banner-dots">
+        <span class="dot" data-slide="0"></span>
+        <span class="dot" data-slide="1"></span>
+    </div>
+</section>
+<div class="container">
+    <h1>New Arrivals</h1>
+    <div class="cards">
+        {{#each products}}
+        <div class="card">
+            <img src="images/icons/Wishlist.svg" alt="Wishlist Icon" class="wishlist-icon">
+            <a href="/shop/{{_id}}" style="text-decoration: none;">
+                <img src="{{mainImage}}" alt="Product Image" class="product-image">
+                <div class="card-content-wrapper">
+                    {{!-- <p class="stock-status">in stock</p> --}}
+                    {{#if stock}}
+                    <p class="stock-status">
+                        In Stock
+                    </p>
+                    {{else}}
+                    <p class="stock-status">
+                        Out of Stock
+                    </p>
+                    {{/if}}
+                    <h2 class="product-name">{{productName}}</h2>
+                    <div class="rating">
+                        <span class="star">&#9733;</span>
+                        <span class="star">&#9733;</span>
+                        <span class="star">&#9733;</span>
+                        <span class="star">&#9733;</span>
+                        <span class="star">&#9733;</span>
+                    </div>
+                    <div class="price">$ {{price}}.00</div>
+            </a>
+            <button>Add to Cart</button>
+        </div>
+    </div>
+    {{/each}}
+
+</div>
+</div>
+
+<script src="/javascripts/user/home.js"></script>

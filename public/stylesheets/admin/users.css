@@ -1,0 +1,86 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 2em;
+    color: #4a4a4a;
+}
+
+.search-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.search-input {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 7.5px;
+    font-size: 16px;
+    background-color: #f5f5f5;
+    background-image: url('search-icon.png'); /* Replace with your icon */
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    padding-left: 40px; /* Adjust to make space for the icon */
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-radius: 12.5px;
+    overflow: hidden;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-table th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #ddd; /* Adds bottom border to the header */
+    color: #4a4a4a;
+    border: 1px solid #ddd;
+}
+
+.user-table td {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    border: none; /* Remove all borders between rows */
+}
+
+.user-table tbody tr {
+    background-color: transparent;
+}
+
+.user-table a {
+    color: #4a4a4a;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.user-table a:hover {
+    text-decoration: underline;
+}
+
+.status-btn {
+    width: 110px;
+    background-color: #4a4a4a;
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 900;
+    transition: background-color 0.3s;
+}
+
+.status-btn:hover {
+    background-color: #a5a5a5;
+}

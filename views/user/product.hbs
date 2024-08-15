@@ -1,0 +1,51 @@
+<link rel="stylesheet" href="/stylesheets/user/product.css">
+<div class="container">
+    <div class="breadcrumbs">
+        <a href="/">Home</a> > <a href="/shop">Shop</a> > <a href="#">{{product.productName}}</a>
+    </div>
+<div class="product-container">
+        <div class="product-images">
+            <div class="hero-image-container">
+                <img src="{{product.mainImage}}" alt="Sony Alpha 7C Camera" class="hero-image" id="main-image">
+            </div>
+            <div class="secondary-images">
+                {{#each product.additionalImages}}
+                <img src="{{this}}" alt="Sony Camera Front View" class="thumbnail">
+            {{/each}}
+            </div>
+        </div>
+        
+        <div class="product-details">
+            <h1>{{product.productName}}</h1>
+            <div class="ratings">
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <a href="#">Read reviews</a>
+            </div>
+                <p class="description">{{product.productDescription}}</p>
+            <div class="price">
+                <span class="original-price">M.R.P:$ {{product.price}}.99</span>
+                <span class="sale-price">You Save 15%</span>
+            </div>
+            <div class="price-container">
+                <button>Add to cart</button>
+                <span class="price-tag">${{product.price}}.99</span>
+            </div>
+            
+            <div class="specs">
+                <ul class="features-list">
+                    <li>24.2 MP full-frame Exmor R CMOS sensor</li>
+                    <li>4K UHD at 30p/24p, Full HD at 120p</li>
+                    <li>5-axis in-body image stabilization</li>
+                    <!-- Add more features as needed -->
+                </ul>
+            </div>
+            
+        </div>
+    </div>
+    </div>
+
+    <script src="/javascripts/user/product.js"></script>
