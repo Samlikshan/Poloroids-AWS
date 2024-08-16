@@ -17,6 +17,7 @@ const getEditProducts = async (req,res,next) => {
     let brands = await Brand.find({isActive:true})
     let types = await Type.find({isActive:true})
     let gears = await Gear.find({isActive:true})
+    
     res.render('admin/editProduct',{product,brands,types,gears})
 }
 
@@ -31,8 +32,7 @@ const getEditProducts = async (req,res,next) => {
 //     res.redirect('/admin/products')
 // }
 
-const postEditProducts = async(req,res,next)=>{
-    console.log(req.body,req.files);
+const postEditProducts = async(req,res)=>{
     
     try {
         let product = await Product.findById(req.params.id);
@@ -126,8 +126,6 @@ const postAddProduct = async (req,res,next) => {
 }
 
 const disableProduct = async (req,res,next) => {
-    console.log('request');
-    
     let id = req.params.id
     let product = await Product.findById({_id:id})
     if(product.availability == true){

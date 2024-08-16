@@ -10,7 +10,7 @@
 
             <div class="form-group">
                 <label for="productName">Product Name</label>
-                <input type="text" id="productName" placeholder="Product Name" name="productName" minlength="5" maxlength="20">
+                <input type="text" id="productName" placeholder="Product Name" name="productName" minlength="10">
             </div>
 
             <div class="form-group">
@@ -68,7 +68,7 @@
         <div class="section">
             <h2>Price</h2>
             <div class="form-group">
-                 <input type="text" name="price" placeholder="Price" required>
+                 <input type="text" name="price" placeholder="Price">
             </div>
         </div>
 
@@ -78,49 +78,38 @@
 
             <div class="form-group">
                 <label for="quantity">Quantity</label>
-                <input type="text" id="quantity" name="stock" placeholder="Min 10" required>
+                <input type="text" id="quantity" name="stock" placeholder="Min 10">
             </div>
         </div>
         
 
-        <!-- Image Upload Section -->
-        <div class="section">
-            <h2>Images</h2>
+       <!-- Image Upload Section -->
+<div class="section">
+    <h2>Images</h2>
 
-            <div class="image-upload-grid">
-                <div class="image-upload-group">
-                    <label for="imageUpload1" class="image-upload-label">
-                        <img src="#" alt="Upload Image">
-                        <span>Upload Image</span>
-                    </label>
-                    <input type="file" id="imageUpload1"  name="mainImage" style="display: none;" required>
-                </div>
-
-                <div class="image-upload-group">
-                    <label for="imageUpload2" class="image-upload-label">
-                        <img src="#" alt="Upload Image">
-                        <span>Upload Image</span>
-                    </label>
-                    <input type="file" id="imageUpload2" style="display: none;" name="additionalImages" multiple>
-                </div>
-
-                {{!-- <div class="image-upload-group">
-                    <label for="imageUpload3" class="image-upload-label">
-                        <img src="#" alt="Upload Image">
-                        <span>Upload Image</span>
-                    </label>
-                    <input type="file" id="imageUpload3" style="display: none;" name="productImage">
-                </div>
-
-                <div class="image-upload-group">
-                    <label for="imageUpload4" class="image-upload-label" >
-                        <img src="#" alt="Upload Image">
-                        <span>Upload Image</span>
-                    </label>
-                    <input type="file" id="imageUpload4" style="display: none;" name="productImage">
-                </div> --}}
-            </div>
+    <div class="image-upload-grid">
+        <div class="image-upload-group">
+            <label for="imageUpload1" class="image-upload-label">
+                <img src="#" alt="Upload Image" class="main-image-preview">
+                <span>Upload Main Image</span>
+            </label>
+            <input type="file" id="imageUpload1" name="mainImage" style="display: none;">
         </div>
+
+        <div class="image-upload-group">
+            <label for="imageUpload2" class="image-upload-label">
+                <img src="#" alt="Upload Image" class="thumbnail-preview" id="thumbnail-preview-placeholder">
+                <span>Upload Additional Images</span>
+            </label>
+            <input type="file" id="imageUpload2" style="display: none;" name="additionalImages" multiple>
+        </div>
+    </div>
+
+    <div class="additional-images-preview" id="additional-images-preview">
+        <!-- Additional images will be dynamically inserted here -->
+    </div>
+</div>
+
 
         <!-- Submit Button -->
         <div class="form-group">
@@ -128,3 +117,42 @@
         </div>
     </form>
 </div>
+
+<script>
+   document.addEventListener('DOMContentLoaded', () => {
+    const mainImageInput = document.getElementById('imageUpload1');
+    const additionalImageInput = document.getElementById('imageUpload2');
+    const mainImagePreview = document.querySelector('.main-image-preview');
+    const additionalImagesPreview = document.getElementById('additional-images-preview');
+
+    // Handle main image preview
+    mainImageInput.addEventListener('change', () => {
+        const file = mainImageInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                mainImagePreview.src = reader.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Handle additional images preview
+    additionalImageInput.addEventListener('change', () => {
+        additionalImagesPreview.innerHTML = ''; // Clear previous previews
+        const files = additionalImageInput.files;
+
+        Array.from(files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const img = document.createElement('img');
+                img.src = reader.result;
+                img.className = 'thumbnail-preview';
+                additionalImagesPreview.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+});
+
+</script>

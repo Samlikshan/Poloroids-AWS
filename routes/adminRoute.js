@@ -5,17 +5,21 @@ const requireAuth = require('../middleware/requireAuth')
 const isLogged = require('../middleware/isLogged')
 const getDashboard = require('../controllers/dashbaordController')
 const { listUsers, blockUser, userDetails } = require('../controllers/userController')
-const { categories,addCategory, changeCategoryStatus } = require('../controllers/categoryController');
+const { categories,addCategory, changeCategoryStatus, editCategory } = require('../controllers/categoryController');
 const { showProducts, getEditProducts, postEditProducts, getAddProduct, postAddProduct, disableProduct } = require('../controllers/productController');
-const { getLogin, postLogin, logout } = require('../controllers/adminAuthController');
+const { getLogin, postLogin ,logout, getResetPassword, postResetPassword, getNewPassword, postNewPassword, getForgotPasswrod, postForgotPassword } = require('../controllers/adminAuthController');
 
 
 //Auth Management
 router.get('/login',isLogged,getLogin)
 router.post('/login' ,isLogged,postLogin)
-router.get('/reset-password')
-router.post('/verification')
-router.post('/reset-password')
+router.get('/forgot-password',getForgotPasswrod)
+router.post('/forgot-password',postForgotPassword)
+router.get('/reset-password',getResetPassword)
+// router.post('/verification')
+router.post('/reset-password',postResetPassword)
+router.get('/new-password',getNewPassword)
+router.post('/new-password',postNewPassword)
 router.get('/logout', logout)
 
 router.use(requireAuth)
@@ -36,6 +40,7 @@ router.get('/categories', categories)
 // router.get('/add-category', getAddCategory)
 router.post('/add-category', addCategory)
 router.post('/toggle-status', changeCategoryStatus)
+router.post('/edit-category', editCategory)
 
 
 

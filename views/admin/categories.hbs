@@ -8,7 +8,8 @@
         {{#each brand}}
         <ul>
             <li>
-                <span class="category-name">{{this.categoryName}}</span>
+                <span class="category-name" id="category-name-{{this._id}}">{{this.categoryName}}</span>
+                <button class="edit-btn" onclick="editCategory('{{this._id}}', '{{this.categoryName}}', 'Brand')">Edit</button>
                 <a href="#" class="status-link" data-id="{{this._id}}" data-type="Brand"
                     onclick="toggleStatus(event, '{{this._id}}', '{{this.isActive}}', 'Brand')">
                     {{#if this.isActive}}Deactivate{{else}}Activate{{/if}}
@@ -24,7 +25,8 @@
         {{#each type}}
         <ul>
             <li>
-                <span class="category-name">{{this.categoryName}}</span>
+                <span class="category-name" id="category-name-{{this._id}}">{{this.categoryName}}</span>
+                <button class="edit-btn" onclick="editCategory('{{this._id}}', '{{this.categoryName}}', 'Type')">Edit</button>
                 <a href="#" class="status-link" data-id="{{this._id}}" data-type="Type"
                     onclick="toggleStatus(event, '{{this._id}}', '{{this.isActive}}', 'Type')">
                     {{#if this.isActive}}Deactivate{{else}}Activate{{/if}}
@@ -40,7 +42,8 @@
         {{#each gear}}
         <ul>
             <li>
-                <span class="category-name">{{this.categoryName}}</span>
+                <span class="category-name" id="category-name-{{this._id}}">{{this.categoryName}}</span>
+                <button class="edit-btn" onclick="editCategory('{{this._id}}', '{{this.categoryName}}', 'Gear')">Edit</button>
                 <a href="#" class="status-link" data-id="{{this._id}}" data-type="Gear"
                     onclick="toggleStatus(event, '{{this._id}}', '{{this.isActive}}', 'Gear')">
                     {{#if this.isActive}}Deactivate{{else}}Activate{{/if}}
@@ -50,12 +53,9 @@
         {{/each}}
         <button class="add-item-btn" onclick="openModal('Gear', '{{json gear}}')">+</button>
     </div>
-
-
 </div>
 
-
-
+<!-- Add Category Modal -->
 <div id="categoryModal" class="modal">
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal()">&times;</span>
@@ -71,125 +71,195 @@
     </div>
 </div>
 
+<!-- Edit Category Modal -->
+<div id="editCategoryModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeEditCategoryModal()">&times;</span>
+        <h2>Edit Category</h2>
+        <form id="editCategoryForm" onsubmit="updateCategory(event)">
+            <input type="hidden" id="editCategoryId" name="categoryId">
+            <input type="hidden" id="editCategoryType" name="categoryType"> <!-- Hidden field for category type -->
+            <div class="form-group">
+                <label for="editCategoryName">Category Name</label>
+                <input type="text" id="editCategoryName" name="categoryName" placeholder="Enter category name" required>
+            </div>
+            <button type="submit" class="save-btn">Save</button>
+        </form>
+    </div>
+</div>
 
 <script>
-    function openModal(categoryType) {
-        document.getElementById('modalTitle').textContent = 'Add Sub-Category to ' + categoryType;
-        document.getElementById('categoryType').value = categoryType;
-        const keyFields = document.getElementById('keyFields');
-        keyFields.innerHTML = ''; // Clear existing fields
+   function openModal(categoryType) {
+    document.getElementById('modalTitle').textContent = 'Add Sub-Category to ' + categoryType;
+    document.getElementById('categoryType').value = categoryType;
+    const keyFields = document.getElementById('keyFields');
+    keyFields.innerHTML = ''; // Clear existing fields
 
-        // Clear any previous error messages
-        const existingError = document.querySelector('.error-message');
-        if (existingError) existingError.remove();
+    // Clear any previous error messages
+    const existingError = document.querySelector('.error-message');
+    if (existingError) existingError.remove();
 
-        // Add empty fields for new categories
-        addField();
+    // Add empty fields for new categories
+    addField();
 
-        document.getElementById('categoryModal').style.display = 'block';
-    }
+    document.getElementById('categoryModal').style.display = 'block';
+}
 
-    function addField(value = '') {
-        const keyFields = document.getElementById('keyFields');
-        const fieldDiv = document.createElement('div');
-        fieldDiv.className = 'form-group';
+function addField(value = '') {
+    const keyFields = document.getElementById('keyFields');
+    const fieldDiv = document.createElement('div');
+    fieldDiv.className = 'form-group';
 
-        fieldDiv.innerHTML = `
+    fieldDiv.innerHTML = `
         <input type="text" name="categoryName[]" value="${value}" placeholder="Enter value" required/>
         <button type="button" class="remove-btn" onclick="removeField(this)">x</button>
     `;
 
-        keyFields.appendChild(fieldDiv);
+    keyFields.appendChild(fieldDiv);
+}
+
+function removeField(button) {
+    button.parentNode.remove();
+}
+
+function closeModal() {
+    document.getElementById('categoryModal').style.display = 'none';
+}
+
+function saveCategories(event) {
+    event.preventDefault(); // Prevent the form from submitting in the traditional way
+
+    const fields = document.querySelectorAll('input[name="categoryName[]"]');
+    const categories = Array.from(fields)
+        .map(field => field.value.trim())
+        .filter(value => value) // Remove empty values
+        .map(value => ({ categoryName: value }));
+
+    if (categories.length === 0) {
+        // Handle the case where no valid categories are provided
+        const errorMessage = document.createElement('p');
+        errorMessage.textContent = 'Please enter at least one valid category.';
+        errorMessage.className = 'error-message';
+        document.getElementById('keyFields').appendChild(errorMessage);
+        return;
     }
 
-    function removeField(button) {
-        button.parentNode.remove();
-    }
-
-    function closeModal() {
-        document.getElementById('categoryModal').style.display = 'none';
-    }
-    function saveCategories(event) {
-        event.preventDefault(); // Prevent the form from submitting in the traditional way
-
-        const fields = document.querySelectorAll('input[name="categoryName[]"]');
-        const categories = Array.from(fields)
-            .map(field => field.value.trim())
-            .filter(value => value) // Remove empty values
-            .map(value => ({ categoryName: value }));
-
-        if (categories.length === 0) {
-            // Handle the case where no valid categories are provided
+    fetch('/admin/add-category', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            categoryType: document.getElementById('categoryType').value,
+            categories: categories
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                // Show error message in the modal
+                const errorMessage = document.createElement('p');
+                errorMessage.textContent = data.message;
+                errorMessage.className = 'error-message'; // Style this as needed
+                document.getElementById('keyFields').appendChild(errorMessage);
+            } else {
+                // Close the modal and possibly update UI
+                closeModal();
+                // Optionally, refresh the categories list
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
             const errorMessage = document.createElement('p');
-            errorMessage.textContent = 'Please enter at least one valid category.';
+            errorMessage.textContent = 'An error occurred while saving the category.';
             errorMessage.className = 'error-message';
             document.getElementById('keyFields').appendChild(errorMessage);
-            return;
-        }
+        });
+}
 
-        fetch('/admin/add-category', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                categoryType: document.getElementById('categoryType').value,
-                categories: categories
-            })
+function toggleStatus(event, id, isActive, categoryType) {
+    event.preventDefault(); // Prevent the default link behavior
+
+    // Determine the new status
+    const newStatus = isActive ? 'Deactivate' : 'Activate';
+
+    fetch('/admin/toggle-status', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id: id,
+            status: newStatus,
+            categoryType: categoryType // Include the category type
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message) {
-                    // Show error message in the modal
-                    const errorMessage = document.createElement('p');
-                    errorMessage.textContent = data.message;
-                    errorMessage.className = 'error-message'; // Style this as needed
-                    document.getElementById('keyFields').appendChild(errorMessage);
-                } else {
-                    // Close the modal and possibly update UI
-                    closeModal();
-                    // Optionally, refresh the categories list
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                const errorMessage = document.createElement('p');
-                errorMessage.textContent = 'An error occurred while saving the category.';
-                errorMessage.className = 'error-message';
-                document.getElementById('keyFields').appendChild(errorMessage);
-            });
-    }
-    function toggleStatus(event, id, isActive, categoryType) {
-        event.preventDefault(); // Prevent the default link behavior
-
-        // Determine the new status
-        const newStatus = isActive ? 'Deactivate' : 'Activate';
-
-        fetch('/admin/toggle-status', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: id,
-                status: newStatus,
-                categoryType: categoryType // Include the category type
-            })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update the link text based on new status
+                const link = event.target;
+                link.textContent = newStatus;
+            } else {
+                console.error('Error:', data.message);
+            }
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Update the link text based on new status
-                    const link = event.target;
-                    link.textContent = newStatus;
-                } else {
-                    console.error('Error:', data.message);
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+}
+
+function editCategory(id, currentName, parentCategoryType) {
+    document.getElementById('editCategoryId').value = id;
+    document.getElementById('editCategoryName').value = currentName;
+    document.getElementById('editCategoryType').value = parentCategoryType; // Set the parent category type
+    document.getElementById('editCategoryModal').style.display = 'block';
+}
+
+function closeEditCategoryModal() {
+    document.getElementById('editCategoryModal').style.display = 'none';
+}
+
+function updateCategory(event) {
+    event.preventDefault(); // Prevent the form from submitting in the traditional way
+
+    const id = document.getElementById('editCategoryId').value;
+    const newName = document.getElementById('editCategoryName').value.trim();
+    const parentCategoryType = document.getElementById('editCategoryType').value; // Retrieve the parent category type
+
+    if (newName === '') {
+        // Handle empty category name
+        alert('Category name cannot be empty.');
+        return;
     }
 
+    fetch('/admin/edit-category', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id: id,
+            categoryName: newName,
+            categoryType: parentCategoryType // Correctly include the parent category type
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update the category name in the UI
+                document.getElementById('category-name-' + id).textContent = newName;
+                closeEditCategoryModal();
+            } else {
+                console.error('Error:', data.message);
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+}
 
+function closeEditCategoryModal() {
+    document.getElementById('editCategoryModal').style.display = 'none';
+}
 </script>

@@ -1,4 +1,5 @@
 require('dotenv').config()
+const Admin = require('../models/adminModel')
 // const Category = require('../models/categoryModel')
 const Brand = require('../models/brandModel')
 const Gear = require('../models/gearModel')
@@ -145,12 +146,84 @@ const addCategory = async (req, res) => {
     }
 }
 
-
+const editCategory = async (req,res)=> {
+    try {
+        const { id, categoryName, categoryType } = req.body;
+    
+        if (!id || !categoryName || !categoryType) {
+            return res.status(400).send('Invalid data');
+        }
+    
+        if (categoryType === 'Brand') {
+            // Handle Brand categories
+            const existingBrand = await Brand.findById(id);
+            if (!existingBrand) {
+                return res.status(404).send('Category not found');
+            }
+    
+            // Check for duplicate entries
+            const duplicateBrand = await Brand.findOne({ categoryName: categoryName, _id: { $ne: id } });
+            if (duplicateBrand) {
+                return res.status(409).json({ message: 'Category already exists' });
+            }
+    
+            // Update the category
+            existingBrand.categoryName = categoryName;
+            await existingBrand.save();
+            return res.status(200).json('Category updated successfully');
+    
+        } else if (categoryType === 'Type') {
+            // Handle Type categories
+            const existingType = await Type.findById(id);
+            if (!existingType) {
+                return res.status(404).send('Category not found');
+            }
+    
+            // Check for duplicate entries
+            const duplicateType = await Type.findOne({ categoryName: categoryName, _id: { $ne: id } });
+            if (duplicateType) {
+                return res.status(409).json({ message: 'Category already exists' });
+            }
+    
+            // Update the category
+            existingType.categoryName = categoryName;
+            await existingType.save();
+            return res.status(200).json('Category updated successfully');
+    
+        } else if (categoryType === 'Gear') {
+            // Handle Gear categories
+            const existingGear = await Gear.findById(id);
+            if (!existingGear) {
+                return res.status(404).send('Category not found');
+            }
+    
+            // Check for duplicate entries
+            const duplicateGear = await Gear.findOne({ categoryName: categoryName, _id: { $ne: id } });
+            if (duplicateGear) {
+                return res.status(409).json({ message: 'Category already exists' });
+            }
+    
+            // Update the category
+            existingGear.categoryName = categoryName;
+            await existingGear.save();
+            return res.status(200).json('Category updated successfully');
+    
+        } else {
+            return res.status(400).send('Invalid category type');
+        }
+    
+    } catch (error) {
+        console.error('Error updating category:', error);
+        res.status(500).send('Server error');
+    }
+    
+}
 
 module.exports = {
     categories,
     addCategory,
-    changeCategoryStatus
+    changeCategoryStatus,
+    editCategory
     // getEditCategories,
     // postEditCategories,
     // getAddCategory,

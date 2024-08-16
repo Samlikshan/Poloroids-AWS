@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 const ObjectId = Schema.ObjectId
 
 const productSchema = new Schema({
-    productName:{type:String, unique:true},
+    productName:{type:String},
     productDescription:{type:String,},
     price:{type:Number,},
     // productImages:{type:Array},

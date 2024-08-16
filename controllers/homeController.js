@@ -14,7 +14,7 @@ const Product = require('../models/productModel')
 
 const getProdcts = async ()=> {
     try{
-        let products = await Product.find({availability:true})
+        let products = await Product.find({availability:true}).limit(6)
         return products
     }catch (error){
         console.log(error)

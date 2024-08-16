@@ -72,7 +72,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Middleware to dynamically set the layout based on the route
 app.use((req, res, next) => {
-  if (req.path.startsWith('/admin/auth') || req.path === '/admin/login') {
+  if (req.path.startsWith('/admin/auth') || req.path === '/admin/login' || req.path === '/admin/reset-password' || req.path === '/admin/new-password' || req.path === '/admin/forgot-password') {
     res.locals.layout = 'auth'; // Use auth layout for specific admin auth routes
   } else if (req.path.startsWith('/admin')) {
     res.locals.layout = 'admin'; // Use admin layout for other admin routes

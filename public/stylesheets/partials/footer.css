@@ -2,7 +2,7 @@
 /* footer */
 
 .footer {
-    background-color: rgb(71, 71, 71);
+    background-color: rgb(0, 0, 0);
     padding: 40px 20px;
     display: flex;
     flex-wrap: wrap;
@@ -25,6 +25,7 @@
   }
   
   .footer-heading {
+    color: #ffffff;
     font-size: 1.5em;
     font-weight: 900;
     margin-bottom: 20px;
@@ -38,7 +39,7 @@
   
   .footer-section p {
     font-size: 1em;
-    color: #666;
+    color: #ffffff;
   }
   
   .footer-section ul {
@@ -53,13 +54,13 @@
   
   .footer-section a {
     text-decoration: none;
-    color: #333;
+    color: #ffffff;
     font-size: 1em;
     transition: color 0.3s;
   }
   
   .footer-section a:hover {
-    color: #007BFF; /* Change color on hover */
+    color: #ffffff; /* Change color on hover */
   }
   
   @media (max-width: 768px) {

@@ -271,3 +271,21 @@ h1 {
 .status-link:hover {
     text-decoration: underline;
 }
+
+
+/* Edit Button Styles */
+.edit-btn {
+    background-color: transparent; /* Match the status link's background */
+    color: #4a4a4a; /* Same text color as the status link */
+    border: none; /* No border */
+    font-size: 16px; /* Match the font size of status link */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-weight: bold; /* Same font weight for consistency */
+    text-decoration: none; /* Underline to match the status link */
+    transition: color 0.3s; /* Smooth transition for color change */
+}
+
+.edit-btn:hover {
+    color: #333; /* Darker color on hover for better visibility */
+    text-decoration: underline; /* Remove underline on hover */
+}
