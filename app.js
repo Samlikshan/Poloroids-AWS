@@ -17,6 +17,8 @@ connectDB();
 const indexRouter = require('./routes/userRoutes');
 const authRouter = require('./routes/authRoute');
 const adminRoute = require('./routes/adminRoute');
+const shoppingCart = require('./routes/shoppingCartRoute')
+const ordersRouter = require('./routes/ordersRouter')
 
 const app = express();
 
@@ -48,10 +50,14 @@ app.engine('hbs', exphbs.engine({
   helpers: {
     json: function (context) {
       return JSON.stringify(context);
+    },
+    eq: function (a, b, options) {
+      return a === b 
     }
   },
   handlebars: allowInsecurePrototypeAccess(Handlebars)
 }));
+
 
 
 
@@ -78,6 +84,8 @@ app.use((req, res, next) => {
     res.locals.layout = 'admin'; // Use admin layout for other admin routes
   } else if (req.path.startsWith('/auth')) {
     res.locals.layout = 'auth'; // Use auth layout for user auth routes
+  } else if (req.path.startsWith('/account')){
+    res.locals.layout = 'accounts'
   } else {
     res.locals.layout = 'user'; // Use user layout for other routes
   }
@@ -93,8 +101,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Route handlers
 app.use('/', indexRouter);
+app.use('/', ordersRouter);
 app.use('/auth', authRouter);
 app.use('/admin', adminRoute);
+app.use('/cart', shoppingCart);
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {

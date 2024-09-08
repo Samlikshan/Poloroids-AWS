@@ -1,0 +1,101 @@
+<link rel="stylesheet" href="/stylesheets/user/userDetails.css">
+
+<div class="form-container">
+    <form>
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" value="{{user.username}}" readonly>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" value="{{user.email}}" readonly>
+
+        <label for="mobile">Mobile Number</label>
+        <input type="text" id="mobile" name="mobile" value="{{user.phoneNumber}}" readonly>
+
+        <button type="button" id="edit-button" class="edit-button">Edit</button>
+    </form>
+</div>
+
+<!-- Modal Structure -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Edit Information</h2>
+        <form id="editForm">
+            <label for="edit-username">Username</label>
+            <input type="text" id="edit-username" name="edit-username" value="{{user.username}}">
+
+            <label for="edit-email">Email</label>
+            <input type="email" id="edit-email" name="edit-email" value="{{user.email}}">
+
+            <label for="edit-mobile">Mobile Number</label>
+            <input type="text" id="edit-mobile" name="edit-mobile" value="{{user.phoneNumber}}">
+
+            <button type="submit" class="save-button">Save</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Get the modal
+    var modal = document.getElementById("editModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("edit-button");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal 
+    btn.onclick = function () {
+        modal.style.display = "flex";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // Handle form submission
+    document.getElementById("editForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Gather form data
+        var formData = new FormData(event.target);
+
+        // Prepare data for POST request
+        var data = {
+            username: formData.get('edit-username'),
+            email: formData.get('edit-email'),
+            phoneNumber: formData.get('edit-mobile')
+        };
+
+        // Send POST request
+        fetch('/account/profile', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert('Information updated successfully!');
+                modal.style.display = 'none'; // Close the modal on success
+            } else {
+                alert('Error updating information.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('There was an error. Please try again.');
+        });
+    });
+</script>

@@ -1,0 +1,81 @@
+/* Ensure to include this in your /stylesheets/layouts/user.css or relevant CSS file */
+
+/* Style for the full-screen loader */
+.newtons-cradle {
+    --uib-size: 50px; /* Default size for the loader dot */
+    --uib-speed: 1.2s; /* Default speed of the animation */
+    --uib-color: #474554; /* Color of the loader dot */
+    position: fixed; /* Fixed position to cover the viewport */
+    top: 0; /* Align to top */
+    left: 0; /* Align to left */
+    width: 100vw; /* Full viewport width */
+    height: 100vh; /* Full viewport height */
+    display: flex; /* Flex to center the dots */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    background: rgba(255, 255, 255, 0.9); /* Optional: semi-transparent background to cover content */
+    z-index: 9999; /* High z-index to ensure it's on top */
+    display: none; /* Hidden by default */
+}
+
+/* Style for each dot in the cradle */
+.newtons-cradle__dot {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: var(--uib-size); /* Use the variable size */
+    width: calc(var(--uib-size) / 4); /* Calculate width to fit within the parent container */
+    transform-origin: center top;
+}
+
+/* Dot appearance */
+.newtons-cradle__dot::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 25%; /* Height relative to the dot's height */
+    border-radius: 50%;
+    background-color: var(--uib-color);
+}
+
+/* Animation for the first dot */
+.newtons-cradle__dot:first-child {
+    animation: swing var(--uib-speed) linear infinite;
+}
+
+/* Animation for the last dot */
+.newtons-cradle__dot:last-child {
+    animation: swing2 var(--uib-speed) linear infinite;
+}
+
+/* Swing animation */
+@keyframes swing {
+    0% {
+        transform: rotate(0deg);
+        animation-timing-function: ease-out;
+    }
+    25% {
+        transform: rotate(70deg);
+        animation-timing-function: ease-in;
+    }
+    50% {
+        transform: rotate(0deg);
+        animation-timing-function: linear;
+    }
+}
+
+/* Second swing animation */
+@keyframes swing2 {
+    0% {
+        transform: rotate(0deg);
+        animation-timing-function: linear;
+    }
+    50% {
+        transform: rotate(0deg);
+        animation-timing-function: ease-out;
+    }
+    75% {
+        transform: rotate(-70deg);
+        animation-timing-function: ease-in;
+    }
+}

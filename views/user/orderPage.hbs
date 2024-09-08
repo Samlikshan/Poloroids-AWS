@@ -1,0 +1,54 @@
+<link rel="stylesheet" href="/stylesheets/user/orderPage.css">
+
+<div class="orders-container">
+    <h2>Orders</h2>
+    {{#each orders}}
+        {{#each items}}
+       <a href="/account/order/{{../_id}}" style="text-decoration: none;"><div class="order-item">
+            <div class="order-image">
+                <img src="{{mainImage}}" alt="{{productName}}">
+            </div>
+            <div class="order-details">
+                <h3>{{productName}}</h3>
+                <p>Quantity: {{quantity}}</p>
+            </div>
+            <div class="order-price">
+                ₹{{totalPrice}}.00
+            </div>
+            <div class="order-status">
+                    <span class="status-dot delivered"></span>
+                    {{../orderStatus}}
+                {{!-- {{#if ../orderStatus "delivered"}}
+                    <span class="status-dot delivered"></span>
+                    Delivered on {{deliveryDate}}
+                {{else}}
+                    <span class="status-dot pending"></span>
+                    Status: {{orderStatus}}
+                {{/if}} --}}
+            </div>
+        </div>
+        </a> 
+        {{/each}}
+    {{/each}}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.order-status').forEach(statusElement => {
+            const statusDot = statusElement.querySelector('.status-dot');
+            const statusText = statusElement.textContent.trim().toLowerCase();
+
+            // Remove all status classes first
+            statusDot.classList.remove('delivered', 'pending', 'cancelled');
+
+            // Apply the appropriate status class
+            if (statusText.includes('delivered')) {
+                statusDot.classList.add('delivered');
+            } else if (statusText.includes('pending')) {
+                statusDot.classList.add('pending');
+            } else if (statusText.includes('cancelled')) {
+                statusDot.classList.add('cancelled');
+            }
+        });
+    });
+</script>

@@ -1,0 +1,77 @@
+.thank-you-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 160px); /* Adjusted to fit within layout minus header and footer height */
+    background-color: #f5f5f5;
+}
+
+.thank-you-content {
+    align-items: center;
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    position: relative; /* Allow absolute positioning of child elements */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.success-icon {
+    margin: 0 auto 20px auto;
+    display: block;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: 900;
+    margin-bottom: 20px;
+    color: #333333;
+}
+
+button {
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 900;
+    margin-bottom: 10px; /* Adjusted to space from the link */
+    max-width: 200px; /* Limit the button width */
+    width: 100%; /* Make button responsive to container width */
+}
+
+button:hover {
+    background-color: #333333;
+}
+
+.orders-link {
+    display: inline-block;
+    color: #666666;
+    text-decoration: none;
+    font-weight: 600;
+    margin-bottom: 10px; /* Adjusted for spacing */
+    max-width: 200px; /* Limit the link width */
+    width: 100%; /* Make link responsive to container width */
+    /* text-align: right; */
+}
+
+.orders-link span {
+    margin-left: 5px;
+}
+
+/* New styles for positioning */
+.footer-links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: calc(100% - 40px); /* Ensure footer-links container doesn’t exceed content width */
+}

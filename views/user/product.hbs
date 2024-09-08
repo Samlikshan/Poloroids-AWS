@@ -1,20 +1,29 @@
 <link rel="stylesheet" href="/stylesheets/user/product.css">
+
 <div class="container">
     <div class="breadcrumbs">
         <a href="/">Home</a> > <a href="/shop">Shop</a> > <a href="#">{{product.productName}}</a>
     </div>
-<div class="product-container">
+    <div class="product-container">
         <div class="product-images">
-            <div class="hero-image-container">
-                <img src="{{product.mainImage}}" alt="Sony Alpha 7C Camera" class="hero-image" id="main-image">
+            <div class="hero-image-container" id="magnifier-container">
+                <div class="magnifier-thumb-wrapper">
+                    <img src="{{product.mainImage}}" 
+                         alt="Product Image" 
+                         class="hero-image" 
+                         id="main-image" 
+                         data-large-src="{{product.mainImage}}">
+                    <div id="magnifier-lens"></div>
+                </div>
             </div>
+
             <div class="secondary-images">
                 {{#each product.additionalImages}}
-                <img src="{{this}}" alt="Sony Camera Front View" class="thumbnail">
-            {{/each}}
+                <img src="{{this}}" alt="Thumbnail Image" class="thumbnail">
+                {{/each}}
             </div>
         </div>
-        
+
         <div class="product-details">
             <h1>{{product.productName}}</h1>
             <div class="ratings">
@@ -25,16 +34,15 @@
                 <span class="star">&#9733;</span>
                 <a href="#">Read reviews</a>
             </div>
-                <p class="description">{{product.productDescription}}</p>
+            <p class="description">{{product.productDescription}}</p>
             <div class="price">
-                <span class="original-price">M.R.P:$ {{product.price}}.99</span>
+                <span class="original-price">M.R.P:₹ {{product.price}}.99</span>
                 <span class="sale-price">You Save 15%</span>
             </div>
             <div class="price-container">
-                <button>Add to cart</button>
-                <span class="price-tag">${{product.price}}.99</span>
+                <button onclick="addToCart('{{product._id}}')">Add to cart</button>
+                <span class="price-tag">₹{{product.price}}.99</span>
             </div>
-            
             <div class="specs">
                 <ul class="features-list">
                     <li>24.2 MP full-frame Exmor R CMOS sensor</li>
@@ -43,9 +51,90 @@
                     <!-- Add more features as needed -->
                 </ul>
             </div>
-            
         </div>
     </div>
-    </div>
 
-    <script src="/javascripts/user/product.js"></script>
+    <div class="related-product-container">
+    <h1>Related Product</h1>
+    <div class="cards">
+        {{#each products}}
+        <div class="card">
+            <img src="/images/icons/Wishlist.svg" alt="Wishlist Icon" class="wishlist-icon">
+            <a href="/shop/{{_id}}" style="text-decoration: none;">
+                <img src="{{mainImage}}" alt="Product Image" class="product-image">
+                <div class="card-content-wrapper">
+                    {{!-- <p class="stock-status">in stock</p> --}}
+                    {{#if stock}}
+                    <p class="stock-status">
+                        In Stock
+                    </p>
+                    {{else}}
+                    <p class="stock-status">
+                        Out of Stock
+                    </p>
+                    {{/if}}
+                    <h2 class="product-name">{{productName}}</h2>
+                    <div class="rating">
+                        <span class="star">&#9733;</span>
+                        <span class="star">&#9733;</span>
+                        <span class="star">&#9733;</span>
+                        <span class="star">&#9733;</span>
+                        <span class="star">&#9733;</span>
+                    </div>
+                    <div class="price">₹ {{price}}.00</div>
+            </a>
+            <button>Add to Cart</button>
+        </div>
+    </div>
+    {{/each}}
+
+</div>
+</div>
+<script src="/javascripts/user/product.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const img = document.getElementById('main-image');
+        const lens = document.getElementById('magnifier-lens');
+        const container = document.getElementById('magnifier-container');
+        
+        lens.style.width = "250px";
+        lens.style.height = "200px";
+        lens.style.position = "absolute";
+        lens.style.border = "1px solid #000";
+        lens.style.cursor = "none";
+        lens.style.borderRadius = '7.5px'
+        
+        container.addEventListener('mousemove', moveLens);
+        container.addEventListener('mouseleave', () => {
+            lens.style.display = 'none';
+        });
+        container.addEventListener('mouseenter', () => {
+            lens.style.display = 'block';
+        });
+
+        function moveLens(e) {
+            const pos = getCursorPos(e);
+            let x = pos.x - (lens.offsetWidth / 2);
+            let y = pos.y - (lens.offsetHeight / 2);
+
+            if (x > img.width - lens.offsetWidth) {x = img.width - lens.offsetWidth;}
+            if (x < 0) {x = 0;}
+            if (y > img.height - lens.offsetHeight) {y = img.height - lens.offsetHeight;}
+            if (y < 0) {y = 0;}
+
+            lens.style.left = x + "px";
+            lens.style.top = y + "px";
+            lens.style.backgroundImage = "url('" + img.src + "')";
+            lens.style.backgroundSize = (img.width * 3) + "px " + (img.height * 3) + "px";
+            lens.style.backgroundPosition = "-" + (x * 3) + "px -" + (y * 3) + "px";
+        }
+
+        function getCursorPos(e) {
+            const rect = img.getBoundingClientRect();
+            return {
+                x: e.pageX - rect.left - window.pageXOffset,
+                y: e.pageY - rect.top - window.pageYOffset
+            };
+        }
+    });
+</script>

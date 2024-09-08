@@ -13,7 +13,7 @@ document.getElementById("loginForm").addEventListener('submit',async function(ev
         })
         if(response.ok){
             const data = await response.json()
-            localStorage.setItem('Token',data.token)
+            // localStorage.setItem('Token',data.token)
             window.location.href= '/'
         }else{
             const errorData = await response.json()

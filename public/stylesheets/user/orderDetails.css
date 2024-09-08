@@ -1,0 +1,123 @@
+.order-details-page {
+    padding: 20px;
+    background-color: #f8f8f8;
+}
+
+.order-address {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    background-color: white;
+    margin-bottom: 20px;
+}
+
+.address-details p {
+    margin: 5px 0;
+    color: #aaa;
+    font-weight: bold;
+}
+
+.order-actions {
+    display: flex;
+    flex-direction: column;
+}
+
+.order-actions button {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px 0;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.order-actions button:hover {
+    background-color: #444;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.order-image img {
+    max-width: 150px;
+    height: auto;
+    margin-right: 20px;
+}
+
+.order-details h3 {
+    margin: 0;
+    color: black;
+    font-weight: bold;
+}
+
+.order-details p {
+    margin: 5px 0;
+    color: #888;
+}
+
+.order-price {
+    font-weight: bold;
+    color: black;
+}
+
+.order-status {
+    display: flex;
+    align-items: center;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.status-dot.delivered {
+    background-color: green;
+}
+
+.status-dot.pending {
+    background-color: blue;
+}
+
+.status-dot.cancelled {
+    background-color: orange;
+}
+
+.order-summary {
+    padding: 20px;
+    background-color: white;
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+}
+
+.order-summary h4 {
+    margin: 0 0 10px 0;
+    color: black;
+    font-weight: bold;
+}
+
+.order-summary p {
+    margin: 5px 0;
+    color: #888;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: #888;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}

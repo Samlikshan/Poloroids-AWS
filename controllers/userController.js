@@ -7,7 +7,7 @@ const listUsers = async (req,res)=>{
 }
 
 const blockUser = async (req, res) => {
-    let id = req.params.id
+    const id = req.params.id
     let user = await User.findById({ _id: id })
     if (user.isActive) {
         await User.updateOne({ _id: id }, { $set: { isActive: false } })

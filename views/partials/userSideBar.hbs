@@ -1,0 +1,56 @@
+<link rel="stylesheet" href="/stylesheets/partials/userSideBar.css" />
+
+<h2>Your Account</h2>
+<ul class="menu">
+    <a href="/account/profile" class="menu-link" style="text-decoration: none;">
+        <li class="menu-item active"><i class="material-icons">person</i> Profile</li>
+    </a>
+    <a href="/account/orders" class="menu-link" style="text-decoration: none;">
+        <li class="menu-item"><i class="material-icons">local_shipping</i> Orders</li>
+    </a>
+    <a href="/account/address" class="menu-link" style="text-decoration: none;">
+        <li class="menu-item"><i class="material-icons">location_on</i> Address</li>
+    </a>
+    <a href="/account/wishlist" class="menu-link" style="text-decoration: none;">
+        <li class="menu-item"><i class="material-icons">favorite</i> Wishlist</li>
+    </a>
+    <a href="/account/wallet" class="menu-link" style="text-decoration: none;">
+        <li class="menu-item"><i class="material-icons">account_balance_wallet</i> Wallet</li>
+    </a>
+</ul>
+<div class="bottom-menu">
+    <a href="/auth/resetPassword" class="menu-link" style="text-decoration: none;"><li class="menu-item logout"><i class="material-icons">lock_reset</i> Reset Password</li></a>
+    <a href="/logout" class="menu-link" style="text-decoration: none;"><li class="menu-item logout"><i class="material-icons">logout</i> Logout</li></a>
+    <a href="/shop" class="back-to-shop">← Go Back to shop</a>
+</div>
+
+<script>
+   document.addEventListener("DOMContentLoaded", () => {
+    const navLinks = document.querySelectorAll(".menu-link");
+    const currentPath = window.location.pathname;
+
+    // Function to set the active class based on the current path
+    function setActiveLink() {
+        navLinks.forEach(link => {
+            const linkPath = link.getAttribute("href");
+            const linkItem = link.querySelector(".menu-item");
+
+            // Normalize paths for comparison
+            const normalizedCurrentPath = currentPath.replace(/\/$/, '');
+            const normalizedLinkPath = linkPath.replace(/\/$/, '');
+
+            // Check if the current path matches the link path
+            if (normalizedCurrentPath === normalizedLinkPath || 
+                normalizedCurrentPath.startsWith(normalizedLinkPath + '/')) {
+                linkItem.classList.add("active");
+            } else {
+                linkItem.classList.remove("active");
+            }
+        });
+    }
+
+    // Set the active link when the page loads
+    setActiveLink();
+});
+
+</script>

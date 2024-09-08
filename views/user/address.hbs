@@ -1,0 +1,165 @@
+<link rel="stylesheet" href="/stylesheets/user/address.css" />
+
+<div class="address-section">
+  <button class="add-address-btn">+ Add A NEW ADDRESS</button>
+  {{#each addresses.address}}
+    <div class="address-card">
+      <div class="address-header">
+        <span>{{addressType}}</span>
+        <div class="dropdown">
+          <button class="options-btn">...</button>
+          <div class="dropdown-content">
+            <button
+              class="dropdown-item edit"
+              data-email="{{email}}"
+              data-firstname="{{firstName}}"
+              data-lastname="{{lastName}}"
+              data-address="{{address}}"
+              data-city="{{city}}"
+              data-phone="{{phoneNumber}}"
+              data-pincode="{{pincode}}"
+              data-country="us"
+              data-state="SC"
+              data-addresstype="{{addressType}}"
+            >Edit</button>
+            <button class="dropdown-item" onclick="deleteAdd('{{_id}}', this)">Delete</button>
+
+          </div>
+        </div>
+      </div>
+      <div class="address-content">
+        <p><strong>{{firstName}}</strong> {{phoneNumber}}</p>
+        <p>{{email}}</p>
+        <p>{{address}}, {{city}}</p>
+        <p>{{state}},&nbsp; {{pincode}}</p>
+      </div>
+    </div>
+  {{/each}}
+</div>
+
+<!-- Add Address Modal -->
+<div id="addAddressModal" class="modal">
+  <div class="modal-content">
+    <h2>Add Address</h2>
+    <form id="addAddressForm">
+      <label>Contact</label>
+      <input type="number" placeholder="Mobile Number" minlength="10" maxlength="10" required />
+
+      <div class="form-row">
+        <label><input type="radio" name="addressType" value="home" checked />
+          Home</label>
+        <label><input type="radio" name="addressType" value="work" />
+          Work</label>
+      </div>
+
+      <select required>
+        <option value="" disabled selected>Country / Region</option>
+        <option value="us">United States</option>
+        <option value="india">India</option>
+        <option value="dubai">Dubai</option>
+      </select>
+
+      <div class="form-row">
+        <input type="text" placeholder="First name" required />
+        <input type="text" placeholder="Last name" required />
+      </div>
+
+      <input type="text" placeholder="Company (optional)" />
+
+      <input type="text" placeholder="Address" required />
+
+      <div class="form-row">
+        <input type="text" placeholder="City/District/Town" required />
+        {{!-- <select required >
+          <option value="" disabled selected>State</option>
+          <option value="sc">South Carolina</option>
+          <option value="kl">Kerala</option>
+        </select> --}}
+        <input type="text" placeholder="State" required>
+      </div>
+
+      <div class="form-row">
+        <input type="email" placeholder="Email" required />
+        <input type="number" placeholder="Pincode" required />
+      </div>
+
+      <button type="submit" class="modal-btn">Add</button>
+    </form>
+  </div>
+</div>
+
+<!-- Edit Address Modal -->
+<div id="editAddressModal" class="modal">
+  <div class="modal-content">
+    <h2>Edit Address</h2>
+    <form id="editAddressForm">
+      <label>Contact</label>
+      <input
+        type="text"
+        id="editEmail"
+        placeholder="Email or mobile number"
+        required
+      />
+
+      <div class="form-row">
+        <label><input
+            type="radio"
+            id="editHome"
+            name="editAddressType"
+            value="home"
+          />
+          Home</label>
+        <label><input
+            type="radio"
+            id="editWork"
+            name="editAddressType"
+            value="work"
+          />
+          Work</label>
+      </div>
+
+      <select id="editCountry" required>
+        <option value="" disabled selected>Country / Region</option>
+        <option value="us">United States</option>
+        <option value="india">India</option>
+        <option value="dubai">Dubai</option>
+      </select>
+
+      <div class="form-row">
+        <input
+          type="text"
+          id="editFirstName"
+          placeholder="First name"
+          required
+        />
+        <input type="text" id="editLastName" placeholder="Last name" required />
+      </div>
+
+      <input type="text" id="editCompany" placeholder="Company (optional)" />
+
+      <input type="text" id="editAddress" placeholder="Address" required />
+
+      <div class="form-row">
+        <input
+          type="text"
+          id="editCity"
+          placeholder="City/District/Town"
+          required
+        />
+        <select id="editState" required>
+          <option value="" disabled selected>State</option>
+          <option value="sc">South Carolina</option>
+          <option value="kl">Kerala</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <input type="text" id="editPhone" placeholder="Phone number" required />
+        <input type="text" id="editPincode" placeholder="Pincode" required />
+      </div>
+
+      <button type="submit" class="modal-btn">Save</button>
+    </form>
+  </div>
+</div>
+<script src="/javascripts/user/address.js"></script>

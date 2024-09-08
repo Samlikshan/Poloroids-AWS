@@ -1,0 +1,109 @@
+
+.header {
+    margin-bottom: 20px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 2em;
+    color: #4a4a4a;
+}
+
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-radius: 12.5px;
+    overflow: hidden;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.order-table th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #ddd;
+    color: #4a4a4a;
+    border: 1px solid #ddd;
+}
+
+.order-table td {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    border: none;
+}
+
+.order-table tbody tr {
+    background-color: transparent;
+}
+
+.order-table a {
+    color: #4a4a4a;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.order-table a:hover {
+    text-decoration: underline;
+}
+
+.status-container {
+    position: relative;
+    display: inline-block;
+    overflow: visible;
+}
+
+.status-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 85px;
+    text-transform: capitalize;
+}
+
+.status-btn.pending {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.status-btn.canceled {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status-btn.delivered {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+
+
+.status-options {
+    max-height: 150px; /* Limit height */
+    overflow-y: auto; /* Allow vertical scrolling */
+    display: none;
+    /* position: absolute; */
+    top: 100%;
+    left: 0;
+    background-color: #ffffff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.status-options a {
+    display: block;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+}
+
+.status-options a:hover {
+    background-color: #f1f1f1;
+}

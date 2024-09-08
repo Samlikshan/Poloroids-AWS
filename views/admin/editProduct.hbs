@@ -67,7 +67,7 @@
         <div class="section">
             <h2>Price</h2>
             <div class="form-group">
-                <input type="text" name="price" value="{{product.price}}">
+                <input type="number" name="price" value="{{product.price}}" min="0" step="0.01" required>
             </div>
         </div>
 
@@ -77,7 +77,7 @@
 
             <div class="form-group">
                 <label for="quantity">Quantity</label>
-                <input type="text" id="quantity" name="stock" value="{{product.stock}}">
+                <input type="number" id="quantity" name="stock" value="{{product.stock}}" min="0" required>
             </div>
         </div>
 
@@ -93,7 +93,7 @@
                         <span>Main Image</span>
                     </label>
                     {{!-- <input type="hidden" name="productImage" value="{{product.productImages.[0]}}"> --}}
-                    <input type="file" id="imageUpload1" name="mainImage" style="display: none;">
+                    <input type="file" id="imageUpload1" name="mainImage" style="display: none;" accept="image/jpeg, image/png">
                 </div>
                 {{#each product.additionalImages}}
                 <div class="image-upload-group">
@@ -105,7 +105,7 @@
                     {{!-- <input type="file" id="imageUpload2" style="display: none;" name="replaceImage{{@index}}">
                     --}}
                     <input type="checkbox" name="deleteImage{{@index}}"> Delete this image
-                    <input type="file" name="replaceImage{{@index}}">
+                    <input type="file" name="replaceImage{{@index}}" accept="image/jpeg, image/png">
                 </div>
                 {{/each}}
                 <div>

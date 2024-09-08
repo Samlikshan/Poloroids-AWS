@@ -1,0 +1,65 @@
+<link rel="stylesheet" href="/stylesheets/admin/singleOrder.css"> <div class="order-details-container">
+
+        <!-- Upper Part -->
+        <div class="section">
+            <div class="section-title">Order - Details</div>
+            <div class="section-content">
+                <p class="order-id"><span>OrderId : </span>{{order._id}}</p>
+                <p class="order-date"><span>Order Date : </span>{{user.createdAt}}</p>
+                <p class="status">
+    <span>Order-Status :</span>
+    <div class="status-container">
+        <button class="status-btn {{order.orderStatus}}">{{order.orderStatus}}</button>
+        <div class="status-options">
+            <a data-status="pending" onclick="pending('{{order._id}}', '{{user.userId}}')">Pending</a>
+            <a data-status="canceled" onclick="canceled('{{order._id}}', '{{user.userId}}')">Canceled</a>
+            <a data-status="delivered" onclick="delivered('{{order._id}}', '{{user.userId}}')">Delivered</a>
+        </div>
+    </div>
+</p>
+
+            </div>
+        </div>
+
+        <!-- Address Part -->
+        <div class="section">
+            <div class="section-title">Shipping Details</div>
+            <div class="section-content">
+                <p><span>User ID :</span> {{order.userId}}</p>
+                <p><span>Username :</span> {{order.address.firstName}}</p>
+                <p><span>Email Address :</span> {{order.address.email}}</p>
+                <p><span>Phone Number :</span> {{order.address.phoneNumber}}</p>
+                <p><span>Address :</span> {{order.address.address}}</p>
+            </div>
+        </div>
+
+        <!-- Product Part -->
+        <div class="section">
+            <div class="section-title">Products</div>
+            <div class="section-content">
+                {{#each order.items}}
+                <div class="product-item">
+                    <img src="{{this.mainImage}}" alt="Product Image 2">
+                    <div class="product-details">
+                        <p><span>Product Name :</span> {{this.productName}}</p>
+                        <p><span>Quantity :</span> {{this.quantity}}</p>
+                        <p><span>Price :</span> ${{this.unitPrice}}.00</p>
+                        <p><span>Total Price :</span> ${{this.totalPrice}}.00</p>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+
+        <!-- Payment Details Part -->
+        <div class="section">
+            <div class="section-title">Payment Details</div>
+            <div class="section-content">
+                <p><span>Payment Method :</span> {{order.paymentMethod}}</p>
+                <p><span>Payment Status :</span> {{order.paymentStatus}}</p>
+                <p><span>Total Price :</span> ${{order.totalAmount}}</p>
+            </div>
+        </div>
+
+
+<script src="/javascripts/admin/singleOrder.js"></script>

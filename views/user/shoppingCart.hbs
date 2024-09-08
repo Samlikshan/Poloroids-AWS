@@ -1,0 +1,43 @@
+<link rel="stylesheet" href="/stylesheets/shoppingCart.css" />
+<div class="cart-container">
+  {{#if isEmpty}}
+  <div class="empty-cart-container">
+    <p class="empty-cart-message">Cart is Empty</p>
+  </div>
+  {{else}}
+  <div class="cart-header">
+    <h1>Shopping Cart</h1>
+    <span class="items-count">0 Items</span>
+  </div>
+  {{#each products}}
+  <div class="cart-item" data-id="{{_id}}">
+    <img src="{{mainImage}}" alt="Camera" />
+    <div class="item-details">
+      <a href="/shop/{{_id}}" style="text-decoration: none;">
+        <p class="item-name" style="color: black;">{{productName}}</p>
+      </a>
+    </div>
+    <div class="quantity-control">
+      <button onclick="quantityDec('{{_id}}')">-</button>
+      <span class="item-quantity">{{quantity}}</span>
+      <p class="item-stock" style="display: none;">{{stock}}</p>
+      <button onclick="quantityInc('{{_id}}')">+</button>
+    </div>
+    <p class="item-price" data-unit-price="{{price}}"></p>
+    <button class="remove-item" onclick="removeItem('{{_id}}')">&times;</button>
+  </div>
+  {{/each}}
+  <div class="cart-summary">
+    <div class="total-amount">
+      <span>Total Amount :</span>
+      <span class="amount">$0.00</span>
+    </div>
+  </div>
+  <div class="cart-footer">
+    <a href="/shop" class="back-to-shop">&larr; Go Back to shop</a>
+    <a href="/checkout"><button class="checkout">Checkout</button></a>
+  </div>
+  {{/if}}
+</div>
+
+<script src="/javascripts/user/shoppingCart.js"></script>

@@ -1,0 +1,27 @@
+<link rel="stylesheet" href="/stylesheets/partials/loader.css">
+<div class="newtons-cradle">
+<div class="newtons-cradle__dot"></div>
+<div class="newtons-cradle__dot"></div>
+<div class="newtons-cradle__dot"></div>
+<div class="newtons-cradle__dot"></div>
+</div>
+
+ <script>
+        // Show the loader
+function showLoader() {
+  document.querySelector('.newtons-cradle').style.display = 'flex';
+}
+
+// Hide the loader
+function hideLoader() {
+  document.querySelector('.newtons-cradle').style.display = 'none';
+}
+
+// Example usage: Show loader on page load, hide after data is fetched
+document.addEventListener('DOMContentLoaded', function() {
+  showLoader();
+  // Simulate data fetching
+  setTimeout(hideLoader, 1250); // Hide after 3 seconds
+});
+
+    </script>

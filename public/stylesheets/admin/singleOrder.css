@@ -1,0 +1,150 @@
+
+.section {
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+.section-content {
+    margin-left: 20px;
+}
+
+.order-id, .order-date, .status {
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.status-badge {
+    display: inline-block;
+    background-color: #e0ecfb;
+    color: #3182ce;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.product-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.product-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+
+.product-details {
+    flex-grow: 1;
+}
+
+.product-details p {
+    margin: 5px 0;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+@media screen and (max-width: 600px) {
+    .order-details-container {
+        padding: 15px;
+    }
+
+    .section-title {
+        font-size: 18px;
+    }
+
+    .order-id, .order-date, .status, .product-details p {
+        font-size: 14px;
+    }
+
+    .status-badge {
+        font-size: 12px;
+    }
+}
+
+.status {
+    display: flex;
+    align-items: center; /* Vertically center align the label and button */
+    display: inline;
+}
+
+.status span {
+    margin-right: 10px; /* Space between the label and the button */
+    white-space: nowrap; /* Prevent the label from wrapping */
+}
+
+    /* .status-container {
+        position: relative;
+        display: inline-block;
+    } */
+
+.status-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    text-transform: capitalize;
+    white-space: nowrap; /* Prevent button text from wrapping */
+}
+
+.status-btn.pending {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.status-btn.canceled {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status-btn.delivered {
+    background-color: #d4edda;
+    color: #155724;
+}
+.status-container {
+    position: relative;
+    display: inline-flex; /* Inline-flex will allow horizontal alignment of the button and options */
+    align-items: center; /* Vertical alignment */
+}
+
+.status-options {
+    display: none; /* Hide by default */
+    position: relative; /* Position relative to status container */
+    margin-left: 10px; /* Add some space between the button and options */
+    z-index: 10;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    padding: 5px;
+    white-space: nowrap; /* Prevent wrapping of options */
+}
+
+.status-options a {
+    display: inline-block;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    margin-right: 5px;
+    background-color: #f1f1f1;
+    border-radius: 3px;
+}
+
+.status-options a:hover {
+    background-color: #e0e0e0;
+}
+
+.status-container:hover .status-options {
+    display: none; /* Show in a row when hovering or clicking */
+}

@@ -31,14 +31,75 @@
     margin: 0;
 } */
 
-.sort-by {
+/* .sort-by {
     font-weight: 900;
 }
 
 .sort-by a {
     color: #E00707;
     text-decoration: none;
+} */
+
+.sort-by {
+    font-weight: 900;
+    position: relative;
+    display: inline-block;
 }
+
+.sort-by a {
+    color: #E00707;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.sort-button {
+    background-color: transparent;
+    color: #E00707;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-weight: 900;
+    font-size: 16px;
+}
+
+.sort-options {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border-radius: 7px;
+    border: 1px solid #ccc;
+    border: none;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: 123px;
+    /* min-width: 129px; */
+    left: 0px;
+    /* top: 52px; */
+}
+
+.sort-options li {
+    padding: 8px 12px;
+}
+
+.sort-options li a {
+    color: #E00707;
+    text-decoration: none;
+    display: block;
+}
+
+.sort-options li:hover {
+    background-color: transparent;
+
+}
+
+.sort-options li a:hover {
+    text-decoration: underline;
+}
+
+
 
 .content {
     display: flex;
@@ -175,6 +236,21 @@
     margin: 15px 0;
 }
 
+/* .card button {
+    background-color: #000000;
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 900;
+    transition: ease 0.3s;
+}
+
+.card button:hover {
+    background-color: #A5A5A5;
+} */
+
 .card button {
     background-color: #000000;
     color: #FFFFFF;
@@ -189,6 +265,23 @@
 .card button:hover {
     background-color: #A5A5A5;
 }
+
+/* New styles for disabled button */
+.card button[disabled] {
+    background-color: #D3D3D3; /* Light grey */
+    color: #A9A9A9; /* Darker grey for text */
+    cursor: not-allowed;
+    border: none;
+    transition: none; /* Remove hover transition for disabled state */
+}
+
+/* Optional: If you want to change hover effects for disabled buttons */
+.card button[disabled]:hover {
+    background-color: #D3D3D3; /* Keep the same light grey color */
+    color: #A9A9A9; /* Same text color */
+    cursor: not-allowed; /* Ensure the cursor remains as not-allowed */
+}
+
 
 .pagination {
     display: flex;

@@ -60,8 +60,10 @@ document.getElementById('otpForm').addEventListener('submit', async function(eve
         });
 
         if (response.ok) {
+            console.log('hai')
             window.location.href= '/auth/login'
         } else {
+            console.log('error')
             const errorData = await response.json();
             errorDisplay(errorData.message);
         }

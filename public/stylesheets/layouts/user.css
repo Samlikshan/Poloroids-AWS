@@ -3,3 +3,8 @@ body {
     margin: 0;
     background-color: #E8E8E8;
 }
+
+.newtons-cradle {
+    display: none; /* Hide by default */
+  }
+  

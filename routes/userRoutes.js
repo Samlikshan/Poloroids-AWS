@@ -1,19 +1,45 @@
-let express = require('express');
-const getHome = require('../controllers/homeController');
-const getProducts = require('../controllers/shopContoller');
-const userRequireAuth = require('../middleware/userRequireAuth');
-const singleProduct = require('../controllers/userProductController');
+let express = require("express");
+const {getHome,logout} = require("../controllers/homeController");
+const {getProducts,sortProducts} = require("../controllers/shopContoller");
+const userRequireAuth = require("../middleware/userRequireAuth");
+const {singleProduct,productResponse} = require("../controllers/userProductController");
+const {
+  addAddress,
+  viewAddress,
+  updateAddress,
+  deleteAddress,
+  fetchAddress,
+} = require("../controllers/user/addressController");
+const {viewOrders,singleOrder, cancelOrder} = require('../controllers/user/orderContoller')
+const {getUserDetails,editUserDetails} = require('../controllers/user/userProfile')
 
 let router = express.Router();
 
-/* GET home page. */
-router.get('/',getHome);
 
-router.get('/shop',getProducts)
-router.get('/account',userRequireAuth,(req,res)=>{
-    res.send('account')
-})
+router.get("/", getHome);
+router.get("/logout", logout);
 
-router.get('/shop/:id',singleProduct)
+router.get("/shop", getProducts);
+router.get("/shop/sort/:order", sortProducts);
+
+
+// router.get("/account/profile", userRequireAuth,getUserDetails);
+router.get('/account/profile',userRequireAuth,getUserDetails)
+router.post('/account/profile',editUserDetails)
+
+router.get('/account/orders',viewOrders)
+router.get('/account/order/:orderId',singleOrder)
+router.post('/account/order/:orderId',cancelOrder)
+
+
+router.get("/shop/:id", singleProduct);
+router.get("/product/:id", productResponse);
+
+router.get("/account/address", viewAddress);
+router.get('/api/addresses',fetchAddress)
+router.post("/account/add-address", addAddress);
+router.post("/account/update-address", updateAddress);
+router.post("/account/address/delete", deleteAddress);
+
 
 module.exports = router;

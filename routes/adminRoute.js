@@ -8,6 +8,7 @@ const { listUsers, blockUser, userDetails } = require('../controllers/userContro
 const { categories,addCategory, changeCategoryStatus, editCategory } = require('../controllers/categoryController');
 const { showProducts, getEditProducts, postEditProducts, getAddProduct, postAddProduct, disableProduct } = require('../controllers/productController');
 const { getLogin, postLogin ,logout, getResetPassword, postResetPassword, getNewPassword, postNewPassword, getForgotPasswrod, postForgotPassword } = require('../controllers/adminAuthController');
+const { viewOrder, updateOrders, singleOrder } = require('../controllers/admin/orderManagement');
 
 
 //Auth Management
@@ -22,7 +23,10 @@ router.get('/new-password',getNewPassword)
 router.post('/new-password',postNewPassword)
 router.get('/logout', logout)
 
-router.use(requireAuth)
+
+// require Auth to prevent from non logged users to protected routes
+// router.use(requireAuth)
+
 //dashboard
 router.get('/', getDashboard)
 
@@ -72,5 +76,14 @@ router.post('/edit-product/:id', upload.fields([
     ]), postEditProducts)
 
 router.get('/disable-product/:id', disableProduct)
+
+
+
+//order Management
+
+router.get('/orders',viewOrder)
+router.get('/order/:orderId',singleOrder)
+router.post('/update-orders',updateOrders)
+
 
 module.exports = router  

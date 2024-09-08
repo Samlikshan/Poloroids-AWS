@@ -1,0 +1,118 @@
+<link rel="stylesheet" href="/stylesheets/user/orderDetails.css">
+
+<div class="order-details-page">
+    <div class="order-address">
+        <div class="address-details">
+            <p><strong>{{order.address.addressType}}</strong></p>
+            <p><strong>{{order.address.firstName}}</strong> {{order.address.phoneNumber}}</p>
+            <p>{{order.address.address}}</p>
+            <p><strong>{{order.address.state}}</strong> {{order.address.pincode}}</p>
+        </div>
+        <div class="order-actions">
+            {{!-- <button class="return-button" data-order-id="{{order._id}}">Return</button> --}}
+            {{#if (eq order.orderStatus 'delivered')}}
+            <button class="return-button" data-order-id="{{order._id}}">Return</button>
+            {{else if (eq order.orderStatus 'pending')}}
+            <button class="cancel-button" data-order-id="{{order._id}}">Cancel</button>
+            {{/if}}
+            {{!-- <button class="invoice-button">Invoice</button> --}}
+        </div>
+    </div>
+
+    <hr>
+
+    {{#each order.items}}
+    <div class="order-item">
+        <div class="order-image">
+            <img src="{{mainImage}}" alt="{{productName}}">
+        </div>
+        <div class="order-details">
+            <h3>{{productName}}</h3>
+            <p>Quantity: {{quantity}}</p>
+        </div>
+        <div class="order-price">
+            ₹{{totalPrice}}
+        </div>
+        <div class="order-status">
+            <span class="status-dot {{#if ../order.orderStatus}}{{../order.orderStatus}}{{else}}pending{{/if}}"></span>
+            <span>{{../order.orderStatus}}</span>
+            {{#if ../order.updatedAt}}
+            <span class="Date" style="margin-left:10px">{{../order.updatedAt}}</span>
+            {{/if}}
+        </div>
+    </div>
+    {{/each}}
+    <hr>
+    <div class="order-summary">
+        <h4>Order Summary</h4>
+        <p><strong>Total Amount:</strong> {{order.totalAmount}}</p>
+        <p><strong>Payment Status:</strong> {{order.paymentStatus}}</p>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Format date
+        document.querySelectorAll('.Date').forEach(dateElement => {
+            let dateStr = dateElement.textContent;
+
+            if (dateStr !== 'Pending') {
+                const cleanDateStr = dateStr.replace(/ GMT.*$/, '').split(' ').slice(0, 4).join(' ');
+                const dateObj = new Date(cleanDateStr);
+                const formattedDate = dateObj.toISOString().split('T')[0];
+                dateElement.textContent = formattedDate;
+            }
+        });
+
+        // Update status dots
+        document.querySelectorAll('.order-status').forEach(statusElement => {
+            const statusDot = statusElement.querySelector('.status-dot');
+            const statusText = statusElement.querySelector('span').textContent.trim().toLowerCase();
+            console.log(statusDot)
+            // Remove all status classes first
+            statusDot.classList.remove('delivered', 'pending', 'cancelled');
+
+            // Apply the appropriate status class
+            if (statusText === 'delivered') {
+                statusDot.classList.add('delivered');
+            } else if (statusText === 'pending') {
+                statusDot.classList.add('pending');
+            } else if (statusText === 'cancelled') {
+                statusDot.classList.add('cancelled');
+            }
+        });
+
+        // Handle return button click
+        document.querySelectorAll('.return-button').forEach(button => {
+            button.addEventListener('click', function () {
+                const orderId = button.getAttribute('data-order-id');
+
+                const requestData = {
+                    orderId: orderId,
+                    action: 'return'
+                };
+
+                fetch(`/account/order/${orderId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            alert('Return request processed successfully!');
+                            // Optionally, you might want to redirect or update the UI
+                        } else {
+                            alert('Error processing return request.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('There was an error processing the return request.');
+                    });
+            });
+        });
+    });
+</script>

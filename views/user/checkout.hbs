@@ -1,0 +1,123 @@
+<link rel="stylesheet" href="/stylesheets/user/checkout.css" />
+<div class="checkout-container">
+  <div class="new-address-form">
+    <h2>Checkout</h2>
+    {{! <h3>Contact</h3>
+    <input
+      type="text"
+      placeholder="Email or mobile number"
+      class="contact-info"
+    /> }}
+
+    <h3>Delivery</h3>
+    <div class="existing-addresses">
+      {{#each user.address}}
+        <label class="address-option" 
+               data-address-id="{{id}}" 
+               data-first-name="{{firstName}}"
+               data-last-name="{{lastName}}"
+               data-company="{{company}}"
+               data-email="{{email}}"
+               data-address="{{address}}"
+               data-city="{{city}}"
+               data-state="{{state}}"
+               data-phone="{{phoneNumber}}"
+               data-pincode="{{pincode}}">
+          <input type="radio" name="address-select" value="{{id}}" />
+          <span class="address-label">{{addressType}}</span>
+          <div class="address-details">
+            <p class="address-name">{{firstName}} {{lastName}}</p>
+            <p class="address-info">{{address}}, {{city}}, {{state}}, {{pincode}}</p>
+          </div>
+          <!-- Edit button with three dots -->
+          <a href="/account/address" style="text-decoration: none;"><button class="edit-address-btn" aria-label="Edit Address">...</button></a>
+        </label>
+      {{/each}}
+    </div>
+
+    {{! <a href="#" class="add-new-address">+ Add New Address</a> }}
+
+    <div class="address-fields">
+      <div class="name-fields">
+        <input type="text" placeholder="First name" class="first-name" />
+        <input type="text" placeholder="Last name" class="last-name" />
+      </div>
+
+      <input type="text" placeholder="Company (optional)" class="company" />
+      <input type="text" placeholder="Address" class="address" />
+
+      {{! <select class="country-select">
+        <option value="us">Country / Region</option>
+        <!-- More countries -->
+      </select> }}
+
+      <div class="city-state-fields">
+        <input type="text" placeholder="City/District/Town" class="city" />
+        <select class="state-select">
+          <option value="State">State</option>
+          <option value="Delhi">Delhi</option>
+          <option value="Kerala">Kerala</option>
+          <!-- More states -->
+        </select>
+      </div>
+
+      <div class="phone-pincode-fields">
+        <input type="text" placeholder="Phone number" class="phone-number" />
+        <input type="text" placeholder="Pincode" class="pincode" />
+      </div>
+    </div>
+
+    <h3>Payment Method</h3>
+    <div class="payment-methods">
+      <div class="payment-option">
+        <input type="radio" id="paytm" name="payment-method" value="paytm" />
+        <label for="paytm">PayTM</label>
+      </div>
+      <div class="payment-option">
+        <input
+          type="radio"
+          id="google-pay"
+          name="payment-method"
+          value="google-pay"
+        />
+        <label for="google-pay">Google Pay</label>
+      </div>
+      <div class="payment-option">
+        <input type="radio" id="upi" name="payment-method" value="upi" />
+        <label for="upi">UPI</label>
+      </div>
+      <div class="payment-option">
+        <input type="radio" id="cod" name="payment-method" value="cod" />
+        <label for="cod">COD</label>
+      </div>
+    </div>
+
+    <button class="confirm-order">Confirm Order</button>
+  </div>
+
+  <div class="order-summary">
+    {{#each products}}
+      <div class="product-item cart-item" data-product-id="{{_id}}">
+        <img src="{{mainImage}}" alt="Product Image" />
+        <div class="product-details">
+          <p class="product-name">{{productName}}</p>
+          <p class="product-qty">Qty: <span class="item-quantity">{{quantity}}</span></p>
+        </div>
+        <div class="product-price item-price" data-unit-price="{{price}}">₹{{price}}</div>
+      </div>
+    {{/each}}
+
+    <div class="order-total">
+      <span>Total</span>
+      <span class="amount">₹0.00</span>
+      <!-- Updated by JavaScript -->
+    </div>
+
+    <div class="discount-code">
+      <input type="text" class="discount-input" placeholder="Discount Code" />
+      <button class="apply-btn">Apply</button>
+    </div>
+  </div>
+</div>
+
+<script src="/javascripts/user/checkout.js"></script>

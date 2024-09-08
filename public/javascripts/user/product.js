@@ -25,3 +25,57 @@ thumbnails.forEach(thumbnail => {
         thumbnail.src = tempSrc;
     });
 });
+
+
+const addToCart = async (productId) => {
+    // event.preventDefault()
+    
+    try {
+        const data = {
+            productId: productId
+        };
+        
+        console.log('Sending data:', data);
+        const productResponse = await fetch(`/product/${productId}`)
+        const product = await productResponse.json();
+        console.log(product,product.product.stock)
+        if (!product.product.stock) {
+            toastr.error('Product is out of stock!');
+            return;
+        }
+        
+
+        const response = await fetch('/cart/add-to-cart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        console.log(response)
+        if(response.ok){
+            toastr.success('Product added to cart successfully!');
+        }
+        // Check if response is OK
+        if (!response.ok) {
+            if (response.status === 401) {
+                toastr.error('Error adding to cart Try again!');
+                window.location.href = '/auth/login'; // or another redirect URL
+            }
+            
+            // Attempt to get detailed error message
+            const errorText = await response.text();  // Get error details if available
+            console.error(`HTTP error! Status: ${response.status}, Details: ${errorText}`);
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+    
+        // Parse and handle JSON response if needed
+        const result = await response.json();
+        console.log('Response data:', result);
+    
+    } catch (error) {
+        // Log detailed error information
+        console.error('Fetch error:', error);
+    }
+    
+}
