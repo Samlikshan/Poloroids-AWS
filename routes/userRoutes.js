@@ -12,6 +12,8 @@ const {
 } = require("../controllers/user/addressController");
 const {viewOrders,singleOrder, cancelOrder} = require('../controllers/user/orderContoller')
 const {getUserDetails,editUserDetails} = require('../controllers/user/userProfile')
+const { addToWishlist, getWishlist, removeItem } = require('../controllers/user/wishlistController')
+const { applyCoupon } = require('../controllers/admin/couponManagement')
 
 let router = express.Router();
 
@@ -41,5 +43,11 @@ router.post("/account/add-address", addAddress);
 router.post("/account/update-address", updateAddress);
 router.post("/account/address/delete", deleteAddress);
 
+router.get('/wishlist',userRequireAuth,getWishlist)
+router.post('/add-to-wishlist',addToWishlist) 
+router.delete('/remove-wishlsit',removeItem) 
 
+
+//coupon Management
+router.post('/apply-coupon',applyCoupon)
 module.exports = router;

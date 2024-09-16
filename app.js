@@ -52,26 +52,23 @@ app.engine('hbs', exphbs.engine({
       return JSON.stringify(context);
     },
     eq: function (a, b, options) {
-      return a === b 
+      a = JSON.stringify(a)
+      b = JSON.stringify(b)
+      return a == b 
+    },
+    lookup:function (items, id) {
+      return items.some(item => item.productId.toString() === id.toString());
+    },
+    formatDate: function(date) {
+      return new Date(date).toLocaleDateString();
+    },
+    or:function(a, b) {
+      return a || b;
     }
   },
   handlebars: allowInsecurePrototypeAccess(Handlebars)
 }));
 
-
-
-
-// const hbs = exphbs.create({
-//   defaultLayout: 'user',
-//   extname: '.hbs',
-//   layoutsDir: path.join(__dirname, 'views/layouts'),
-//   partialsDir: path.join(__dirname, 'views/partials'),
-//   helpers: {
-//     json: function (context) {
-//       return JSON.stringify(context);
-//     }
-//   }
-// });
 
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));

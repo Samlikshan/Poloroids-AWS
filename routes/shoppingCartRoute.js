@@ -8,9 +8,9 @@ const {
   checkout
 } = require("../controllers/shoppingCartController");
 
-router.use(userRequireAuth);
+// router.use(userRequireAuth);
 
-router.get("/", viewCart);
+router.get("/",userRequireAuth,viewCart);
 router.post("/add-to-cart", addToCart);
 router.post("/updateItem", updateitem);
 router.get('/cart-checkout',checkout)

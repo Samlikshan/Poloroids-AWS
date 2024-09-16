@@ -18,6 +18,7 @@ const orderSchema = new Schema({
       email: { type: String },
     },
     totalAmount: { type: String },
+    finalPrice: { type: String },
   paymentMethod: { type: String },
   paymentStatus: { type: String },
   orderStatus: { type: String },

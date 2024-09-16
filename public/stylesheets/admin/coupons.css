@@ -1,0 +1,178 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 2em;
+    color: #4a4a4a;
+}
+
+
+.open-modal-btn {
+    background-color: #454545; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+}
+/* 
+.add-product-btn:hover {
+    background-color: #4d4d4d;
+} */
+
+/* Positioning the Add Product button */
+/* .add-product-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+} */
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-radius: 12.5px;
+    overflow: hidden;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-table th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #ddd; /* Adds bottom border to the header */
+    color: #4a4a4a;
+    border: 1px solid #ddd;
+}
+
+.user-table td {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    border: none; /* Remove all borders between rows */
+}
+
+.user-table tbody tr {
+    background-color: transparent;
+}
+
+.user-table a {
+    color: #4a4a4a;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.user-table a:hover {
+    text-decoration: underline;
+}
+
+.status-btn {
+    width: 110px;
+    background-color: #4a4a4a;
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 900;
+    transition: background-color 0.3s;
+}
+
+.status-btn:hover {
+    background-color: #a5a5a5;
+}
+/* Modal styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    margin: 20px; /* Added margin to prevent touching edges */
+    padding: 30px; /* Adjusted padding for better spacing */
+    border-radius: 8px;
+    width: 50%;
+    max-width: 600px; /* Set a max width for the modal */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.form-group {
+    margin-bottom: 20px; /* Added margin between form elements */
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.form-group input, .form-group select {
+    width: calc(100% - 20px); /* Adjust width to prevent touching the edges */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.form-group button {
+    background-color: #454545;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.form-group button:hover {
+    background-color: #454545;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+/* Button to open modal */
+/* .open-modal-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+} */
+
+/* .open-modal-btn:hover {
+    background-color: #45a049;
+} */

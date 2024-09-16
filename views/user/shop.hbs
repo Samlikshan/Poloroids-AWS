@@ -1,131 +1,150 @@
 <link rel="stylesheet" href="/stylesheets/user/shop.css">
 <div class="container">
-    <div class="breadcrumbs">
-        <a href="/">Home</a> > <a href="/shop">Shop</a>
+  <div class="breadcrumbs">
+    <a href="/">Home</a> > <a href="/shop">Shop</a>
+  </div>
+  <div class="header">
+    <!-- <h1>Categories</h1> -->
+    <div class="sort-by">
+      Sort by:
+      <button class="sort-button">Price</button>
+      <ul class="sort-options">
+        <li><a href="/shop/sort/name_asc">A to Z</a></li>
+        <li><a href="/shop/sort/name_desc">Z to A</a></li>
+        <li><a href="/shop/sort/price_asc">Price: Low to High</a></li>
+        <li><a href="/shop/sort/price_desc">Price: High to Low</a></li>
+      </ul>
     </div>
-    <div class="header">
-        <!-- <h1>Categories</h1> -->
-        <div class="sort-by">
-            Sort by:
-            <button class="sort-button">Price</button>
-            <ul class="sort-options">
-                <li><a href="/shop/sort/name_asc">A to Z</a></li>
-                <li><a href="/shop/sort/name_desc">Z to A</a></li>
-                <li><a href="/shop/sort/price_asc">Price: Low to High</a></li>
-                <li><a href="/shop/sort/price_desc">Price: High to Low</a></li>
-            </ul>
-        </div>
 
-    </div>
-    <div class="content">
-        <aside class="sidebar">
-            {{!-- <div class="category">
-                <h2>Categories</h2>
-                <ul>
-                    <li><a href="#">All Products</a></li>
-                    <li><a href="#">Camera</a></li>
-                    <li><a href="#">Lenses</a></li>
-                    <li><a href="#">Accessories</a></li>
-                </ul>
-            </div> --}}
-            {{!-- {{#each categories}}
-            <div class="brand">
-                <h2>{{categoryName}}</h2>
-                <ul>
-                    {{#each subCategories}}
-                    <li><a href="#">{{this}}</a></li>
-                    {{/each}}
-                </ul>
+  </div>
+  <div class="content">
+    <aside class="sidebar">
+      {{!-- <div class="category">
+        <h2>Categories</h2>
+        <ul>
+          <li><a href="#">All Products</a></li>
+          <li><a href="#">Camera</a></li>
+          <li><a href="#">Lenses</a></li>
+          <li><a href="#">Accessories</a></li>
+        </ul>
+      </div> --}}
+      {{!-- {{#each categories}}
+      <div class="brand">
+        <h2>{{categoryName}}</h2>
+        <ul>
+          {{#each subCategories}}
+          <li><a href="#">{{this}}</a></li>
+          {{/each}}
+        </ul>
+      </div>
+      {{/each}} --}}
+      <div class="brand">
+        <h2>Brand</h2>
+        <ul>
+          <li><a class="filter-option" data-value="all">All</a></li>
+          {{#each brands}}
+          <li><a class="filter-option" data-filter="brand" data-value="{{categoryName}}">{{categoryName}}</a>
+          </li>
+          {{/each}}
+        </ul>
+      </div>
+      <div class="type">
+        <h2>Type</h2>
+        <ul>
+          <li><a class="filter-option" data-value="all">All</a></li>
+          {{#each types}}
+          <li><a class="filter-option" data-filter="type" data-value="{{categoryName}}">{{categoryName}}</a>
+          </li>
+          {{/each}}
+        </ul>
+      </div>
+      <div class="gear">
+        <h2>Gear</h2>
+        <ul>
+          <li><a class="filter-option" data-value="all">All</a></li>
+          {{#each gears}}
+          <li><a class="filter-option" data-filter="gear" data-value="{{categoryName}}">{{categoryName}}</a>
+          </li>
+          {{/each}}
+        </ul>
+      </div>
+      {{!-- <div class="prices">
+        <h2>Prices</h2>
+        <ul>
+          <li><a href="#">₹499-₹999</a></li>
+          <li><a href="#">₹999-₹1499</a></li>
+          <li><a href="#">₹1499-₹1999</a></li>
+          <li><a href="#">₹1999-₹2499</a></li>
+          <li><a href="#">₹2499-₹2999</a></li>
+          <li><a href="#">₹2999-₹3499</a></li>
+        </ul>
+      </div> --}}
+    </aside>
+    <main class="main-content">
+      <div class="cards">
+        {{#each products}}
+        <div class="card" data-brand="{{brand}}" data-type="{{type}}" data-gear="{{gear}}">
+          <!-- Wishlist logic -->
+          {{#if ../wishlist}}
+          {{#if (lookup ../wishlist.items _id)}}
+          <a class="wishlist-item-included">
+            <img src="/images/icons/wishlist-active.svg" alt="Wishlist Icon" class="wishlist-icon filled">
+          </a>
+          {{else}}
+          <a onclick="addToWishlist('{{_id}}',this)">
+            <img src="/images/icons/Wishlist.svg" alt="Wishlist Icon" class="wishlist-icon">
+          </a>
+          {{/if}}
+          {{else}}
+          <a onclick="addToWishlist('{{_id}}')">
+            <img src="/images/icons/Wishlist.svg" alt="Wishlist Icon" class="wishlist-icon">
+          </a>
+          {{/if}}
+
+          <a href="/shop/{{_id}}" style="text-decoration: none;">
+            <img src="{{mainImage}}" alt="Product Image" class="product-image">
+            <div class="card-content-wrapper">
+              <h2>{{productName}}</h2>
+
+              {{#if stock}}
+              <p class="stock-status">In Stock</p>
+              {{else}}
+              <p class="stock-status">Out of Stock</p>
+              {{/if}}
+
+              <!-- Show only the original price if no offer, or both if there is an offer -->
+              {{#if offer}}
+              <div class="offer">
+                <p>Offer: {{offer.discountPercentage}}% off!</p>
+              </div>
+              <p class="original-price" style="text-decoration: line-through;">₹ {{price}}.00</p>
+              <p class="final-price">₹ {{finalPrice}}.00</p>
+              {{else}}
+              <p class="final-price">₹ {{price}}.00</p>
+              {{/if}}
+
+              {{#if stock}}
+              <a onclick="addToCart('{{_id}}')"><button>Add to Cart</button></a>
+              {{else}}
+              <button disabled class="out-of-stock-button">Out of Stock</button>
+              {{/if}}
             </div>
-            {{/each}} --}}
-            <div class="brand">
-                <h2>Brand</h2>
-                <ul>
-                    <li><a class="filter-option" data-value="all">All</a></li>
-                    {{#each brands}}
-                    <li><a class="filter-option" data-filter="brand" data-value="{{categoryName}}">{{categoryName}}</a></li>
-                    {{/each}}
-                </ul>
-            </div>
-            <div class="type">
-                <h2>Type</h2>
-                <ul>
-                    <li><a class="filter-option" data-value="all">All</a></li>
-                    {{#each types}}
-                    <li><a class="filter-option" data-filter="type" data-value="{{categoryName}}">{{categoryName}}</a></li>
-                    {{/each}}
-                </ul>
-            </div>
-            <div class="gear">
-                <h2>Gear</h2>
-                <ul>
-                    <li><a class="filter-option" data-value="all">All</a></li>
-                    {{#each gears}}
-                    <li><a class="filter-option" data-filter="gear" data-value="{{categoryName}}">{{categoryName}}</a></li>
-                    {{/each}}
-                </ul>
-            </div>
-            {{!-- <div class="prices">
-                <h2>Prices</h2>
-                <ul>
-                    <li><a href="#">₹499-₹999</a></li>
-                    <li><a href="#">₹999-₹1499</a></li>
-                    <li><a href="#">₹1499-₹1999</a></li>
-                    <li><a href="#">₹1999-₹2499</a></li>
-                    <li><a href="#">₹2499-₹2999</a></li>
-                    <li><a href="#">₹2999-₹3499</a></li>
-                </ul>
-            </div> --}}
-        </aside>
-        <main class="main-content">
-            <div class="cards">
-                {{#each products}}
-                <div class="card" data-brand="{{brand}}" data-type="{{type}}" data-gear="{{gear}}" >
-                    <img src="/images/icons/Wishlist.svg" alt="Wishlist Icon" class="wishlist-icon">
-                    <a href="/shop/{{_id}}" style="text-decoration: none;">
-                        {{!-- <div class="badge">New</div> --}}
-                        <img src="{{mainImage}}" alt="Product Image" class="product-image">
-                        <div class="card-content-wrapper">
-                            {{!-- <p class="stock-status">in stock</p> --}}
-                            {{#if stock}}
-                            <p class="stock-status">
-                                In Stock
-                            </p>
-                            {{else}}
-                            <p class="stock-status">
-                                Out of Stock
-                            </p>
-                            {{/if}}
-                    </a>
-                    <h2>{{productName}}</h2>
-                    <div class="rating">
-                        <span class="star">&#9733;</span>
-                        <span class="star">&#9733;</span>
-                        <span class="star">&#9733;</span>
-                        <span class="star">&#9733;</span>
-                        <span class="star">&#9733;</span>
-                    </div>
-                    <p class="price">₹ {{price}}.00</p>
-                    {{!-- <a onclick="addToCart('{{_id}}')"><button>Add to Cart</button></a> --}}
-                    {{#if stock}}
-                    <a onclick="addToCart('{{_id}}')"><button>Add to Cart</button></a>
-                    {{else}}
-                    <button disabled class="out-of-stock-button">Out of Stock</button>
-                    {{/if}}
-                </div>
-            </div>
-            {{/each}}
-    </div>
-    {{!-- <div class="pagination">
+          </a>
+        </div>
+        {{/each}}
+
+
+      </div>
+      {{!-- <div class="pagination">
         <a href="#" class="active">1</a>
         <a href="#">2</a>
         <a href="#">3</a>
         <a href="#">4</a>
         <a href="#">...</a>
         <a href="#">10</a>
-    </div> --}}
+      </div> --}}
     </main>
-</div>
+  </div>
 </div>
 
 <script src="/javascripts/user/shop.js"></script>

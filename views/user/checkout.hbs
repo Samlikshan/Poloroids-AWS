@@ -3,34 +3,38 @@
   <div class="new-address-form">
     <h2>Checkout</h2>
     {{! <h3>Contact</h3>
-    <input
-      type="text"
-      placeholder="Email or mobile number"
-      class="contact-info"
-    /> }}
+    <input type="text" placeholder="Email or mobile number" class="contact-info" /> }}
 
     <h3>Delivery</h3>
     <div class="existing-addresses">
       {{#each user.address}}
-        <label class="address-option" 
-               data-address-id="{{id}}" 
-               data-first-name="{{firstName}}"
-               data-last-name="{{lastName}}"
-               data-company="{{company}}"
-               data-email="{{email}}"
-               data-address="{{address}}"
-               data-city="{{city}}"
-               data-state="{{state}}"
-               data-phone="{{phoneNumber}}"
-               data-pincode="{{pincode}}">
+        <label
+          class="address-option"
+          data-address-id="{{id}}"
+          data-first-name="{{firstName}}"
+          data-last-name="{{lastName}}"
+          data-company="{{company}}"
+          data-email="{{email}}"
+          data-address="{{address}}"
+          data-city="{{city}}"
+          data-state="{{state}}"
+          data-phone="{{phoneNumber}}"
+          data-pincode="{{pincode}}"
+        >
           <input type="radio" name="address-select" value="{{id}}" />
           <span class="address-label">{{addressType}}</span>
           <div class="address-details">
             <p class="address-name">{{firstName}} {{lastName}}</p>
-            <p class="address-info">{{address}}, {{city}}, {{state}}, {{pincode}}</p>
+            <p class="address-info">{{address}},
+              {{city}},
+              {{state}},
+              {{pincode}}</p>
           </div>
           <!-- Edit button with three dots -->
-          <a href="/account/address" style="text-decoration: none;"><button class="edit-address-btn" aria-label="Edit Address">...</button></a>
+          <a href="/account/address" style="text-decoration: none;"><button
+              class="edit-address-btn"
+              aria-label="Edit Address"
+            >...</button></a>
         </label>
       {{/each}}
     </div>
@@ -69,22 +73,22 @@
 
     <h3>Payment Method</h3>
     <div class="payment-methods">
-      <div class="payment-option">
+      {{! <div class="payment-option">
         <input type="radio" id="paytm" name="payment-method" value="paytm" />
         <label for="paytm">PayTM</label>
-      </div>
+      </div> }}
+      {{! <div class="payment-option">
+        <input type="radio" id="google-pay" name="payment-method" value="google-pay" />
+        <label for="google-pay">Google Pay</label>
+      </div> }}
       <div class="payment-option">
         <input
           type="radio"
-          id="google-pay"
+          id="razorpay"
           name="payment-method"
-          value="google-pay"
+          value="razorpay"
         />
-        <label for="google-pay">Google Pay</label>
-      </div>
-      <div class="payment-option">
-        <input type="radio" id="upi" name="payment-method" value="upi" />
-        <label for="upi">UPI</label>
+        <label for="razorpay">RazorPay</label>
       </div>
       <div class="payment-option">
         <input type="radio" id="cod" name="payment-method" value="cod" />
@@ -95,29 +99,92 @@
     <button class="confirm-order">Confirm Order</button>
   </div>
 
+  {{!-- <div class="order-summary">
+    {{#each products}}
+    <div class="product-item cart-item" data-product-id="{{_id}}">
+      <img src="{{mainImage}}" alt="Product Image" />
+      <div class="product-details">
+        <p class="product-name">{{productName}}</p>
+        <p class="product-qty">Qty: <span class="item-quantity">{{quantity}}</span></p>
+      </div>
+      <div class="product-price item-price" data-unit-price="{{price}}">₹{{price}}</div>
+    </div>
+    {{/each}}
+
+    <div class="order-total">
+      <span>Total</span>
+      <span class="amount" id="totalAmount">₹0.00</span>
+      <!-- Updated by JavaScript -->
+    </div>
+
+    <div class="discount-code">
+      <input type="text" class="discount-input" placeholder="Discount Code" id="couponCode" />
+      <button class="apply-btn" onclick="applyCoupon()">Apply</button>
+      <p class="coupon-error" style="color: rgb(184, 11, 11);"></p>
+      <p class="coupon-success" style="color: rgb(3, 255, 95);"></p>
+    </div>
+  </div> --}}
   <div class="order-summary">
+    <!-- Loop through each product -->
     {{#each products}}
       <div class="product-item cart-item" data-product-id="{{_id}}">
         <img src="{{mainImage}}" alt="Product Image" />
         <div class="product-details">
           <p class="product-name">{{productName}}</p>
-          <p class="product-qty">Qty: <span class="item-quantity">{{quantity}}</span></p>
+          <p class="product-qty">Qty:
+            <span class="item-quantity">{{quantity}}</span></p>
         </div>
-        <div class="product-price item-price" data-unit-price="{{price}}">₹{{price}}</div>
+        <div
+          class="product-price item-price"
+          data-unit-price="{{price}}"
+        >₹{{price}}</div>
       </div>
     {{/each}}
 
+    <!-- Subtotal -->
+    <div class="order-total">
+      <span>Subtotal</span>
+      <span class="amount" id="subtotalAmount">₹0.00</span>
+      <!-- JavaScript will update this -->
+    </div>
+
+    <div class="coupon-total">
+      <span>Coupon Code</span>
+      <span class="coupon-code" id="coupon-code"></span>
+      <!-- JavaScript will update this -->
+    </div>
+
+    <div class="coupon-discount">
+      <span class="label">Discount</span>
+      <div class="amount-container">
+        <span class="amount" id="discount"></span>
+        <a class="remove-coupon" onclick="removeCoupon()">Remove Coupon</a>
+      </div>
+    </div>
+
+    <!-- Discount Code Input -->
+    <div class="discount-code">
+      <input
+        type="text"
+        class="discount-input"
+        placeholder="Discount Code"
+        id="couponCode"
+      />
+      <button class="apply-btn" onclick="applyCoupon()">Apply</button>
+
+      <!-- Coupon error or success messages -->
+      <p id="couponMessage" class="coupon-error"></p>
+    </div>
+
+    <!-- Total -->
     <div class="order-total">
       <span>Total</span>
-      <span class="amount">₹0.00</span>
-      <!-- Updated by JavaScript -->
-    </div>
-
-    <div class="discount-code">
-      <input type="text" class="discount-input" placeholder="Discount Code" />
-      <button class="apply-btn">Apply</button>
+      <span class="amount" id="totalAmount">₹0.00</span>
+      <!-- JavaScript will update this -->
     </div>
   </div>
+
 </div>
 
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="/javascripts/user/checkout.js"></script>

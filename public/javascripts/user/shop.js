@@ -14,7 +14,6 @@ const addToCart = async (productId) => {
             toastr.error('Product is out of stock!');
             return;
         }
-        
 
         const response = await fetch('/cart/add-to-cart', {
             method: 'POST',
@@ -25,7 +24,7 @@ const addToCart = async (productId) => {
         });
         console.log(response)
         if(response.ok){
-            toastr.success('Product added to cart successfully!');
+            toastr.success('Product added to cart!');
         }
         // Check if response is OK
         if (!response.ok) {
@@ -50,6 +49,49 @@ const addToCart = async (productId) => {
     }
     
 }
+const addToWishlist = async (productId,element) => {
+    try {
+        // Make a POST request to add the product to the wishlist
+        const response = await fetch('/add-to-wishlist', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ productId })
+        });
+
+        // Check if the request was successful
+        if (!response.ok) {
+            if (response.status === 401) {
+                toastr.error('User not logged in!');
+                window.location.href = '/auth/login'; // Redirect to login page if unauthorized
+            } else {
+                // Handle other errors
+                toastr.error('Failed to add product to wishlist!');
+            }
+            return; // Exit the function on error
+        }
+
+        // If the request was successful
+        toastr.success('Product added to wishlist!');
+
+        // Optionally, update the icon state here
+        // For example:
+        if (element) {
+            const img = element.querySelector('img');
+            img.src = "/images/icons/wishlist-active.svg";
+            img.classList.add('filled');
+            element.classList.add('wishlist-item-included'); // Make the element non-clickable
+            element.removeAttribute('onclick'); //
+        }
+
+
+    } catch (error) {
+        // Log any errors that occur during the fetch
+        console.error('Error adding to wishlist:', error);
+        toastr.error('An error occurred while adding to the wishlist.');
+    }
+};
 
     document.addEventListener('DOMContentLoaded', function() {
         var button = document.querySelector('.sort-button');

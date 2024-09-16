@@ -1,0 +1,167 @@
+<link rel="stylesheet" href="/stylesheets/admin/offer.css">
+
+<div class="header">
+    <h1>Offer Management</h1>
+
+    <div class="add-product-button">
+        <button class="open-modal-btn">Add Offer</button>
+    </div>
+</div>
+<table class="user-table">
+    <thead>
+        <tr>
+            <th>Offer Type</th>
+            <th>Offer for</th>
+            <th>Discount</th>
+            <th>Valid From</th>
+            <th>Valid To</th>
+            <th>Status</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each offers}}
+        <tr>
+            <td>{{offerType}}</td>
+            {{#if (eq offerType 'product')}}
+            <td>{{typeId.productName}}</td>
+            {{else}}
+            <td>{{typeId.categoryName}}</td>
+            {{/if}}
+            <td>{{discountPercentage}}%</td>
+            <td>{{formatDate validFrom}}</td>
+            <td>{{formatDate validTo}}</td>
+            <td>{{status}}</td>
+            <td><a class="openEditOfferModal" data-id="{{_id}}"="">Edit</a></td>
+            <td><a onclick="deleteOffer('{{_id}}')">Delete</a></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+
+<!-- Modal Structure -->
+<div id="offer-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Add New Offer</h2>
+        <form id="offerForm">
+            <div class="form-group">
+                <label for="offerType">Offer Type:</label>
+                <select name="offerType" id="offerType">
+                    <option value="none" selected disabled>None</option>
+                    <option value="product">Product</option>
+                    <option value="brand">Brand</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="typeId">Offer For:</label>
+                <select name="typeId" id="typeId" class="form-control" required>
+                    <!-- Options will be dynamically loaded here -->
+                    <option value="none" selected disabled>None</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="discountPercentage">Discount Percentage:</label>
+                <input type="number" id="discountPercentage" name="discountPercentage" required
+                    placeholder="Enter Discount Percentage (e.g., 10 for 10%)" min="1" max="100">
+            </div>
+            <div class="form-group">
+                <label for="validFrom">Expiry Date:</label>
+                <input type="date" id="validFrom" name="validFrom" required>
+            </div>
+            <div class="form-group">
+                <label for="validTo">Expiry Date:</label>
+                <input type="date" id="validTo" name="validTo" required>
+            </div>
+            <div class="form-group">
+                <label for="status">Status:</label>
+                <select id="status" name="status" required>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="submit-btn">Add Coupon</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Structure for Editing an Offer -->
+<div id="edit-offer-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="edit-close">&times;</span>
+        <h2>Edit Offer</h2>
+        <form id="editOfferForm">
+            <input type="hidden" id="editOfferId" name="offerId">
+            <div class="form-group">
+                <label for="editOfferType">Offer Type:</label>
+                <select name="offerType" id="editOfferType">
+                    <option value="none" selected disabled>None</option>
+                    <option value="product">Product</option>
+                    <option value="brand">Brand</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="editTypeId">Offer For:</label>
+                <select name="typeId" id="editTypeId" class="form-control" required>
+                    <!-- Options will be dynamically loaded here -->
+                    <option value="none" selected disabled>None</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="editDiscountPercentage">Discount Percentage:</label>
+                <input type="number" id="editDiscountPercentage" name="discountPercentage" required
+                    placeholder="Enter Discount Percentage (e.g., 10 for 10%)" min="1" max="100">
+            </div>
+            <div class="form-group">
+                <label for="editValidFrom">Expiry Date:</label>
+                <input type="date" id="editValidFrom" name="validFrom" required>
+            </div>
+            <div class="form-group">
+                <label for="editValidTo">Expiry Date:</label>
+                <input type="date" id="editValidTo" name="validTo" required>
+            </div>
+            <div class="form-group">
+                <label for="editStatus">Status:</label>
+                <select id="editStatus" name="status" required>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="submit-btn">Update Offer</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<!-- Include the data as JSON in a <script> tag -->
+<script id="data-template" type="application/json">
+    {
+        "products": [
+            {{#each Products}}
+                {
+                    "_id": "{{_id}}",
+                    "name": "{{productName}}"
+                }{{#unless @last}},{{/unless}}
+            {{/each}}
+        ],
+        "brands": [
+            {{#each Brands}}
+                {
+                    "_id": "{{_id}}",
+                    "name": "{{categoryName}}"
+                }{{#unless @last}},{{/unless}}
+            {{/each}}
+        ]
+    }
+</script>
+
+
+
+<script src="/javascripts/admin/offer.js"></script>

@@ -3,25 +3,93 @@ const Cart = require("../../models/shoppingCartModel");
 const Product = require("../../models/productModel");
 const Order = require("../../models/orderModel");
 const jwt = require("jsonwebtoken");
-
+const Offer = require('../../models/offerModel')
 
 
 const viewCheckout = async (req, res) => {
+  let coupon;
   const token = req.cookies["Token"];
+  
+  if (!token) {
+    return res.status(401).send("Unauthorized");
+  }
+
   const decoded = jwt.verify(token, process.env.SECRET_KEY);
   const user = await User.findOne({ username: decoded.username });
+
+  if (!user) {
+    return res.status(404).send("User not found");
+  }
+
   const cart = await Cart.findOne({ userId: user._id });
-  const productPromises = cart.items.map(async (item) => {
-    const product = await Product.findById(item.productId);
-    return {
-      ...product.toObject(),
-      quantity: item.quantity,
-    };
-  });
-  const products = await Promise.all(productPromises);
-  // console.log(user, cart, products);
-  res.render("user/checkout", { user, products });
+  
+  if (!cart || cart.items.length === 0) {
+    return res.status(400).send("Cart is empty");
+  }
+
+  try {
+    // Fetch products and apply any applicable offers
+    const productPromises = cart.items.map(async (item) => {
+      const product = await Product.findById(item.productId);
+
+      // Fetch product-specific offer
+      const productOffer = await Offer.findOne({
+        typeId: product._id,
+        offerType: 'product',
+        validFrom: { $lte: new Date() },
+        validTo: { $gte: new Date() },
+        status: true
+      });
+
+      // Fetch brand-specific offer and populate `typeId`
+      const brandOffer = await Offer.findOne({
+        offerType: 'brand',
+        validFrom: { $lte: new Date() },
+        validTo: { $gte: new Date() },
+        status: true
+      }).populate('typeId'); // Populating `typeId` for brand offer
+
+      // Check if the populated brandOffer's `categoryName` matches the product's `brand`
+      let finalBrandOffer = null;
+      if (brandOffer && brandOffer.typeId && brandOffer.typeId.categoryName === product.brand) {
+        finalBrandOffer = brandOffer;
+      }
+
+      // Calculate the final price based on the highest discount offer
+      let price = product.price;
+      if (productOffer && finalBrandOffer) {
+        // Choose the offer with the higher discount percentage
+        const maxDiscount = Math.max(productOffer.discountPercentage, finalBrandOffer.discountPercentage);
+        price = product.price - (product.price * maxDiscount / 100);
+      } else if (productOffer) {
+        price = product.price - (product.price * productOffer.discountPercentage / 100);
+      } else if (finalBrandOffer) {
+        price = product.price - (product.price * finalBrandOffer.discountPercentage / 100);
+      }
+
+      return {
+        ...product.toObject(),
+        price, // Final price after applying the offer
+        quantity: item.quantity
+      };
+    });
+
+    const products = await Promise.all(productPromises);
+
+    // Check if there's a coupon applied in the session
+    if (req.session.coupon) {
+      coupon = req.session.coupon;
+    }
+
+    // Render checkout page with user, products (with final prices), and coupon info
+    res.render("user/checkout", { user, products, coupon });
+    
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Something went wrong");
+  }
 };
+
 
 const postCheckout = async (req, res) => {
   console.log(req.body.address)
@@ -35,7 +103,8 @@ const postCheckout = async (req, res) => {
       address: req.body.address,
       paymentMethod: req.body.paymentMethod,
       totalAmount: req.body.totalAmount,
-      paymentStatus: "pending",
+      finalPrice: req.body.finalPrice,
+      paymentStatus: req.body.paymentStatus,
       orderStatus: 'pending',
       createdAt: Date.now(),
     });

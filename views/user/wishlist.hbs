@@ -1,0 +1,29 @@
+<link rel="stylesheet" href="/stylesheets/user/wishlist.css">
+
+<div class="wishlist-container">
+    {{#if isEmpty}}
+  <div class="empty-cart-container">
+    <p class="empty-cart-message">Wishlist is Empty</p>
+  </div>
+  {{else}}
+  <h2>My Wish List</h2>
+
+    {{#each wishlist.items}}
+  <div class="wishlist-item">
+    <img src="{{productId.mainImage}}" alt="FujiFilm X100">
+    <div class="item-details">
+      <h3>{{ productId.productName}}</h3>
+      <div class="item-rating">
+        {{!-- <span>★★★★☆</span> --}}
+      </div>
+      <div class="item-price">₹ {{productId.price}}</div>
+    </div>
+    <button class="delete-btn">
+      <a onclick="removeItem('{{productId._id}}','{{../wishlist._id}}',this.closest('.wishlist-item'))"><img src="/images/icons/Delete.svg" alt="Account" class="icon"></a>
+    </button>
+  </div>
+    {{/each}}
+    {{/if}}
+</div>
+
+<script src="/javascripts/user/wishlist.js"></script>

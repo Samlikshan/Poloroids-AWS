@@ -36,12 +36,14 @@
             </div>
             <p class="description">{{product.productDescription}}</p>
             <div class="price">
-                <span class="original-price">M.R.P:₹ {{product.price}}.99</span>
-                <span class="sale-price">You Save 15%</span>
+                <span class="original-price">M.R.P:₹ {{product.price}}.00</span>
+                {{#if maxDiscount}}
+                <span class="sale-price">You Save {{maxDiscount}}%</span>
+                {{/if}}
             </div>
             <div class="price-container">
                 <button onclick="addToCart('{{product._id}}')">Add to cart</button>
-                <span class="price-tag">₹{{product.price}}.99</span>
+                <span class="price-tag">₹{{finalPrice}}.00</span>
             </div>
             <div class="specs">
                 <ul class="features-list">

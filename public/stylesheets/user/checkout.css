@@ -39,7 +39,7 @@ h3 {
 }
 .contact-info, .country-select, .first-name, 
 .last-name, .company, .address, .city, .state-select, 
-.phone-number, .pincode, .discount-input {
+.phone-number, .pincode {
     width: 100%; /* Ensure full width */
     padding: 10px;
     border: 1px solid #ddd;
@@ -303,18 +303,58 @@ h3 {
     font-weight: bold;
     font-size: 1.2rem;
   }
+
+  .coupon-total {
+    display: none;
+    /* display: flex; */
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  .coupon-discount {
+    display: none;
+    justify-content: space-between;
+    align-items: flex-start; /* Align items at the top */
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-size: 1rem;
+  }
   
+  .amount-container {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: flex-end; /* Align items to the end of the container (right side) */
+  }
+  
+  .remove-coupon {
+    font-size: .97em;
+    margin-top: 5px; /* Space between the amount and the link */
+    text-decoration: none; /* Remove underline from the link */
+    color: #737373; /* Link color */
+  }
+  
+  .remove-coupon:hover {
+    text-decoration: underline; /* Underline on hover */
+  }
+  
+
   .total-price {
     color: red;
     font-size: 1.5rem;
   }
   
   .discount-code {
-    display: flex;
+    /* display: flex; */
+    
     align-items: center;
+    margin-bottom: 10px;
+    margin-top: 10px;
   }
   
   .discount-input {
+    width: calc(100% - 95px);
     flex-grow: 1;
     margin-right: 10px;
     border: 1px solid #ccc;

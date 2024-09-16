@@ -3,11 +3,16 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 const Product = require("../models/productModel");
 const ShoppingCart = require("../models/shoppingCartModel");
+const Offer = require("../models/offerModel");
 
 const addToCart = async (req, res) => {
-  console.log('req')
   const { productId } = req.body;
   const token = req.cookies["Token"];
+  // console.log('token',token)
+  if (!token) {
+    console.log("hai");
+    return res.status(401).json({ message: "user not logged in" });
+  }
   const decoded = jwt.verify(token, process.env.SECRET_KEY);
   const user = await User.findOne({
     username: decoded.username,
@@ -73,6 +78,10 @@ const addToCart = async (req, res) => {
 
 const viewCart = async (req, res) => {
   const token = req.cookies["Token"];
+  if (!token) {
+    return res.status(401);
+  }
+
   const decoded = jwt.verify(token, process.env.SECRET_KEY);
   const user = await User.findOne({
     username: decoded.username,
@@ -84,28 +93,66 @@ const viewCart = async (req, res) => {
 
     // Check if cart exists and has items
     if (!cart || cart.items.length === 0) {
-      return res.render('user/shoppingCart',{isEmpty:true})
+      return res.render('user/shoppingCart', { isEmpty: true });
     }
 
-    if (cart) {
-      const productPromises = cart.items.map(async (item) => {
-        const product = await Product.findById(item.productId);
-        return {
-          ...product.toObject(),
-          quantity: item.quantity,
-        };
+    // Fetch product details and apply any applicable offers
+    const productPromises = cart.items.map(async (item) => {
+      const product = await Product.findById(item.productId);
+
+      // Fetch product-specific offer
+      const productOffer = await Offer.findOne({
+        typeId: product._id,
+        offerType: 'product',
+        validFrom: { $lte: new Date() },
+        validTo: { $gte: new Date() },
+        status: true
       });
 
-      const products = await Promise.all(productPromises);
-      res.render("user/shoppingCart", { products });
-    } else {
-      res.send("Cart is empty");
-    }
+      // Fetch brand-specific offer and populate the `typeId` field to access `categoryName`
+      const brandOffer = await Offer.findOne({
+        offerType: 'brand',
+        validFrom: { $lte: new Date() },
+        validTo: { $gte: new Date() },
+        status: true
+      }).populate('typeId');  // Populating typeId for brand
+
+      // Check if the populated brandOffer's `categoryName` matches the product's `brand`
+      let finalBrandOffer = null;
+      if (brandOffer && brandOffer.typeId && brandOffer.typeId.categoryName === product.brand) {
+        finalBrandOffer = brandOffer;
+      }
+
+      // Calculate the final price based on the highest discount offer
+      let price = product.price;
+      if (productOffer && finalBrandOffer) {
+        // Choose the offer with the higher discount percentage
+        const maxDiscount = Math.max(productOffer.discountPercentage, finalBrandOffer.discountPercentage);
+        price = product.price - (product.price * maxDiscount / 100);
+      } else if (productOffer) {
+        price = product.price - (product.price * productOffer.discountPercentage / 100);
+      } else if (finalBrandOffer) {
+        price = product.price - (product.price * finalBrandOffer.discountPercentage / 100);
+      }
+
+      return {
+        ...product.toObject(),
+        price,                // The final price after applying the offer (if any)
+        quantity: item.quantity,  // Product quantity in the cart
+      };
+    });
+
+    const products = await Promise.all(productPromises);
+
+    // Render the cart page with products and their final prices
+    res.render("user/shoppingCart", { products });
   } catch (err) {
     console.error(err);
     res.status(500).json("Something went wrong");
   }
 };
+
+
 
 const updateitem = async (req, res) => {
   const { productId, action } = req.body;
@@ -164,17 +211,19 @@ const updateitem = async (req, res) => {
   }
 };
 
-
-const checkout = async (req,res)=>{
+const checkout = async (req, res) => {
   const token = req.cookies["Token"];
   const decoded = jwt.verify(token, process.env.SECRET_KEY);
   const user = await User.findOne({
     username: decoded.username,
     isActive: true,
   });
-  const cart = await ShoppingCart.findOne({userId:user._id},{items:1,_id:0})
-  const Items= cart.items
-  res.status(200).json({Items})
-}
+  const cart = await ShoppingCart.findOne(
+    { userId: user._id },
+    { items: 1, _id: 0 }
+  );
+  const Items = cart.items;
+  res.status(200).json({ Items });
+};
 
 module.exports = { addToCart, viewCart, updateitem, checkout };

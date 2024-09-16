@@ -20,6 +20,6 @@ const productSchema = new Schema({
     updatedAt:{type:Date, default:null}
 })
 
-const Product = mongoose.model('Products',productSchema)
+const Product = mongoose.model('product',productSchema)
 
 module.exports = Product

@@ -1,0 +1,80 @@
+<link rel="stylesheet" href="/stylesheets/admin/coupons.css">
+
+<div class="header">
+    <h1>User Management</h1>
+    
+    <div class="add-product-button">
+    <button class="open-modal-btn">Add Coupon</button>
+</div>
+</div>
+<table class="user-table">
+    <thead>
+        <tr>
+            <th>Coupon Id</th>
+            <th>Coupon Code</th>
+            <th>Status</th>
+            <th>Discount</th>
+            <th>Min Purchase</th>
+            <th>Max Purchase</th>
+            <th>Validity</th>
+            <th>Edit</th>
+        </tr>
+    </thead>
+    <tbody>
+       {{#each coupons}}
+        <tr>
+            <td>1</td>
+            <td>{{couponCode}}</td>
+            <td>{{status}}</td>
+            <td>{{discountValue}}%</td>
+            <td>{{minPurchase}}</td>
+            <td>{{maxPurchase}}</td>
+            <td class="expiryDate">{{expiryDate}}</td>
+            <td>Edit</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+
+<!-- Modal Structure -->
+<div id="coupon-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Add New Coupon</h2>
+        <form action="/admin/add-coupon" method="POST">
+            <div class="form-group">
+                <label for="couponCode">Coupon Code:</label>
+                <input type="text" id="couponCode" name="couponCode" required placeholder="Enter Coupon Code">
+            </div>
+            <div class="form-group">
+                <label for="discountValue">Discount Percentage:</label>
+                <input type="number" id="discountValue" name="discountValue" required placeholder="Enter Discount Percentage (e.g., 10 for 10%)" min="1" max="100">
+            </div>
+            <div class="form-group">
+                <label for="minPurchase">Minimum Purchase Amount:</label>
+                <input type="number" id="minPurchase" name="minPurchase" required placeholder="Enter Minimum Purchase Amount (e.g., 100)">
+            </div>
+            <div class="form-group">
+                <label for="maxPurchase">Maximum Purchase Amount:</label>
+                <input type="number" id="maxPurchase" name="maxPurchase" required placeholder="Enter Maximum Discount Amount (e.g., 50)">
+            </div>
+            <div class="form-group">
+                <label for="expiryDate">Expiry Date:</label>
+                <input type="date" id="expiryDate" name="expiryDate" required>
+            </div>
+            <div class="form-group">
+                <label for="status">Status:</label>
+                <select id="status" name="status" required>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="submit-btn">Add Coupon</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/javascripts/admin/coupons.js"></script>

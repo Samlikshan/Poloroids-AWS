@@ -35,7 +35,8 @@ const getEditProducts = async (req, res, next) => {
 const postEditProducts = async (req, res) => {
   try {
     let product = await Product.findById(req.params.id);
-
+    console.log(req.body,'body')
+    console.log(req.files,'files')
     // Handle Main Image
     if (req.body.deleteMainImage) {
       product.mainImage = null;

@@ -9,7 +9,8 @@ const { categories,addCategory, changeCategoryStatus, editCategory } = require('
 const { showProducts, getEditProducts, postEditProducts, getAddProduct, postAddProduct, disableProduct } = require('../controllers/productController');
 const { getLogin, postLogin ,logout, getResetPassword, postResetPassword, getNewPassword, postNewPassword, getForgotPasswrod, postForgotPassword } = require('../controllers/adminAuthController');
 const { viewOrder, updateOrders, singleOrder } = require('../controllers/admin/orderManagement');
-
+const { viewCoupons, postCoupon, applyCoupon } = require('../controllers/admin/couponManagement');
+const { viewOffers, addOffer, getEditOffer, postEditOffer, deleteOffer } = require('../controllers/admin/offerManagement');
 
 //Auth Management
 router.get('/login',isLogged,getLogin)
@@ -25,7 +26,7 @@ router.get('/logout', logout)
 
 
 // require Auth to prevent from non logged users to protected routes
-// router.use(requireAuth)
+router.use(requireAuth)
 
 //dashboard
 router.get('/', getDashboard)
@@ -74,16 +75,22 @@ router.post('/edit-product/:id', upload.fields([
     { name: 'replaceImage2', maxCount: 1 },
     { name: 'newAdditionalImages', maxCount: 3 }
     ]), postEditProducts)
-
 router.get('/disable-product/:id', disableProduct)
 
-
-
 //order Management
-
 router.get('/orders',viewOrder)
 router.get('/order/:orderId',singleOrder)
 router.post('/update-orders',updateOrders)
 
+//coupon Management
+router.get('/coupons',viewCoupons)
+router.post('/add-coupon',postCoupon)
+
+//offer Management
+router.get('/offers',viewOffers)
+router.post('/offers/add',addOffer)
+router.get('/offers/edit/:offerId',getEditOffer)
+router.post('/offers/edit',postEditOffer)
+router.delete('/offers/delete',deleteOffer)
 
 module.exports = router  
