@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require('multer')
 const requireAuth = require('../middleware/requireAuth')
 const isLogged = require('../middleware/isLogged')
-const getDashboard = require('../controllers/dashbaordController')
+const {getDashboard, generatePDFReport} = require('../controllers/dashbaordController')
 const { listUsers, blockUser, userDetails } = require('../controllers/userController')
 const { categories,addCategory, changeCategoryStatus, editCategory } = require('../controllers/categoryController');
 const { showProducts, getEditProducts, postEditProducts, getAddProduct, postAddProduct, disableProduct } = require('../controllers/productController');
@@ -30,6 +30,7 @@ router.use(requireAuth)
 
 //dashboard
 router.get('/', getDashboard)
+router.get('/report', generatePDFReport)
 
 
 //users management

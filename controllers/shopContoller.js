@@ -28,7 +28,7 @@ const getProducts = async (req, res) => {
       );
 
       // Calculate the price after the offer
-      product.finalPrice = product.price - (product.price * bestOffer.discountPercentage / 100);
+      product.finalPrice = Math.ceil(product.price - (product.price * bestOffer.discountPercentage / 100));
       product.offer = bestOffer;
     } else {
       // No offer, final price is the same as the original price

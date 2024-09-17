@@ -1,1 +1,57 @@
-<h1>Dashboard</h1>
+<link rel="stylesheet" href="/stylesheets/admin/dashboard.css">
+
+<div class="header">
+    <h1>Dashboard</h1>
+    <div class="filter-container">
+    <div class="filter-button">
+        <button class="filter-btn" onclick="filterOrders('daily')">Daily</button>
+        <button class="filter-btn" onclick="filterOrders('weekly')">Weekly</button>  
+        <button class="filter-btn" onclick="filterOrders('monthly')">Monthly</button>
+        <button class="filter-btn" onclick="filterOrders('yearly')">Yearly</button>
+    </div>
+    <div class="custom-date-filter">
+        <label for="start-date">Start Date:</label>
+        <input type="date" id="start-date">
+        <label for="end-date">End Date:</label>
+        <input type="date" id="end-date">
+        <button class="filter-btn" id="custom-filter-btn">Filter</button>
+    </div>
+    <div class="custom-date-filter">
+        <button class="filter-btn" id="download-pdf-btn">Download Report</button>
+    </div>
+</div>
+
+</div>
+<p>Sales Count: {{salesCount}}</p>
+<p>Total Amount: {{totalAmount}}</p>
+<p>Total Discount: {{discountedAmount}}</p>
+<table class="user-table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Order Id</th>
+            <th>Customer</th>
+            <th>Status</th>
+            <th>payment</th>
+            <th>qty</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each orders}}
+        {{#each items}}
+        <tr>
+            <td>{{formatDate ../createdAt}}</td>
+            <td>{{../_id}}</td>
+            <td>{{../address.firstName}}</td>
+            <td>{{../orderStatus}}</td>
+            <td>{{../paymentMethod}}</td>
+            <td>{{quantity}}</td>
+            <td>{{totalPrice}}</td>
+        </tr>
+        {{/each}}
+        {{/each}}
+    </tbody>
+</table>
+
+<script src="/javascripts/admin/dashboard.js"></script>

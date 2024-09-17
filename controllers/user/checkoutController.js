@@ -60,11 +60,11 @@ const viewCheckout = async (req, res) => {
       if (productOffer && finalBrandOffer) {
         // Choose the offer with the higher discount percentage
         const maxDiscount = Math.max(productOffer.discountPercentage, finalBrandOffer.discountPercentage);
-        price = product.price - (product.price * maxDiscount / 100);
+        price = Math.ceil(product.price - (product.price * maxDiscount / 100));
       } else if (productOffer) {
-        price = product.price - (product.price * productOffer.discountPercentage / 100);
+        price = Math.ceil(product.price - (product.price * productOffer.discountPercentage / 100));
       } else if (finalBrandOffer) {
-        price = product.price - (product.price * finalBrandOffer.discountPercentage / 100);
+        price = Math.ceil(product.price - (product.price * finalBrandOffer.discountPercentage / 100));
       }
 
       return {
