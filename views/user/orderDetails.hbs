@@ -37,7 +37,7 @@
             <span class="status-dot {{#if ../order.orderStatus}}{{../order.orderStatus}}{{else}}pending{{/if}}"></span>
             <span>{{../order.orderStatus}}</span>
             {{#if ../order.updatedAt}}
-            <span class="Date" style="margin-left:10px">{{../order.updatedAt}}</span>
+            <span class="Date" style="margin-left:10px">{{formatDate ../order.updatedAt}}</span>
             {{/if}}
         </div>
     </div>
@@ -53,22 +53,12 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Format date
-        document.querySelectorAll('.Date').forEach(dateElement => {
-            let dateStr = dateElement.textContent;
-
-            if (dateStr !== 'Pending') {
-                const cleanDateStr = dateStr.replace(/ GMT.*$/, '').split(' ').slice(0, 4).join(' ');
-                const dateObj = new Date(cleanDateStr);
-                const formattedDate = dateObj.toISOString().split('T')[0];
-                dateElement.textContent = formattedDate;
-            }
-        });
+       
 
         // Update status dots
         document.querySelectorAll('.order-status').forEach(statusElement => {
             const statusDot = statusElement.querySelector('.status-dot');
             const statusText = statusElement.querySelector('span').textContent.trim().toLowerCase();
-            console.log(statusDot)
             // Remove all status classes first
             statusDot.classList.remove('delivered', 'pending', 'cancelled');
 
@@ -92,7 +82,7 @@
                     action: 'return'
                 };
 
-                fetch(`/account/order/${orderId}`, {
+                fetch(`/account/return-order/${orderId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -103,6 +93,38 @@
                     .then(result => {
                         if (result.success) {
                             alert('Return request processed successfully!');
+                            // Optionally, you might want to redirect or update the UI
+                        } else {
+                            alert('Error processing return request.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('There was an error processing the return request.');
+                    });
+            });
+        });
+
+        document.querySelectorAll('.cancel-button').forEach(button => {
+            button.addEventListener('click', function () {
+                const orderId = button.getAttribute('data-order-id');
+
+                const requestData = {
+                    orderId: orderId,
+                    action: 'cancel'
+                };
+
+                fetch(`/account/cancel-order/${orderId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            alert(' Order cancelled successfully!');
                             // Optionally, you might want to redirect or update the UI
                         } else {
                             alert('Error processing return request.');

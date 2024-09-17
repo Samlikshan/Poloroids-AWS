@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="/stylesheets/user/wallet.css">
+
+<div class="wallet-container">
+    <div class="wallet-header">
+        <h2>My Wallet</h2>
+        {{!-- <button class="btn-add-funds">Add Funds</button> --}}
+    </div>
+    <div class="wallet-balance">
+        <p><strong>Balance:</strong> ₹<span id="wallet-balance">{{balance}}.00</span></p>
+    </div>
+    <div class="wallet-transactions">
+        <h3>Transaction History</h3>
+        <ul id="transaction-list">
+            {{#each transactions}}
+            <li class="transaction-item">
+                <span class="transaction-date">{{formatDate createdAt}}</span>
+                {{!-- <span class="transaction-description">Order #1234</span> --}}
+                <span class="transaction-amount credit">+ ₹{{amount}}.00</span>
+            </li>
+            {{/each}}
+            {{!-- <li class="transaction-item">
+                <span class="transaction-date">2024-09-10</span>
+                <span class="transaction-description">Order #1233</span>
+                <span class="transaction-amount debit">- $20.00</span>
+            </li> --}}
+        </ul>
+    </div>
+</div>

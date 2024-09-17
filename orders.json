@@ -374,5 +374,36 @@
     "currency": "INR",
     "receipt": "receipt#1",
     "status": "created"
+  },
+  {
+    "order_id": "order_OxjITuJ5Gkyog2",
+    "amount": 990000,
+    "currency": "INR",
+    "receipt": "receipt#1",
+    "status": "created"
+  },
+  {
+    "order_id": "order_OxotsjIa7RovOK",
+    "amount": 3300000,
+    "currency": "INR",
+    "receipt": "receipt#1",
+    "status": "paid",
+    "payment_id": "pay_OxotyAeO9Tz8J5"
+  },
+  {
+    "order_id": "order_OxqNnJ5h4oIw99",
+    "amount": 4000000,
+    "currency": "INR",
+    "receipt": "receipt#1",
+    "status": "paid",
+    "payment_id": "pay_OxqNsjjw2aIjBO"
+  },
+  {
+    "order_id": "order_Oy5YmqZARmf64T",
+    "amount": 3300000,
+    "currency": "INR",
+    "receipt": "receipt#1",
+    "status": "paid",
+    "payment_id": "pay_Oy5YsJ7CdaF9xO"
   }
 ]

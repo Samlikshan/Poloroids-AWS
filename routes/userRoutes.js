@@ -10,10 +10,12 @@ const {
   deleteAddress,
   fetchAddress,
 } = require("../controllers/user/addressController");
-const {viewOrders,singleOrder, cancelOrder} = require('../controllers/user/orderContoller')
+const {viewOrders,singleOrder, cancelOrder, returnOrder} = require('../controllers/user/orderContoller')
 const {getUserDetails,editUserDetails} = require('../controllers/user/userProfile')
 const { addToWishlist, getWishlist, removeItem } = require('../controllers/user/wishlistController')
-const { applyCoupon } = require('../controllers/admin/couponManagement')
+const { applyCoupon } = require('../controllers/admin/couponManagement');
+const { viewWallet } = require("../controllers/user/walletController");
+
 
 let router = express.Router();
 
@@ -31,7 +33,8 @@ router.post('/account/profile',editUserDetails)
 
 router.get('/account/orders',viewOrders)
 router.get('/account/order/:orderId',singleOrder)
-router.post('/account/order/:orderId',cancelOrder)
+router.post('/account/return-order/:orderId',returnOrder)
+router.post('/account/cancel-order/:orderId',cancelOrder)
 
 
 router.get("/shop/:id", singleProduct);
@@ -47,6 +50,8 @@ router.get('/wishlist',userRequireAuth,getWishlist)
 router.post('/add-to-wishlist',addToWishlist) 
 router.delete('/remove-wishlsit',removeItem) 
 
+
+router.get('/account/wallet',viewWallet)
 
 //coupon Management
 router.post('/apply-coupon',applyCoupon)
