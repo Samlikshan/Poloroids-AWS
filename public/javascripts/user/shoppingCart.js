@@ -136,22 +136,33 @@ const quantityDec = async (productId) => {
 // Remove Item
 const removeItem = async (productId) => {
   try {
-    const response = await fetch("/cart/updateItem", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ productId, action: "remove" }),
+    Swal.fire({
+      title: "Do you want to remove this item",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+    }).then(async (result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        const response = await fetch("/cart/updateItem", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ productId, action: "remove" }),
+        });
+        if (response.ok) {
+          // Remove the item from the cart display
+          const itemElement = document.querySelector(`.cart-item[data-id="${productId}"]`);
+          if (itemElement) {
+            itemElement.remove();
+          }
+          updateCartSummary(); // Optionally update the cart summary
+        } else {
+          console.error("Failed to remove item");
+        }
+      } else if (result.isDenied) {
+        Swal.fire("Changes are not saved", "", "info");
+      }
     });
 
-    if (response.ok) {
-      // Remove the item from the cart display
-      const itemElement = document.querySelector(`.cart-item[data-id="${productId}"]`);
-      if (itemElement) {
-        itemElement.remove();
-      }
-      updateCartSummary(); // Optionally update the cart summary
-    } else {
-      console.error("Failed to remove item");
-    }
   } catch (error) {
     console.error(error);
   }

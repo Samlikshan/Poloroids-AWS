@@ -10,27 +10,29 @@
 <table class="user-table">
     <thead>
         <tr>
-            <th>Coupon Id</th>
+            {{!-- <th>Coupon Id</th> --}}
             <th>Coupon Code</th>
             <th>Status</th>
             <th>Discount</th>
             <th>Min Purchase</th>
             <th>Max Purchase</th>
             <th>Validity</th>
-            <th>Edit</th>
+            {{!-- <th>Edit</th> --}}
+            <th>Delete</th>
         </tr>
     </thead>
     <tbody>
        {{#each coupons}}
-        <tr>
-            <td>1</td>
+        <tr class="coupon-row">
+            {{!-- <td>1</td> --}}
             <td>{{couponCode}}</td>
             <td>{{status}}</td>
             <td>{{discountValue}}%</td>
             <td>{{minPurchase}}</td>
             <td>{{maxPurchase}}</td>
             <td class="expiryDate">{{expiryDate}}</td>
-            <td>Edit</td>
+            {{!-- <td>Edit</td> --}}
+            <td><a onclick="deleteCoupon('{{_id}}',this.closest('.coupon-row'))">Delete</a></td>
         </tr>
         {{/each}}
     </tbody>
@@ -42,7 +44,7 @@
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Add New Coupon</h2>
-        <form action="/admin/add-coupon" method="POST">
+        <form action="/admin/add-coupon" method="POST" id="coupon-form">
             <div class="form-group">
                 <label for="couponCode">Coupon Code:</label>
                 <input type="text" id="couponCode" name="couponCode" required placeholder="Enter Coupon Code">

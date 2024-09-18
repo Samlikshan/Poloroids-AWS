@@ -75,6 +75,9 @@ const returnOrder = async (req, res) => {
       { _id: orderId },
       { $set: { orderStatus: "returned" } }
     );
+    for (const item of order.items) {
+      await Product.updateOne({ _id: item.productId }, { $inc: { stock: item.quantity } });
+    }
     return res
       .status(200)
       .json({ success: true, message: "order cancelled successfully" });
@@ -102,8 +105,8 @@ const cancelOrder = async (req, res) => {
       } else {
         await Wallet.create({
           userId: order.userId,
-          balance: order.finalPrice, // Initialize with the transaction amount
-          transactions: [transaction], // Add the first transaction
+          balance: order.finalPrice, 
+          transactions: [transaction],
         });
       }
     }
@@ -112,6 +115,9 @@ const cancelOrder = async (req, res) => {
       { _id: orderId },
       { $set: { orderStatus: "canceled" } }
     );
+    for (const item of order.items) {
+      await Product.updateOne({ _id: item.productId }, { $inc: { stock: item.quantity } });
+    }
     return res
       .status(200)
       .json({ success: true, message: "order cancelled successfully" });

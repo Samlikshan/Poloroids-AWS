@@ -53,7 +53,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Format date
-       
+
 
         // Update status dots
         document.querySelectorAll('.order-status').forEach(statusElement => {
@@ -82,26 +82,39 @@
                     action: 'return'
                 };
 
-                fetch(`/account/return-order/${orderId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(requestData)
-                })
-                    .then(response => response.json())
-                    .then(result => {
-                        if (result.success) {
-                            alert('Return request processed successfully!');
-                            // Optionally, you might want to redirect or update the UI
-                        } else {
-                            alert('Error processing return request.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('There was an error processing the return request.');
-                    });
+                Swal.fire({
+                    title: "Do you want to return this order?",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes",
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        fetch(`/account/return-order/${orderId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(requestData)
+                        }).then(response => response.json())
+                            .then(result => {
+                                if (result.success) {
+                                    Swal.fire("Order returned successfully!", "", "success");
+                                    setTimeout(() => {
+                                        window.location.href = '/account/orders'
+                                    }, 1000);
+                                    // Optionally, you might want to redirect or update the UI
+                                } else {
+                                    toastr.error('Error processing return request.');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                toastr.error('There was an error processing the return request.');
+                            });
+                    } else if (result.isDenied) {
+                        Swal.fire("Changes are not saved", "", "info");
+                    }
+                });
             });
         });
 
@@ -113,27 +126,39 @@
                     orderId: orderId,
                     action: 'cancel'
                 };
-
-                fetch(`/account/cancel-order/${orderId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(requestData)
-                })
-                    .then(response => response.json())
-                    .then(result => {
-                        if (result.success) {
-                            alert(' Order cancelled successfully!');
-                            // Optionally, you might want to redirect or update the UI
-                        } else {
-                            alert('Error processing return request.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('There was an error processing the return request.');
-                    });
+                Swal.fire({
+                    title: "Do you want to remove this item",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes",
+                }).then(async (result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        fetch(`/account/cancel-order/${orderId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(requestData)
+                        }).then(response => response.json())
+                            .then(result => {
+                                if (result.success) {
+                                    Swal.fire("Order Cancelled successfully!", "", "success");
+                                    setTimeout(() => {
+                                        window.location.href = '/account/orders'
+                                    }, 1000);
+                                    // Optionally, you might want to redirect or update the UI
+                                } else {
+                                    toastr.error('Error processing return request.');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                toastr.error('There was an error processing the return request.');
+                            });
+                    } else if (result.isDenied) {
+                        Swal.fire("Order cancellation failed", "", "info");
+                    }
+                });
             });
         });
     });

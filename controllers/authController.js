@@ -99,7 +99,7 @@ const postVerify = async (req, res, next) => {
       // res.redirect('/auth/login')
     } else {
       // throw new Error("Invalid otp");
-      console.log('req')
+      console.log("req");
       return res.status(401).json({ message: "Invalid otp" });
     }
   } catch (error) {
@@ -214,11 +214,10 @@ const postForgotPasswordVerification = (req, res) => {
       return res.status(400).json({ message: "Invalid OTP" }); // Use 400 Bad Request
     }
   } catch (error) {
-    console.error('Error occurred during forgot password verification:', error);
+    console.error("Error occurred during forgot password verification:", error);
     res.status(500).json({ message: "Internal server error" }); // Handle server errors
   }
 };
-
 
 const getResetPassword = (req, res) => {
   res.render("user/resetPassword");
@@ -258,6 +257,26 @@ const postResetPassword = async (req, res, next) => {
   }
 };
 
+const getpreviousPassword = (req, res) => {
+  res.render("user/previousPassword");
+};
+
+const postpreviousPassword = async (req, res) => {
+  try {
+    let { password } = req.body;
+    const token = req.cookies["Token"];
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const user = await User.findOne({ username: decoded.username });
+    password = await bcrypt.compare(password, user.password);
+    if (!password) {
+      return res.status(401).json({ message: "Wrong password" });
+    }
+    return res.status(200).json("password matched!");
+  } catch (error) {
+    console.log(error, "error getting previous password");
+  }
+};
+
 module.exports = {
   getSignup,
   postSingup,
@@ -272,4 +291,6 @@ module.exports = {
   postForgotPasswordVerification,
   getResetPassword,
   postResetPassword,
+  getpreviousPassword,
+  postpreviousPassword,
 };

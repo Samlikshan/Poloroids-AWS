@@ -53,3 +53,53 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
 });
+
+const form = document.getElementById('coupon-form')
+form.addEventListener('submit',async(event)=>{
+    event.preventDefault()
+    const formData = new FormData(form)
+    const data = {}
+    formData.forEach((value,key)=>{
+        data[key] = value;
+    })
+    const response = await fetch('/admin/add-coupon/',{
+        method:'POST',
+        headers: {
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify(data)
+    })
+    if(!response.ok){
+        const errorData = await response.json();
+        return toastr.warning(errorData.message)
+    }
+    if(response.ok){
+        window.location.href = '/admin/coupons'
+    }
+})
+
+const deleteCoupon = async (couponId,element) => {
+    Swal.fire({
+        title: "Do you want to delete this coupon?",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+      }).then(async (result) => {
+       
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+           
+            const response = await fetch("/admin/delete-coupon", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ couponId }),
+              });
+              if(response.ok){
+                element.remove()
+              }
+        } else if (result.isDenied) {
+          Swal.fire("Changes are not saved", "", "info");
+        }
+      });
+}

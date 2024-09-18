@@ -1,122 +1,142 @@
 // Function to handle adding a new address
 function addAddress() {
-    const form = document.getElementById('addAddressForm');
-    if (!form.checkValidity()) {
-        console.log('Form is not valid');
-        return;
-    }
+  const form = document.getElementById("addAddressForm");
+  if (!form.checkValidity()) {
+    console.log("Form is not valid");
+    return;
+  }
 
-    const formData = {
-        phoneNumber: form.querySelector('input[type="number"]').value,
-        addressType: form.querySelector('input[name="addressType"]:checked').value,
-        country: form.querySelector('select').value,
-        firstName: form.querySelector('input[placeholder="First name"]').value,
-        lastName: form.querySelector('input[placeholder="Last name"]').value,
-        company: form.querySelector('input[placeholder="Company (optional)"]').value,
-        address: form.querySelector('input[placeholder="Address"]').value,
-        city: form.querySelector('input[placeholder="City/District/Town"]').value,
-        state: form.querySelector('input[placeholder="State"]').value,
-        email: form.querySelector('input[type="email"]').value,
-        pincode: form.querySelector('input[placeholder="Pincode"]').value
-    };
-    fetch('/account/add-address', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
+  const formData = {
+    phoneNumber: form.querySelector('input[type="number"]').value,
+    addressType: form.querySelector('input[name="addressType"]:checked').value,
+    country: form.querySelector("select").value,
+    firstName: form.querySelector('input[placeholder="First name"]').value,
+    lastName: form.querySelector('input[placeholder="Last name"]').value,
+    company: form.querySelector('input[placeholder="Company (optional)"]')
+      .value,
+    address: form.querySelector('input[placeholder="Address"]').value,
+    city: form.querySelector('input[placeholder="City/District/Town"]').value,
+    state: form.querySelector('input[placeholder="State"]').value,
+    email: form.querySelector('input[type="email"]').value,
+    pincode: form.querySelector('input[placeholder="Pincode"]').value,
+  };
+  fetch("/account/add-address", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formData),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+      document.getElementById("addAddressModal").style.display = "none";
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-        document.getElementById('addAddressModal').style.display = 'none';
-    })
-    .catch(error => {
-        console.error('Error:', error);
+    .catch((error) => {
+      console.error("Error:", error);
     });
 }
 
 // Attach event listener to form submit
-document.getElementById('addAddressForm').addEventListener('submit', function (event) {
-    console.log('Form submitted');
+document.getElementById("addAddressForm").addEventListener(
+  "submit",
+  function (event) {
+    console.log("Form submitted");
     event.preventDefault(); // Prevent default form submission
     addAddress();
-},{once:true});
+  },
+  { once: true }
+);
 
 // Function to handle editing an existing address
 function editAddress() {
-    const form = document.getElementById('editAddressForm');
+  const form = document.getElementById("editAddressForm");
 
-    if (!form.checkValidity()) {
-        console.log('Form is not valid');
-        return;
-    }
+  if (!form.checkValidity()) {
+    console.log("Form is not valid");
+    return;
+  }
 
-    const formData = {
-        id: form.querySelector('#editEmail').dataset.id,
-        contact: form.querySelector('#editPhone').value,
-        addressType: form.querySelector('input[name="editAddressType"]:checked').value,
-        country: form.querySelector('#editCountry').value,
-        firstName: form.querySelector('#editFirstName').value,
-        lastName: form.querySelector('#editLastName').value,
-        company: form.querySelector('#editCompany').value,
-        address: form.querySelector('#editAddress').value,
-        city: form.querySelector('#editCity').value,
-        state: form.querySelector('#editState').value,
-        email: form.querySelector('#editEmail').value,
-        pincode: form.querySelector('#editPincode').value
-    };
+  const formData = {
+    id: form.querySelector("#editEmail").dataset.id,
+    contact: form.querySelector("#editPhone").value,
+    addressType: form.querySelector('input[name="editAddressType"]:checked')
+      .value,
+    country: form.querySelector("#editCountry").value,
+    firstName: form.querySelector("#editFirstName").value,
+    lastName: form.querySelector("#editLastName").value,
+    company: form.querySelector("#editCompany").value,
+    address: form.querySelector("#editAddress").value,
+    city: form.querySelector("#editCity").value,
+    state: form.querySelector("#editState").value,
+    email: form.querySelector("#editEmail").value,
+    pincode: form.querySelector("#editPincode").value,
+  };
 
-    fetch(`/api/address/${formData.id}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
+  fetch(`/api/address/${formData.id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formData),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+      document.getElementById("editAddressModal").style.display = "none";
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-        document.getElementById('editAddressModal').style.display = 'none';
-    })
-    .catch(error => {
-        console.error('Error:', error);
+    .catch((error) => {
+      console.error("Error:", error);
     });
 }
 
 // Attach event listener to form submit
-document.getElementById('editAddressForm').addEventListener('submit', function (event) {
+document.getElementById("editAddressForm").addEventListener(
+  "submit",
+  function (event) {
     event.preventDefault(); // Prevent default form submission
     editAddress();
-},{once:true});
+  },
+  { once: true }
+);
 
 async function deleteAdd(addressId, element) {
-    try {
-        const response = await fetch('/account/address/delete', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ addressId })
+  try {
+    Swal.fire({
+      title: "Do you want to delete this address?",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+    }).then(async (result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        const response = await fetch("/account/address/delete", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ addressId }),
         });
 
         if (response.ok) {
-            console.log('Address deleted');
-            const data = await response.json();
-            // Remove the address card from the DOM
-            const addressCard = element.closest('.address-card');
-            if (addressCard) {
-                addressCard.remove();
-            }
+          console.log("Address deleted");
+          const data = await response.json();
+          // Remove the address card from the DOM
+          const addressCard = element.closest(".address-card");
+          if (addressCard) {
+            addressCard.remove();
+          }
         } else {
-            const errorData = await response.json();
-            errorDisplay(errorData.message);
+          const errorData = await response.json();
+          errorDisplay(errorData.message);
         }
-    } catch (err) {
-        console.error('Error:', err);
-    }
+      } else if (result.isDenied) {
+        Swal.fire("Changes are not saved", "", "info");
+      }
+    });
+  } catch (err) {
+    console.error("Error:", err);
+  }
 }
-
 
 document.querySelectorAll(".options-btn").forEach((button) => {
   button.addEventListener("click", function () {

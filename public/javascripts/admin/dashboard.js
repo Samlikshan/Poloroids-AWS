@@ -9,7 +9,7 @@ document.getElementById('custom-filter-btn').addEventListener('click', function(
     if (startDate && endDate) {
         window.location.href = `/admin/?startDate=${startDate}&endDate=${endDate}`;
     } else {
-        alert("Please select both start and end dates.");
+        toastr.warning('Please select both start and end dates.');
     }
 });
 

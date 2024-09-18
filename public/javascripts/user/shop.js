@@ -139,3 +139,39 @@ const addToWishlist = async (productId,element) => {
         }
     });
     
+
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        const query = this.value.toLowerCase();
+        const productCards = document.querySelectorAll('.card'); // Assuming each product has the class 'card'
+      
+        productCards.forEach((card) => {
+          const productName = card.querySelector('h2').textContent.toLowerCase(); // Product name inside the <h2> tag
+          
+          if (productName.includes(query)) {
+            card.style.display = '';  // Show the product if it matches the query
+          } else {
+            card.style.display = 'none';  // Hide the product if it doesn't match
+          }
+        });
+      });
+
+      
+    //   Advanced Searching
+    //   document.getElementById('searchInput').addEventListener('keyup', function() {
+    //     const query = this.value.toLowerCase();
+    //     const productCards = document.querySelectorAll('.card'); // Assuming each product has the class 'card'
+      
+    //     productCards.forEach((card) => {
+    //       const productName = card.querySelector('h2').textContent.toLowerCase(); // Product name inside the <h2> tag
+    //       const brandName = card.getAttribute('data-brand').toLowerCase(); // Brand name from the data-brand attribute
+    //       const typeName = card.getAttribute('data-type').toLowerCase(); // Type from data-type attribute
+    //       const gearName = card.getAttribute('data-gear').toLowerCase(); // Gear from data-gear attribute
+      
+    //       if (productName.includes(query) || brandName.includes(query) || typeName.includes(query) || gearName.includes(query)) {
+    //         card.style.display = '';  // Show the product if it matches the query
+    //       } else {
+    //         card.style.display = 'none';  // Hide the product if it doesn't match
+    //       }
+    //     });
+    //   });
+      

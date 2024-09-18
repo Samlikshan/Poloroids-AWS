@@ -101,7 +101,7 @@
           </a>
           {{/if}}
 
-          <a href="/shop/{{_id}}" style="text-decoration: none;">
+          <a href="/shop/{{_id}}" style="text-decoration: none; color:black">
             <img src="{{mainImage}}" alt="Product Image" class="product-image">
             <div class="card-content-wrapper">
               <h2>{{productName}}</h2>
@@ -112,16 +112,22 @@
               <p class="stock-status">Out of Stock</p>
               {{/if}}
 
-              <!-- Show only the original price if no offer, or both if there is an offer -->
-              {{#if offer}}
-              <div class="offer">
-                <p>Offer: {{offer.discountPercentage}}% off!</p>
+              <!-- Price container -->
+              <div class="price-container">
+                {{#if offer}}
+                <div class="offer">
+                  <p>Offer: {{offer.discountPercentage}}% off!</p>
+                </div>
+                <p class="original-price"><s>₹ {{price}}.00</s></p>
+                <p class="final-price">₹ {{finalPrice}}.00</p>
+                {{else}}
+                <!-- Empty offer space to maintain layout -->
+                <div class="offer no-offer">
+                  <p>&nbsp;</p> <!-- This space will keep the layout aligned -->
+                </div>
+                <p class="final-price">₹ {{price}}.00</p>
+                {{/if}}
               </div>
-              <p class="original-price" style="text-decoration: line-through;">₹ {{price}}.00</p>
-              <p class="final-price">₹ {{finalPrice}}.00</p>
-              {{else}}
-              <p class="final-price">₹ {{price}}.00</p>
-              {{/if}}
 
               {{#if stock}}
               <a onclick="addToCart('{{_id}}')"><button>Add to Cart</button></a>
@@ -132,17 +138,16 @@
           </a>
         </div>
         {{/each}}
-
-
       </div>
-      {{!-- <div class="pagination">
-        <a href="#" class="active">1</a>
-        <a href="#">2</a>
-        <a href="#">3</a>
-        <a href="#">4</a>
-        <a href="#">...</a>
-        <a href="#">10</a>
-      </div> --}}
+
+      <div class="pagination">
+        {{#if totalPages}}
+        {{#each (range 1 totalPages)}}
+        <a href="?page={{this}}" class="{{#ifEquals this ../currentPage}}active{{/ifEquals}}">{{this}}</a>
+        {{/each}}
+        {{/if}}
+      </div>
+
     </main>
   </div>
 </div>

@@ -316,12 +316,12 @@ document
                 // window.location.href = '/success';
                 placeorder("paid");
               } else {
-                alert("Payment verification failed");
+                toastr.error("Payment verification failed");
               }
             })
             .catch((error) => {
               console.error("Error:", error);
-              alert("Error verifying payment");
+              toastr.error("Payment verification failed");
             });
         },
       };

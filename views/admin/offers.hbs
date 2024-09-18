@@ -22,7 +22,7 @@
     </thead>
     <tbody>
         {{#each offers}}
-        <tr>
+        <tr class="offer-row">
             <td>{{offerType}}</td>
             {{#if (eq offerType 'product')}}
             <td>{{typeId.productName}}</td>
@@ -34,7 +34,7 @@
             <td>{{formatDate validTo}}</td>
             <td>{{status}}</td>
             <td><a class="openEditOfferModal" data-id="{{_id}}"="">Edit</a></td>
-            <td><a onclick="deleteOffer('{{_id}}')">Delete</a></td>
+            <td><a onclick="deleteOffer('{{_id}}',this.closest('.offer-row'))">Delete</a></td>
         </tr>
         {{/each}}
     </tbody>

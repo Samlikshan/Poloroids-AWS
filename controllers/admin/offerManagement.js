@@ -24,8 +24,14 @@ const addOffer = async (req, res) => {
     } = req.body.data;
     let { status } = req.body.data
     status = status === "active";
-    console.log(req.body)
-    console.log(offerType,typeId,discountPercentage,validFrom,validTo,status)
+    const existOffer = await Offer.findOne({
+      offerType: offerType,
+      typeId:typeId
+    });
+    
+    if(existOffer){
+      return res.status(409).json({ message: 'Offer already exists.' });
+    }
     await  Offer.create({
         offerType,
       typeId,
@@ -44,7 +50,6 @@ const getEditOffer = async (req, res) => {
   try {
     const offerId = req.params.offerId
     const offer = await Offer.findById(offerId)
-    console.log(offer)
     res.json(offer)
   } catch (error) {
     console.log("error editing offer", error);

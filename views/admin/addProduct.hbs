@@ -2,7 +2,7 @@
 <div class="add-product-container">
     <a href="/admin/products" class="back-link">← Back to product list</a>
     <h1>Add New Product</h1>
- 
+
     <form class="product-form" action="/admin/add-product" method="post" enctype="multipart/form-data">
         <!-- Description Section -->
         <div class="section">
@@ -10,12 +10,14 @@
 
             <div class="form-group">
                 <label for="productName">Product Name</label>
-                <input type="text" id="productName" placeholder="Product Name" name="productName" minlength="10" required>
+                <input type="text" id="productName" placeholder="Product Name" name="productName" minlength="10"
+                    required>
             </div>
 
             <div class="form-group">
                 <label for="description">Product Description</label>
-                <textarea id="description" name="productDescription" placeholder="Product Description" minlength="350" maxlength="450"></textarea>
+                <textarea id="description" name="productDescription" placeholder="Product Description" minlength="350"
+                    maxlength="450"></textarea>
             </div>
         </div>
 
@@ -28,7 +30,7 @@
                 <select id="productCategory1" name="{{categoryName}}">
                     <option>None</option>
                     {{#each subCategories}}
-                    <option >{{this}}</option>
+                    <option>{{this}}</option>
                     {{/each}}
                 </select>
             </div>
@@ -68,7 +70,7 @@
         <div class="section">
             <h2>Price</h2>
             <div class="form-group">
-                 <input type="number" name="price" placeholder="Price" required min="0">
+                <input type="number" name="price" placeholder="Price" required min="0">
             </div>
         </div>
 
@@ -81,34 +83,36 @@
                 <input type="number" id="quantity" name="stock" placeholder="Min 10" min="0">
             </div>
         </div>
-        
 
-       <!-- Image Upload Section -->
-<div class="section">
-    <h2>Images</h2>
 
-    <div class="image-upload-grid">
-        <div class="image-upload-group">
-            <label for="imageUpload1" class="image-upload-label">
-                <img src="#" alt="Upload Image" class="main-image-preview">
-                <span>Upload Main Image</span>
-            </label>
-            <input type="file" id="imageUpload1" name="mainImage" style="display: none;" accept="image/jpeg, image/png">
+        <!-- Image Upload Section -->
+        <div class="section">
+            <h2>Images</h2>
+
+            <div class="image-upload-grid">
+                <div class="image-upload-group">
+                    <label for="imageUpload1" class="image-upload-label">
+                        <img src="#" alt="Upload Image" class="main-image-preview">
+                        <span>Upload Main Image</span>
+                    </label>
+                    <input type="file" id="imageUpload1" name="mainImage" style="display: none;"
+                        accept="image/jpeg, image/png">
+                </div>
+
+                <div class="image-upload-group">
+                    <label for="imageUpload2" class="image-upload-label">
+                        <img src="#" alt="Upload Image" class="thumbnail-preview" id="thumbnail-preview-placeholder">
+                        <span>Upload Additional Images</span>
+                    </label>
+                    <input type="file" id="imageUpload2" style="display: none;" name="additionalImages"
+                        accept="image/jpeg, image/png" multiple>
+                </div>
+            </div>
+
+            <div class="additional-images-preview" id="additional-images-preview">
+                <!-- Additional images will be dynamically inserted here -->
+            </div>
         </div>
-
-        <div class="image-upload-group">
-            <label for="imageUpload2" class="image-upload-label">
-                <img src="#" alt="Upload Image" class="thumbnail-preview" id="thumbnail-preview-placeholder">
-                <span>Upload Additional Images</span>
-            </label>
-            <input type="file" id="imageUpload2" style="display: none;" name="additionalImages" accept="image/jpeg, image/png" multiple>
-        </div>
-    </div>
-
-    <div class="additional-images-preview" id="additional-images-preview">
-        <!-- Additional images will be dynamically inserted here -->
-    </div>
-</div>
 
 
         <!-- Submit Button -->
@@ -131,7 +135,7 @@
 </div>
 
 <script>
-   {/* document.addEventListener('DOMContentLoaded', () => {
+    {/* document.addEventListener('DOMContentLoaded', () => {
     const mainImageInput = document.getElementById('imageUpload1');
     const additionalImageInput = document.getElementById('imageUpload2');
     const mainImagePreview = document.querySelector('.main-image-preview');
@@ -165,135 +169,139 @@
             reader.readAsDataURL(file);
         });
     });
-}); */}document.addEventListener('DOMContentLoaded', () => {
-    const mainImageInput = document.getElementById('imageUpload1');
-    const additionalImageInput = document.getElementById('imageUpload2');
-    const mainImagePreview = document.querySelector('.main-image-preview');
-    const additionalImagesPreview = document.getElementById('additional-images-preview');
-    const modal = document.getElementById('cropperModal');
-    const closeModal = document.querySelector('.close');
-    const cropButton = document.getElementById('cropButton');
-    let cropper;
-    let currentInput;
-    let additionalImagesDataTransfer = new DataTransfer();
+}); */} document.addEventListener('DOMContentLoaded', () => {
+        const mainImageInput = document.getElementById('imageUpload1');
+        const additionalImageInput = document.getElementById('imageUpload2');
+        const mainImagePreview = document.querySelector('.main-image-preview');
+        const additionalImagesPreview = document.getElementById('additional-images-preview');
+        const modal = document.getElementById('cropperModal');
+        const closeModal = document.querySelector('.close');
+        const cropButton = document.getElementById('cropButton');
+        let cropper;
+        let currentInput;
+        let additionalImagesDataTransfer = new DataTransfer();
 
-    const allowedTypes = ['image/jpeg', 'image/png'];
-
-    const validateFileType = (file) => {
-        if (!allowedTypes.includes(file.type)) {
-            alert('Only JPEG and PNG files are allowed.');
-            return false;
-        }
-        return true;
-    };
-
-    // Show modal when the main image is selected
-    mainImageInput.addEventListener('change', () => {
-        const file = mainImageInput.files[0];
-        if (file && validateFileType(file)) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const imageToCrop = document.getElementById('imageToCrop');
-                imageToCrop.src = reader.result;
-                modal.style.display = "block";
-                currentInput = mainImageInput;
-
-                if (cropper) {
-                    cropper.destroy();
-                }
-                cropper = new Cropper(imageToCrop, {
-                    aspectRatio: 1,
-                    viewMode: 2,
-                    movable: true,
-                    zoomable: true,
-                    rotatable: true,
-                    scalable: true,
-                });
-            };
-            reader.readAsDataURL(file);
-        } else {
-            mainImageInput.value = ''; // Reset the input if the file type is invalid
-        }
-    });
-
-    // Show modal when an additional image is selected
-    additionalImageInput.addEventListener('change', () => {
-        const file = additionalImageInput.files[0];
-        if (file && validateFileType(file)) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const imageToCrop = document.getElementById('imageToCrop');
-                imageToCrop.src = reader.result;
-                modal.style.display = "block";
-                currentInput = additionalImageInput;
-
-                if (cropper) {
-                    cropper.destroy();
-                }
-                cropper = new Cropper(imageToCrop, {
-                    aspectRatio: 1,
-                    viewMode: 2,
-                    movable: true,
-                    zoomable: true,
-                    rotatable: true,
-                    scalable: true,
-                });
-            };
-            reader.readAsDataURL(file);
-        } else {
-            additionalImageInput.value = ''; // Reset the input if the file type is invalid
-        }
-    });
-
-    // Close modal
-    closeModal.onclick = () => {
-        modal.style.display = "none";
-        if (cropper) {
-            cropper.destroy();
-        }
-    };
-
-    // Crop and save image
-    cropButton.onclick = () => {
-        const canvas = cropper.getCroppedCanvas();
-        canvas.toBlob((blob) => {
-            const uniqueFilename = `cropped-image-${Date.now()}-${Math.floor(Math.random() * 1000)}.png`;
-            const croppedFile = new File([blob], uniqueFilename, { type: "image/png" });
-
-            if (currentInput === mainImageInput) {
-                const url = URL.createObjectURL(blob);
-                mainImagePreview.src = url;
-                const dataTransfer = new DataTransfer();
-                dataTransfer.items.add(croppedFile);
-                mainImageInput.files = dataTransfer.files;
-            } else if (currentInput === additionalImageInput) {
-                // Display cropped image
-                const img = document.createElement('img');
-                img.src = URL.createObjectURL(blob);
-                img.className = 'thumbnail-preview';
-                additionalImagesPreview.appendChild(img);
-
-                // Add the new cropped file to the DataTransfer object for additional images
-                additionalImagesDataTransfer.items.add(croppedFile);
-                additionalImageInput.files = additionalImagesDataTransfer.files;
+        const allowedTypes = ['image/jpeg', 'image/png'];
+        const maxFileSize = 5 * 1024 * 1024;
+        const validateFileType = (file) => {
+            if (file.size > maxFileSize) {
+                toastr.warning('File size must be less than 5 MB.');
+                return false;
             }
+            if (!allowedTypes.includes(file.type)) {
+                toastr.warning('Only JPEG and PNG files are allowed.');
+                return false;
+            }
+            return true;
+        };
 
-            // Close modal and destroy cropper instance
-            modal.style.display = "none";
-            cropper.destroy();
+        // Show modal when the main image is selected
+        mainImageInput.addEventListener('change', () => {
+            const file = mainImageInput.files[0];
+            if (file && validateFileType(file)) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const imageToCrop = document.getElementById('imageToCrop');
+                    imageToCrop.src = reader.result;
+                    modal.style.display = "block";
+                    currentInput = mainImageInput;
+
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+                    cropper = new Cropper(imageToCrop, {
+                        aspectRatio: 1,
+                        viewMode: 2,
+                        movable: true,
+                        zoomable: true,
+                        rotatable: true,
+                        scalable: true,
+                    });
+                };
+                reader.readAsDataURL(file);
+            } else {
+                mainImageInput.value = ''; // Reset the input if the file type is invalid
+            }
         });
-    };
 
-    // Close modal if clicked outside
-    window.addEventListener('click', (event) => {
-        if (event.target == modal) {
+        // Show modal when an additional image is selected
+        additionalImageInput.addEventListener('change', () => {
+            const file = additionalImageInput.files[0];
+            if (file && validateFileType(file)) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const imageToCrop = document.getElementById('imageToCrop');
+                    imageToCrop.src = reader.result;
+                    modal.style.display = "block";
+                    currentInput = additionalImageInput;
+
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+                    cropper = new Cropper(imageToCrop, {
+                        aspectRatio: 1,
+                        viewMode: 2,
+                        movable: true,
+                        zoomable: true,
+                        rotatable: true,
+                        scalable: true,
+                    });
+                };
+                reader.readAsDataURL(file);
+            } else {
+                additionalImageInput.value = ''; // Reset the input if the file type is invalid
+            }
+        });
+
+        // Close modal
+        closeModal.onclick = () => {
             modal.style.display = "none";
             if (cropper) {
                 cropper.destroy();
             }
-        }
+        };
+
+        // Crop and save image
+        cropButton.onclick = () => {
+            const canvas = cropper.getCroppedCanvas();
+            canvas.toBlob((blob) => {
+                const uniqueFilename = `cropped-image-${Date.now()}-${Math.floor(Math.random() * 1000)}.png`;
+                const croppedFile = new File([blob], uniqueFilename, { type: "image/png" });
+
+                if (currentInput === mainImageInput) {
+                    const url = URL.createObjectURL(blob);
+                    mainImagePreview.src = url;
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(croppedFile);
+                    mainImageInput.files = dataTransfer.files;
+                } else if (currentInput === additionalImageInput) {
+                    // Display cropped image
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(blob);
+                    img.className = 'thumbnail-preview';
+                    additionalImagesPreview.appendChild(img);
+
+                    // Add the new cropped file to the DataTransfer object for additional images
+                    additionalImagesDataTransfer.items.add(croppedFile);
+                    additionalImageInput.files = additionalImagesDataTransfer.files;
+                }
+
+                // Close modal and destroy cropper instance
+                modal.style.display = "none";
+                cropper.destroy();
+            });
+        };
+
+        // Close modal if clicked outside
+        window.addEventListener('click', (event) => {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                if (cropper) {
+                    cropper.destroy();
+                }
+            }
+        });
     });
-});
 
 
 </script>

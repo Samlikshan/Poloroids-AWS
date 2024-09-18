@@ -87,15 +87,15 @@
         .then(response => response.json())
         .then(result => {
             if (result.success) {
-                alert('Information updated successfully!');
+                toastr.success('Information updated successfully!');
                 modal.style.display = 'none'; // Close the modal on success
             } else {
-                alert('Error updating information.');
+                toastr.error('Error updating information.');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('There was an error. Please try again.');
+            toastr.error('There was an error. Please try again.');
         });
     });
 </script>

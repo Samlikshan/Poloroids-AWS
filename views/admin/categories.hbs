@@ -228,8 +228,7 @@ function updateCategory(event) {
     const parentCategoryType = document.getElementById('editCategoryType').value; // Retrieve the parent category type
 
     if (newName === '') {
-        // Handle empty category name
-        alert('Category name cannot be empty.');
+        toastr.warning('Category name cannot be empty.');
         return;
     }
 

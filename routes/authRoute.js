@@ -14,6 +14,8 @@ const {
   postForgotPasswordVerification,
   getResetPassword,
   postResetPassword,
+  getpreviousPassword,
+  postpreviousPassword,
 } = require("../controllers/authController");
 const googleAuth = require("../config/passoprt");
 const passport = require("passport");
@@ -83,5 +85,8 @@ router.get("/forgotVerify", getForgotPasswordVerification);
 router.post("/forgotVerify", postForgotPasswordVerification);
 router.get("/resetPassword", getResetPassword);
 router.post("/resetPassword", postResetPassword);
+router.get('/previous-password',getpreviousPassword)
+router.post('/previous-password',postpreviousPassword)
+
 
 module.exports = router;

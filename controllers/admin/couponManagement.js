@@ -6,6 +6,7 @@ const viewCoupons = async (req, res) => {
 };
 
 const postCoupon = async (req, res) => {
+ 
   let {
     couponCode,
     discountValue,
@@ -14,6 +15,10 @@ const postCoupon = async (req, res) => {
     expiryDate,
     status,
   } = req.body;
+  const existCoupon = await Coupons.findOne({couponCode:couponCode})
+  if(existCoupon){
+    return res.status(409).json({ message: 'Coupon already exists.' }); 
+  }
   discountValue = parseFloat(discountValue);
   minPurchase = parseFloat(minPurchase);
   maxPurchase = parseFloat(maxPurchase);
@@ -28,7 +33,8 @@ const postCoupon = async (req, res) => {
     expiryDate,
     status,
   });
-  res.redirect("/admin/coupons");
+  // res.redirect("/admin/coupons");
+  res.status(200).json('coupon created')
 };
 
 const applyCoupon = async (req, res) => {
@@ -52,8 +58,20 @@ const applyCoupon = async (req, res) => {
   
 };
 
+const deleteCoupon = async (req,res) => {
+  try{
+    const {couponId} = req.body
+    await Coupons.deleteOne({_id:couponId})
+    res.status(200).json('coupon deleted successfully')
+  }catch(error){
+    console.log(error,'error deleting coupon')
+  }
+
+}
+
 module.exports = {
   viewCoupons,
   postCoupon,
   applyCoupon,
+  deleteCoupon
 };

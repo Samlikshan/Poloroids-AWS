@@ -9,7 +9,7 @@ const { categories,addCategory, changeCategoryStatus, editCategory } = require('
 const { showProducts, getEditProducts, postEditProducts, getAddProduct, postAddProduct, disableProduct } = require('../controllers/productController');
 const { getLogin, postLogin ,logout, getResetPassword, postResetPassword, getNewPassword, postNewPassword, getForgotPasswrod, postForgotPassword } = require('../controllers/adminAuthController');
 const { viewOrder, updateOrders, singleOrder } = require('../controllers/admin/orderManagement');
-const { viewCoupons, postCoupon, applyCoupon } = require('../controllers/admin/couponManagement');
+const { viewCoupons, postCoupon, applyCoupon, deleteCoupon } = require('../controllers/admin/couponManagement');
 const { viewOffers, addOffer, getEditOffer, postEditOffer, deleteOffer } = require('../controllers/admin/offerManagement');
 
 //Auth Management
@@ -86,6 +86,7 @@ router.post('/update-orders',updateOrders)
 //coupon Management
 router.get('/coupons',viewCoupons)
 router.post('/add-coupon',postCoupon)
+router.delete('/delete-coupon',deleteCoupon)
 
 //offer Management
 router.get('/offers',viewOffers)
