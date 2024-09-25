@@ -100,18 +100,21 @@ app.use((req, res, next) => {
     req.path === "/admin/login" ||
     req.path === "/admin/reset-password" ||
     req.path === "/admin/new-password" ||
-    req.path === "/admin/forgot-password" ||
-    req.path === "/admin/report"
+    req.path === "/admin/forgot-password" 
+    // req.path === "/admin/report"  
   ) {
     res.locals.layout = "auth"; // Use auth layout for specific admin auth routes
+  } else if(req.path.startsWith('/invoice')|| req.path == '/admin/report'){
+    res.locals.layout = 'pdf'
   } else if (req.path.startsWith("/admin")) {
     res.locals.layout = "admin"; // Use admin layout for other admin routes
   } else if (req.path.startsWith("/auth")) {
     res.locals.layout = "auth"; // Use auth layout for user auth routes
   } else if (req.path.startsWith("/account")) {
     res.locals.layout = "accounts";
-  } else {
+  }else {
     res.locals.layout = "user"; // Use user layout for other routes
+
   }
   next();
 });

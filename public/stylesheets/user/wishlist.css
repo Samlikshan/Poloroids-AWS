@@ -86,3 +86,30 @@
     height: auto;
     border-radius: 4px;
   }
+
+  .cart-btn {
+    background-color: #000000;
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 900;
+    transition: ease 0.3s;
+  }
+  
+  .cart-btn:hover{
+    background-color: #787878;
+  }
+
+  .cart-btn-out-of-stock{
+    background-color: #7d7d7d40;
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    /* cursor: pointer; */
+    font-weight: 900;
+    transition: ease 0.3s;
+
+  }

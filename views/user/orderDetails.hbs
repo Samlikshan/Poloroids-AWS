@@ -7,13 +7,17 @@
             <p><strong>{{order.address.firstName}}</strong> {{order.address.phoneNumber}}</p>
             <p>{{order.address.address}}</p>
             <p><strong>{{order.address.state}}</strong> {{order.address.pincode}}</p>
+            <p><strong>Order ID: </strong>{{order._id}}</p>
         </div>
         <div class="order-actions">
             {{!-- <button class="return-button" data-order-id="{{order._id}}">Return</button> --}}
             {{#if (eq order.orderStatus 'delivered')}}
             <button class="return-button" data-order-id="{{order._id}}">Return</button>
+            <button class="invoice-button" data-order-id="{{order._id}}">Invoice</button>
             {{else if (eq order.orderStatus 'pending')}}
             <button class="cancel-button" data-order-id="{{order._id}}">Cancel</button>
+            {{else if (eq order.orderStatus 'failed')}}
+            <button class="retry-button" id="retry-button" data-order-id="{{order._id}}">Retry</button>
             {{/if}}
             {{!-- <button class="invoice-button">Invoice</button> --}}
         </div>
@@ -45,11 +49,12 @@
     <hr>
     <div class="order-summary">
         <h4>Order Summary</h4>
-        <p><strong>Total Amount:</strong> ₹{{order.finalPrice}}</p>
+        <p id="totalAmount"><strong>Amount:</strong> ₹{{order.totalAmount}}</p>
+        <p id="totalAmount"><strong>Final Amount:</strong> ₹{{order.finalPrice}}</p>
         <p><strong>Payment Status:</strong> {{order.paymentStatus}}</p>
     </div>
 </div>
-
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Format date
@@ -161,5 +166,96 @@
                 });
             });
         });
+        const invoiceBtn = document.querySelector('.invoice-button')
+        if (invoiceBtn) {
+            invoiceBtn.addEventListener('click', async () => {
+                const orderId = invoiceBtn.getAttribute('data-order-id');
+                window.location.href = `/invoice/${orderId}`
+            })
+        }
+
+        const retryBtn = document.getElementById('retry-button')
+        if (retryBtn) {
+            retryBtn.addEventListener('click', async () => {
+            const finalPrice = JSON.stringify({{ order.finalPrice }})
+
+            // Create order by calling the server endpoint
+            const response = await fetch('/create-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ finalPrice, currency: 'INR', receipt: 'receipt#1', notes: {} })
+            });
+
+            const order = await response.json();
+
+            // Open Razorpay Checkout
+            const options = {
+                key: "rzp_test_XCHGauJ6DVoH7U", // Replace with your Razorpay key_id
+                amount: order.amount,
+                currency: order.currency,
+                name: "Polaroids",
+                description: "Transaction",
+                order_id: order.id, // This is the order_id created in the backend
+                callback_url: "http://localhost:3000/payment-success", // Your success URL
+                prefill: {
+                    name: "samlik",
+                    email: "samlikshan123@gmail.com",
+                    contact: "9072175739",
+                },
+                theme: {
+                    color: "#F37254",
+                },
+                handler: function (response) {
+                    fetch("/verify-payment", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature,
+                        }),
+                    })
+                        .then((res) => res.json())
+                        .then((data) => {
+                            if (data.status === "ok") {
+                                // window.location.href = '/success';
+                                retryPayment("paid");
+                            } else {
+                                toastr.error("Payment verification failed");
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("Error:", error);
+                            toastr.error("Payment verification failed");
+                        });
+                },
+            };
+            async function retryPayment() {
+                const orderId = retryBtn.getAttribute('data-order-id');
+                const response = await fetch('/retry-payment', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body:JSON.stringify({orderId})
+                })
+                if(response.ok){
+                    return location.reload()
+                }
+                if(!response.ok){
+                    const errorData = await response.json();
+                    toastr.error(errorData.message);
+                }
+            }
+
+            const rzp = new Razorpay(options);
+            rzp.open();
+        })
+        }
+
     });
 </script>

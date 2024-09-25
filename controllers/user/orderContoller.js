@@ -4,6 +4,11 @@ const Order = require("../../models/orderModel");
 const jwt = require("jsonwebtoken");
 const Orders = require("../../models/orderModel");
 const Wallet = require("../../models/walletModel");
+const pdf = require('html-pdf');
+const path = require('path');
+const exphbs = require('express-handlebars');
+const hbs = exphbs.create(); 
+
 
 const viewOrders = async (req, res) => {
   const token = req.cookies["Token"];
@@ -12,6 +17,7 @@ const viewOrders = async (req, res) => {
   const orders = await Orders.find({ userId: user._id })
     .populate("items")
     .sort({ createdAt: -1 });
+  
   const products = await Product.find();
   // Assuming orders and products are already defined arrays
 
@@ -70,7 +76,10 @@ const returnOrder = async (req, res) => {
         transactions: [transaction], // Add the first transaction
       });
     }
-
+    await Orders.updateOne(
+      { _id: orderId },
+      { $set: { paymentStatus: "refunded" } }
+    )
     await Orders.updateOne(
       { _id: orderId },
       { $set: { orderStatus: "returned" } }
@@ -90,7 +99,7 @@ const cancelOrder = async (req, res) => {
   try {
     const orderId = req.params.orderId;
     const order = await Order.findById(orderId);
-    if (order.paymentMethod == "razorpay") {
+    if (order.paymentMethod == "razorpay" || order.paymentMethod == "wallet") {
       const wallet = await Wallet.findOne({ userId: order.userId });
       const transaction = {
         orderId: orderId,
@@ -102,12 +111,20 @@ const cancelOrder = async (req, res) => {
           $push: { transactions: transaction },
           $inc: { balance: order.finalPrice },
         });
+        await Orders.updateOne(
+          { _id: orderId },
+          { $set: { paymentStatus: "refunded" } }
+        )
       } else {
         await Wallet.create({
           userId: order.userId,
           balance: order.finalPrice, 
           transactions: [transaction],
         });
+        await Orders.updateOne(
+          { _id: orderId },
+          { $set: { paymentStatus: "refunded" } }
+        )
       }
     }
 
@@ -126,9 +143,42 @@ const cancelOrder = async (req, res) => {
   }
 };
 
+const getInvoice = async (req, res) => {
+  try {
+    const orderId = req.params.orderId;
+    const order = await Orders.findById(orderId).populate('items.productId');
+
+    if (!order) {
+      return res.status(404).send('Order not found');
+    }
+
+    res.render('user/invoice', { order }, (err, html) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send('Error generating HTML for PDF');
+      }
+
+      pdf.create(html).toStream((err, stream) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).send('Error generating PDF');
+        }
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename="invoice.pdf"');
+        stream.pipe(res); // Stream the PDF as a download
+      });
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Error creating invoice');
+  }
+};
+
+
 module.exports = {
   viewOrders,
   singleOrder,
   returnOrder,
   cancelOrder,
+  getInvoice
 };

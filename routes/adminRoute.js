@@ -3,7 +3,8 @@ const router = express.Router();
 const multer = require('multer')
 const requireAuth = require('../middleware/requireAuth')
 const isLogged = require('../middleware/isLogged')
-const {getDashboard, generatePDFReport} = require('../controllers/dashbaordController')
+const { getDashboard, getSalesData } = require('../controllers/admin/dashboardController')
+const {generatePDFReport, getSalesReport , generateExcelReport} = require('../controllers/salesReportController')
 const { listUsers, blockUser, userDetails } = require('../controllers/userController')
 const { categories,addCategory, changeCategoryStatus, editCategory } = require('../controllers/categoryController');
 const { showProducts, getEditProducts, postEditProducts, getAddProduct, postAddProduct, disableProduct } = require('../controllers/productController');
@@ -28,10 +29,14 @@ router.get('/logout', logout)
 // require Auth to prevent from non logged users to protected routes
 router.use(requireAuth)
 
-//dashboard
-router.get('/', getDashboard)
-router.get('/report', generatePDFReport)
+//dashbaor
+router.get('/',getDashboard)
+router.get('/sales',getSalesData)
 
+//sales-reoprt
+router.get('/sales-report', getSalesReport)
+router.get('/report', generatePDFReport)
+router.get('/excelReport',generateExcelReport)
 
 //users management
 router.get('/users', listUsers)

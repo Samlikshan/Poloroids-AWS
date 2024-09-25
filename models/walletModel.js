@@ -8,7 +8,7 @@ const walletSchema = new Schema({
     {
         orderId:{type:mongoose.Schema.Types.ObjectId,ref:'orders'},
         amount:{type:Number},
-        transactionsType:{type:String},
+        transactionType:{type:String},
         createdAt:{type:Date,default:Date.now}
     }
  ],

@@ -10,7 +10,7 @@ const {
   deleteAddress,
   fetchAddress,
 } = require("../controllers/user/addressController");
-const {viewOrders,singleOrder, cancelOrder, returnOrder} = require('../controllers/user/orderContoller')
+const {viewOrders,singleOrder, cancelOrder, returnOrder , getInvoice} = require('../controllers/user/orderContoller')
 const {getUserDetails,editUserDetails} = require('../controllers/user/userProfile')
 const { addToWishlist, getWishlist, removeItem } = require('../controllers/user/wishlistController')
 const { applyCoupon } = require('../controllers/admin/couponManagement');
@@ -34,6 +34,7 @@ router.post('/account/profile',editUserDetails)
 router.get('/account/orders',viewOrders)
 router.get('/account/order/:orderId',singleOrder)
 router.post('/account/return-order/:orderId',returnOrder)
+router.get('/invoice/:orderId',getInvoice)
 router.post('/account/cancel-order/:orderId',cancelOrder)
 
 

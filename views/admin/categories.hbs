@@ -65,7 +65,7 @@
             <div id="keyFields">
                 <!-- Dynamic fields will be added here -->
             </div>
-            <button type="button" class="add-field-btn" onclick="addField()">+</button>
+            {{!-- <button type="button" class="add-field-btn" onclick="addField()">+</button> --}}
             <button type="submit" class="save-btn">Save</button>
         </form>
     </div>
@@ -112,7 +112,6 @@ function addField(value = '') {
 
     fieldDiv.innerHTML = `
         <input type="text" name="categoryName[]" value="${value}" placeholder="Enter value" required/>
-        <button type="button" class="remove-btn" onclick="removeField(this)">x</button>
     `;
 
     keyFields.appendChild(fieldDiv);

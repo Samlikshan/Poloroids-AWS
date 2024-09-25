@@ -267,6 +267,8 @@ document
     let finalPrice = document.getElementById('totalAmount')
     finalPrice = finalPrice.textContent.replace(/[^\d.]/g, "")
     // Format total amount
+    
+
     if (paymentMethod.value == "razorpay") {
       const response = await fetch("/create-order", {
         method: "POST",
@@ -327,10 +329,32 @@ document
       };
 
       const rzp = new Razorpay(options);
+
+      rzp.on('payment.failed', async function (response) {
+        failedPayment()
+      });
       rzp.open();
       return;
     } else if (paymentMethod.value == "cod") {
+      if(finalPrice>1000){
+        return toastr.warning(`COD can't be used over 1000`)
+      }
       placeorder("pending");
+    }else if(paymentMethod.value == 'wallet'){
+        const response = await fetch('/order-wallet',{
+          method:'POST',
+          headers:{
+            'Content-type':'application/json'
+          },
+          body:JSON.stringify({finalPrice})
+        })
+        if(response.ok){
+          return placeorder('paid')
+        }
+        if(!response.ok){
+          const errorData = await response.json()
+          return toastr.warning(errorData.message)
+        }
     }
 
     async function placeorder(paymentStatus) {
@@ -358,7 +382,41 @@ document
           window.location.href = "/success";
         } else {
           const errorData = await response.json();
-          errorDisplay(errorData.message);
+          // errorDisplay(errorData.message);
+         return toaster.error(errorData.message)
+        }
+      } catch (err) {
+        console.log("error", err);
+      }
+    }
+
+    async function failedPayment(){
+      const data = {
+        address: addressData,
+        items: products,
+        totalAmount: totalAmount,
+        finalPrice: finalPrice,
+        paymentStatus: 'failed ',
+        paymentMethod: paymentMethod.value,
+      };
+      try {
+        const response = await fetch("/failed-payment", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+        console.log(response)
+        if (response.ok) {
+          console.log('req')
+          const data = await response.json();
+          // localStorage.setItem('Token',data.token)
+          window.location.href = "/success";
+        } else {
+          console.log('else in failed')
+          const errorData = await response.json();
+          window.location.href = "/failed";
         }
       } catch (err) {
         console.log("error", err);

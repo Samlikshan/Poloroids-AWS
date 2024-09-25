@@ -59,7 +59,10 @@ const getProducts = async (req, res) => {
 
   const decoded = jwt.verify(token, process.env.SECRET_KEY);
   const user = await User.findOne({ username: decoded.username });
-  const wishlist = await Wishlist.findOne({ userId: user._id });
+  let wishlist 
+  if(user){
+    wishlist = await Wishlist.findOne({ userId: user._id });
+  }
 
   return res.render("user/shop", {
     products,

@@ -18,6 +18,13 @@
       </div>
       <div class="item-price">₹ {{productId.price}}</div>
     </div>
+    {{#if productId.stock}}
+    <button class="cart-btn" onclick="addToCart('{{productId._id}}')">
+      Add to cart
+    </button>
+    {{else}}
+    <button class="cart-btn-out-of-stock" disabled>Out of stock</button>
+    {{/if}}
     <button class="delete-btn">
       <a onclick="removeItem('{{productId._id}}','{{../wishlist._id}}',this.closest('.wishlist-item'))"><img src="/images/icons/Delete.svg" alt="Account" class="icon"></a>
     </button>

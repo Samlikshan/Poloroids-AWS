@@ -1,57 +1,108 @@
 <link rel="stylesheet" href="/stylesheets/admin/dashboard.css">
+<h1>Dashboard</h1>
 
-<div class="header">
-    <h1>Dashboard</h1>
-    <div class="filter-container">
-    <div class="filter-button">
-        <button class="filter-btn" onclick="filterOrders('daily')">Daily</button>
-        <button class="filter-btn" onclick="filterOrders('weekly')">Weekly</button>  
-        <button class="filter-btn" onclick="filterOrders('monthly')">Monthly</button>
-        <button class="filter-btn" onclick="filterOrders('yearly')">Yearly</button>
+<div class="dashboard">
+    <div class="graph-container">
+        <canvas id="salesGraph"></canvas>
+        <div class="buttons">
+            <button onclick="showGraph('weekly')">Weekly</button>
+            <button onclick="showGraph('monthly')">Monthly</button>
+            <button onclick="showGraph('yearly')">Yearly</button>
+
+        </div>
+
+        <div class="info-boxes">
+            <div class="info-box" onclick="openModal('bestSellingProducts')">
+                <h3>Best Selling Product</h3>
+                <p>Product Name</p>
+            </div>
+            <div class="info-box" onclick="openModal('bestBrand')">
+                <h3>Best Brand</h3>
+                <p>Brand Name</p>
+            </div>
+            <div class="info-box" onclick="openModal('bestType')">
+                <h3>Best Type</h3>
+                <p>Type Name</p>
+            </div>
+        </div>
     </div>
-    <div class="custom-date-filter">
-        <label for="start-date">Start Date:</label>
-        <input type="date" id="start-date">
-        <label for="end-date">End Date:</label>
-        <input type="date" id="end-date">
-        <button class="filter-btn" id="custom-filter-btn">Filter</button>
+
+    <!-- Modals -->
+    <div id="bestSellingProducts" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('bestSellingProducts')">&times;</span>
+            <h2>Best Selling Products</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product Image</th>
+                        <th>Product</th>
+                        <th>Sales</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each topProduct}}
+                    {{#each productDetails}}
+                    <tr>
+                        <td><img src="{{mainImage}}" alt="Product 1" class="product-image"></td>
+                        <td>{{productName}}</td>
+                        <td>{{../quantity}}</td>
+                    </tr>
+                    {{/each}}
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div class="custom-date-filter">
-        <button class="filter-btn" id="download-pdf-btn">Download Report</button>
+
+
+    <div id="bestBrand" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('bestBrand')">&times;</span>
+            <h2>Best Brands</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Brand</th>
+                        <th>Sales</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each brandSales}}
+                    <tr>
+                        <td>{{_id}}</td>
+                        <td>{{totalQuantity}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="bestType" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('bestType')">&times;</span>
+            <h2>Best Types</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Sales</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each typeSales}}
+                    <tr>
+                        <td>{{_id}}</td>
+                        <td>{{totalQuantity}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
-</div>
-<p>Sales Count: {{salesCount}}</p>
-<p>Total Amount: {{totalAmount}}</p>
-<p>Total Discount: {{discountedAmount}}</p>
-<table class="user-table">
-    <thead>
-        <tr>
-            <th>Date</th>
-            <th>Order Id</th>
-            <th>Customer</th>
-            <th>Status</th>
-            <th>payment</th>
-            <th>qty</th>
-            <th>Total</th>
-        </tr>
-    </thead>
-    <tbody>
-        {{#each orders}}
-        {{#each items}}
-        <tr>
-            <td>{{formatDate ../createdAt}}</td>
-            <td>{{../_id}}</td>
-            <td>{{../address.firstName}}</td>
-            <td>{{../orderStatus}}</td>
-            <td>{{../paymentMethod}}</td>
-            <td>{{quantity}}</td>
-            <td>{{totalPrice}}</td>
-        </tr>
-        {{/each}}
-        {{/each}}
-    </tbody>
-</table>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script src="/javascripts/admin/dashboard.js"></script>

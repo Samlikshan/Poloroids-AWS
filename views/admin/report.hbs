@@ -1,74 +1,107 @@
 <style>
-    
-.user-table {
+  body {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    color: #555;
+    margin: 0;
+    padding: 0;
+  }
+
+  .report-box {
+    max-width: 800px;
+    margin: auto;
+    padding: 30px;
+    border: 1px solid #eee;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .report-box h1 {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .report-box p {
+    font-size: 16px;
+    margin: 0 0 10px;
+  }
+
+  table {
     width: 100%;
+    line-height: inherit;
+    text-align: left;
     border-collapse: collapse;
-    border-spacing: 0;
-    border-radius: 12.5px;
-    overflow: hidden;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
+  }
 
-.user-table th {
-    padding: 12px 15px;
-    text-align: left;
-    font-weight: 600;
-    border-bottom: 2px solid #ddd; /* Adds bottom border to the header */
-    color: #4a4a4a;
+  table td, table th {
+    padding: 12px;
     border: 1px solid #ddd;
-}
-
-.user-table td {
-    padding: 12px 15px;
     text-align: left;
-    font-weight: 600;
-    border: none; /* Remove all borders between rows */
-}
+  }
 
-.user-table tbody tr {
-    background-color: transparent;
-}
+  table th {
+    background: #eee;
+    font-weight: bold;
+    border-bottom: 2px solid #ddd;
+  }
 
-.user-table a {
+  table tr.item td {
+    border-bottom: 1px solid #eee;
+  }
+
+  .total-row td {
+    font-weight: bold;
+    font-size: 18px;
+    border-top: 2px solid #eee;
+  }
+
+  .summary-section {
+    margin-bottom: 20px;
+  }
+
+  .summary-section p {
+    font-weight: bold;
     color: #4a4a4a;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.user-table a:hover {
-    text-decoration: underline;
-}
+  }
 </style>
 
-<h1>Sales Report</h1>
-<p>Sales Count: {{salesCount}}</p>
-<p>Total Amount: {{totalAmount}}</p>
-<p>Total Discount: {{discountedAmount}}</p>
-<table class="user-table">
+<div class="report-box">
+  <h1>Sales Report</h1>
+
+  <div class="summary-section">
+    <p>Sales Count: {{salesCount}}</p>
+    <p>Total Amount: {{totalAmount}}</p>
+    <p>Total Discount: {{discountedAmount}}</p>
+  </div>
+
+  <table>
     <thead>
-        <tr>
-            <th>Date</th>
-            <th>Order Id</th>
-            <th>Customer</th>
-            <th>Status</th>
-            <th>payment</th>
-            <th>qty</th>
-            <th>Total</th>
-        </tr>
+      <tr>
+        <th>Date</th>
+        <th>Order Id</th>
+        <th>Customer</th>
+        <th>Status</th>
+        <th>Payment</th>
+        <th>Quantity</th>
+        <th>Total</th>
+      </tr>
     </thead>
     <tbody>
-        {{#each orders}}
-        {{#each items}}
-        <tr>
-            <td>{{formatDate ../createdAt}}</td>
-            <td>{{../_id}}</td>
-            <td>{{../address.firstName}}</td>
-            <td>{{../orderStatus}}</td>
-            <td>{{../paymentMethod}}</td>
-            <td>{{quantity}}</td>
-            <td>{{totalPrice}}</td>
-        </tr>
-        {{/each}}
-        {{/each}}
+      {{#each orders}}
+      {{#each items}}
+      <tr class="item">
+        <td>{{formatDate ../createdAt}}</td>
+        <td>{{../_id}}</td>
+        <td>{{../address.firstName}}</td>
+        <td>{{../orderStatus}}</td>
+        <td>{{../paymentMethod}}</td>
+        <td>{{quantity}}</td>
+        <td>{{totalPrice}}</td>
+      </tr>
+      {{/each}}
+      {{/each}}
     </tbody>
-</table>
+  </table>
+</div>

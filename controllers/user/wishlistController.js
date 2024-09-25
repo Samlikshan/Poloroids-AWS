@@ -52,6 +52,7 @@ const getWishlist = async (req, res) => {
     if(!wishlist || wishlist.items.length === 0){
       return res.render('user/wishlist',{isEmpty:true})
     }
+    console.log(wishlist.items[0].productId.stock)
     res.render("user/wishlist", { wishlist });
   } catch (error) {
     console.log(error);

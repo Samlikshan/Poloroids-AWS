@@ -10,7 +10,6 @@ const addToCart = async (req, res) => {
   const token = req.cookies["Token"];
   // console.log('token',token)
   if (!token) {
-    console.log("hai");
     return res.status(401).json({ message: "user not logged in" });
   }
   const decoded = jwt.verify(token, process.env.SECRET_KEY);

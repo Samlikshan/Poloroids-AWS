@@ -3,7 +3,15 @@ const Schema = mongoose.Schema;
 
 const orderSchema = new Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
-  items:{type:Array},
+  items:[
+    {
+      productId: { type: mongoose.Schema.Types.ObjectId, ref: 'product' },
+      productName: String,
+      unitPrice: Number,
+      quantity: Number,
+      totalPrice: Number,
+    }
+  ],
   address: {
       addressId: { type: mongoose.Schema.Types.ObjectId },
       firstName: { type: String },

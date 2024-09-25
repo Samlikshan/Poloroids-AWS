@@ -1,0 +1,153 @@
+
+   <style>
+  body {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    color: #555;
+    line-height: 24px;
+    margin: 0;
+    padding: 0;
+}
+
+.invoice-box {
+    max-width: 800px;
+    margin: auto;
+    padding: 30px;
+    border: 1px solid #eee;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    font-size: 16px;
+}
+
+table {
+    width: 100%;
+    line-height: inherit;
+    text-align: left;
+}
+
+table td {
+    padding: 5px;
+    vertical-align: top;
+}
+
+table tr td:nth-child(3) {
+    text-align: right;
+}
+
+table tr.top table td {
+    padding-bottom: 20px;
+}
+
+table tr.top table td.title h1 {
+    font-size: 35px;
+    color: #333;
+}
+
+table tr.information table td {
+    padding-bottom: 40px;
+}
+
+table tr.heading td {
+    background: #eee;
+    border-bottom: 1px solid #ddd;
+    font-weight: bold;
+}
+
+table tr.details td {
+    padding-bottom: 20px;
+}
+
+table tr.item td {
+    border-bottom: 1px solid #eee;
+}
+
+table tr.item.last td {
+    border-bottom: none;
+}
+
+table tr.total td {
+    font-weight: bold;
+    border-top: 2px solid #eee;
+    font-size: 18px;
+    padding-top: 20px;
+}
+
+.title p {
+    font-size: 14px;
+    color: #888;
+}
+.total {
+    {{!-- align-items: right; --}}
+}
+   </style>
+<body>
+    <div class="invoice-box">
+        <table cellpadding="0" cellspacing="0">
+            <tr class="top">
+                <td colspan="3">
+                    <table>
+                        <tr>
+                            <td class="title">
+                                <h1>Polaroids</h1>
+                                <p>Your trusted online store for cameras</p>
+                            </td>
+                            <td>
+                                Invoice #: {{order._id}}<br>
+                                Created: {{formatDate order.createdAt}}<br>
+                                Delivered: {{formatDate order.updatedAt}}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr class="information">
+                <td colspan="3">
+                    <table>
+                        <tr>
+                            <td>
+                                Polaroids, Inc.<br>
+                                345 Broto Lane<br>
+                                Kak Cheri, KC 673638
+                            </td>
+                            <td>
+                                {{order.address.firstName}}<br>
+                                {{order.address.email}}<br>
+                                {{order.address.address}}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr class="heading">
+                <td>Payment Method</td>
+                <td colspan="2"></td>
+            </tr>
+
+            <tr class="details">
+                <td>{{order.paymentMethod}}</td>
+                <td colspan="2"></td>
+            </tr>
+
+            <tr class="heading">
+                <td>Item</td>
+                <td>Quantity</td>
+                <td>Price</td>
+            </tr>
+
+            {{#each order.items}}
+
+            <tr class="item">
+                <td>{{productId.productName}}</td>
+                <td>{{quantity}}</td>
+                <td>{{totalPrice}}.00</td>
+            </tr>
+            {{/each}}
+            <tr class="total">
+                <td></td>
+                <td colspan="2">Total: {{order.finalPrice}}</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
