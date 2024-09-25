@@ -4,7 +4,8 @@ const bcrypt = require("bcrypt");
 const validator = require("validator");
 const jwt = require("jsonwebtoken");
 const { generateOTP, sendMail } = require("../services/emailVerification");
-
+const generateReferralCode = require('../services/referralCode')
+const Wallet = require('../models/walletModel')
 // const verifyOtp = async (req,res,next,email) => {
 //     try {
 //         const otp = await generateOTP()
@@ -21,10 +22,8 @@ const getSignup = (req, res) => {
 };
 
 const postSingup = async (req, res) => {
-  console.log(req.body);
-
   try {
-    const { username, email, password, confirmPassword } = req.body;
+    const { username, email, password , confirmPassword,referralCode} = req.body;
     if (!username || !username.trim()) {
       return res
         .status(400)
@@ -34,9 +33,14 @@ const postSingup = async (req, res) => {
       return res.status(400).json({ message: "Fields cannot be empty" });
     }
     let user = await User.findOne({
-      $or: [{ username: username }, { email: email }],
+      $or: [{ username: username.toLowerCase() }, { email: email }],
     });
-
+    if(referralCode){
+      const referredUser = await User.findOne({referralCode:referralCode})
+      if(!referredUser){
+        return res.status(400).json({message:'Invalid refferal code'})
+      }
+    }
     let isEmail = validator.isEmail(email);
     let isStrongPassword = validator.isStrongPassword(password);
     if (!user && password == confirmPassword) {
@@ -56,7 +60,7 @@ const postSingup = async (req, res) => {
         });
       }
     } else if (user) {
-      if (user.username == username) {
+      if (user.username == username.toLowerCase()) {
         // throw new Error("Username already taken");
         res.status(401).json({ message: "Username already taken" });
       } else {
@@ -69,6 +73,7 @@ const postSingup = async (req, res) => {
     }
   } catch (error) {
     // res.render('signup',{error})
+    console.log(error,'error post signup')
     res.status(509).json({ message: "Oops server error" });
   }
 };
@@ -88,12 +93,24 @@ const postVerify = async (req, res, next) => {
   try {
     let otp = req.body;
     if (req.session.otp && otp.otp == req.session.otp.otp) {
-      const { username, email, password } = req.session.user;
-      await User.create({
+      const { username, email, password,referralCode } = req.session.user;
+      if(referralCode){
+        const referredUser = await User.findOne({referralCode:referralCode})
+        if(!referredUser){
+          return res.status(400).json({message:'Invalid refferal code'})
+        }
+      await Wallet.create({userId:referredUser._id,balance:1000})
+      await Wallet.create({userId:user.id,balance:500})
+      }
+      const newReferralCode = generateReferralCode()
+      const user = await User.create({
         username: username.toLowerCase(),
         email: email.toLowerCase(),
+        referralCode:newReferralCode,
         password: password,
       });
+      
+      
       // let token = jwt.sign({username,email},process.env.SECRET_KEY)
       res.status(200).json({ message: "Succesfully Registered" });
       // res.redirect('/auth/login')
@@ -103,6 +120,7 @@ const postVerify = async (req, res, next) => {
       return res.status(401).json({ message: "Invalid otp" });
     }
   } catch (error) {
+    console.log(error,'error creating user')
     res.render("user/verify", { error });
   }
 };

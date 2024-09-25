@@ -1017,5 +1017,21 @@
     "currency": "INR",
     "receipt": "receipt#1",
     "status": "created"
+  },
+  {
+    "order_id": "order_P1Hfq5fzYPnkCI",
+    "amount": 5000000,
+    "currency": "INR",
+    "receipt": "receipt#1",
+    "status": "paid",
+    "payment_id": "pay_P1Hful2lfh5fsN"
+  },
+  {
+    "order_id": "order_P1M7qvNjIy2KAA",
+    "amount": 5000000,
+    "currency": "INR",
+    "receipt": "receipt#1",
+    "status": "paid",
+    "payment_id": "pay_P1M7zTUomqkZq4"
   }
 ]

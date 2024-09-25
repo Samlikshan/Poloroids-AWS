@@ -2,9 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  googleId: { type: String,unique:true },
+  googleId: { type: String,unique:true ,sparse: true},
   username: { type: String, unique: true },
   email: { type: String, unique: true },
+  referralCode:{type:String},
   password: { type: String },
   phoneNumber:{type:String},
   address: [

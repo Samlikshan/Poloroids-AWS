@@ -1,3 +1,5 @@
+const generateReferralCode = require('../services/referralCode')
+
 let express = require("express");
 let router = express.Router();
 const {
@@ -42,7 +44,8 @@ router.get(
     // console.log(user,"user");
 
     if (!user) {
-      await User.create({ googleId: id, username: displayName, email: email });
+      const referralCode = generateReferralCode()
+      await User.create({ googleId: id, username: displayName, referralCode:referralCode, email: email });
       let username = displayName;
       const token = jwt.sign(
         { id, username, email, role: "user" },

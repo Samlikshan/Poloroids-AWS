@@ -29,8 +29,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // Start the timer when the page loads
     startTimer(30); // Start the 30-second timer
 
-    resendLink.addEventListener("click", function (event) {
+    resendLink.addEventListener("click", async function (event) {
         event.preventDefault(); // Prevent the default link behavior
+        await fetch('/auth/forgotVerify')
         clearInterval(countdown); // Clear any existing timer
         startTimer(30); // Start the timer again
     });

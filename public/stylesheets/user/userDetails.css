@@ -92,3 +92,36 @@ input[type="email"] {
 .save-button:hover {
     background-color: #c00;
 }
+
+
+.referral-container {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.referral-code {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+}
+
+.share-button {
+    padding: 10px 20px;
+    background-color: #25D366;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.share-button:hover {
+    background-color: #1DAF57;
+}

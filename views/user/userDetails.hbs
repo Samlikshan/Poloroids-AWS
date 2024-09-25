@@ -14,7 +14,14 @@
         <button type="button" id="edit-button" class="edit-button">Edit</button>
     </form>
 </div>
-
+<!-- Referral Code Container -->
+<div class="referral-container">
+    <h3>Your Referral Code</h3>
+    <div class="referral-code">
+        <span id="referral-code">{{user.referralCode}}</span>
+    </div>
+    <button id="share-button" class="share-button">Share on WhatsApp</button>
+</div>
 <!-- Modal Structure -->
 <div id="editModal" class="modal">
     <div class="modal-content">
@@ -98,4 +105,10 @@
             toastr.error('There was an error. Please try again.');
         });
     });
+
+     document.getElementById("share-button").onclick = function() {
+        const referralCode = document.getElementById("referral-code").innerText;
+        const whatsappLink = `https://api.whatsapp.com/send?text=Check out my referral code: ${referralCode}`;
+        window.open(whatsappLink, '_blank');
+    };
 </script>

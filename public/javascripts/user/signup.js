@@ -6,7 +6,7 @@ document.getElementById('signupForm').addEventListener('submit', async function(
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
-
+    const referralCode = document.getElementById('referralCode').value
     // Validate form data
     if (password !== confirmPassword) {
         errorDisplay("Passwords do not match");
@@ -19,7 +19,7 @@ document.getElementById('signupForm').addEventListener('submit', async function(
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username, email, password, confirmPassword })
+            body: JSON.stringify({ username, email, password, confirmPassword,referralCode })
         });
 
         if (response.ok) {
