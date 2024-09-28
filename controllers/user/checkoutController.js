@@ -108,6 +108,9 @@ const viewCheckout = async (req, res) => {
 const postCheckout = async (req, res) => {
   try {
     const token = req.cookies["Token"];
+    if (!token) {
+      return res.redirect("/auth/login");
+    }
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     const user = await User.findOne({ username: decoded.username });
     const order = new Order({
@@ -178,6 +181,9 @@ const checkWallet = async (req, res) => {
   try {
     const { finalPrice } = req.body;
     const token = req.cookies["Token"];
+    if (!token) {
+      return res.redirect("/auth/login");
+    }
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     const user = await User.findOne({ username: decoded.username });
     const wallet = await Wallet.findOne({ userId: user._id });

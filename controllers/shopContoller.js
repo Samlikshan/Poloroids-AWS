@@ -8,6 +8,7 @@ const Gear = require("../models/gearModel");
 const Wishlist = require("../models/wishlistModel");
 
 const Offer = require('../models/offerModel')
+const Cart = require('../models/shoppingCartModel')
 
 const getProducts = async (req, res) => {
   const page = parseInt(req.query.page) || 1; // Current page
@@ -27,21 +28,29 @@ const getProducts = async (req, res) => {
   const gears = await Gear.find({ isActive: true });
   const offers = await Offer.find({ status: true }).populate('typeId');
 
+  const currentDate = new Date();
+
   products.forEach(product => {
-    const applicableOffers = offers.filter(offer =>
-      offer.typeId._id.toString() === product._id.toString() ||
-      offer.typeId.categoryName === product.brand
-    );
+    // Filter for applicable offers
+    const applicableOffers = offers.filter(offer => {
+      const isValidOffer = currentDate >= new Date(offer.validFrom) && currentDate <= new Date(offer.validTo);
+      return isValidOffer && (
+        (offer.offerType === "brand" && offer.typeId.categoryName === product.brand) || // Brand-based offer
+        (offer.offerType === "product" && offer.typeId._id.toString() === product._id.toString()) // Product-based offer
+      );
+    });
 
     if (applicableOffers.length > 0) {
-      const bestOffer = applicableOffers.reduce((maxOffer, currentOffer) =>
-        currentOffer.discountPercentage > maxOffer.discountPercentage ? currentOffer : maxOffer
-      );
+      // Find the best offer (with the highest discount percentage)
+      const bestOffer = applicableOffers.reduce((maxOffer, currentOffer) => {
+        return currentOffer.discountPercentage > maxOffer.discountPercentage ? currentOffer : maxOffer;
+      });
 
+      // Calculate final price using the best offer
       product.finalPrice = Math.ceil(product.price - (product.price * bestOffer.discountPercentage / 100));
       product.offer = bestOffer;
     } else {
-      product.finalPrice = product.price;
+      product.finalPrice = product.price; // No offers, so final price is the original price
     }
   });
 
@@ -57,11 +66,15 @@ const getProducts = async (req, res) => {
     });
   }
 
+
+
   const decoded = jwt.verify(token, process.env.SECRET_KEY);
   const user = await User.findOne({ username: decoded.username });
   let wishlist 
+  let cart
   if(user){
     wishlist = await Wishlist.findOne({ userId: user._id });
+    cart = await Cart.findOne({userId:user._id})
   }
 
   return res.render("user/shop", {
@@ -71,7 +84,8 @@ const getProducts = async (req, res) => {
     gears,
     wishlist,
     currentPage: page,
-    totalPages
+    totalPages,
+    cart
   });
 };
 

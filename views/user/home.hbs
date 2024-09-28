@@ -46,7 +46,11 @@
                     </div>
                     <div class="price">₹ {{price}}.00</div>
             </a>
-            <button>Add to Cart</button>
+            {{#if stock}}
+            <button onclick="addToCart('{{_id}}')">Add to Cart</button>
+            {{else}}
+            <button disabled>Out of stock</button>
+            {{/if}}
         </div>
     </div>
     {{/each}}

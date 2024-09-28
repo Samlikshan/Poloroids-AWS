@@ -64,3 +64,12 @@ button {
 button:hover {
     background: #CC0000;
 }
+
+
+
+.error{
+    font-size: 1em;
+    font-weight: 800;
+    color: #E00707;
+    /* padding-bottom: 5px; */
+}

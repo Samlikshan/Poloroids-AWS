@@ -44,7 +44,11 @@ const getWishlist = async (req, res) => {
     //   return res.status(401).json({message:'user not logged yet'})
     // }
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
-    const user = await User.findOne({ username: decoded.username });
+    const user = await User.findOne({ username: decoded.username ,isActive:true});
+    if(!user){
+      res.clearCookie('Token');
+      return res.redirect('/auth/login')
+    }
     const wishlist = await Wishlist.findOne({ userId: user._id }).populate(
       "items.productId"
     );

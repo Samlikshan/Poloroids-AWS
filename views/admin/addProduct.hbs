@@ -10,14 +10,12 @@
 
             <div class="form-group">
                 <label for="productName">Product Name</label>
-                <input type="text" id="productName" placeholder="Product Name" name="productName" minlength="10"
-                    required>
+                <input type="text" id="productName" placeholder="Product Name" name="productName">
             </div>
 
             <div class="form-group">
                 <label for="description">Product Description</label>
-                <textarea id="description" name="productDescription" placeholder="Product Description" minlength="350"
-                    maxlength="450"></textarea>
+                <textarea id="description" name="productDescription" placeholder="Product Description"></textarea>
             </div>
         </div>
 
@@ -39,7 +37,7 @@
             <div class="form-group">
 
                 <select id="productCategory1" name="brand">
-                    <option selected>None</option>
+                    <option selected disabled>None</option>
                     {{#each brands}}
                     <option>{{categoryName}}</option>
                     {{/each}}
@@ -49,7 +47,7 @@
             <div class="form-group">
 
                 <select id="productCategory1" name="type">
-                    <option selected>None</option>
+                    <option selected disabled>None</option>
                     {{#each types}}
                     <option>{{categoryName}}</option>
                     {{/each}}
@@ -59,7 +57,7 @@
             <div class="form-group">
 
                 <select id="productCategory1" name="gear">
-                    <option selected>None</option>
+                    <option selected disabled>None</option>
                     {{#each gears}}
                     <option>{{categoryName}}</option>
                     {{/each}}
@@ -70,7 +68,7 @@
         <div class="section">
             <h2>Price</h2>
             <div class="form-group">
-                <input type="number" name="price" placeholder="Price" required min="0">
+                <input type="number" name="price" placeholder="Price">
             </div>
         </div>
 
@@ -80,7 +78,7 @@
 
             <div class="form-group">
                 <label for="quantity">Quantity</label>
-                <input type="number" id="quantity" name="stock" placeholder="Min 10" min="0">
+                <input type="number" id="quantity" name="stock" placeholder="Min 10">
             </div>
         </div>
 
@@ -301,7 +299,54 @@
                 }
             }
         });
+        const form = document.querySelector('.product-form');
+        // Validate before form submission
+        form.addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            // Get input values
+            const productName = document.getElementById('productName').value.trim();
+            const productDescription = document.getElementById('description').value.trim();
+            const price = parseFloat(document.querySelector('input[name="price"]').value);
+
+            // Category selections
+            const brandSelected = document.querySelector('select[name="brand"]').value !== 'None';
+            const typeSelected = document.querySelector('select[name="type"]').value !== 'None';
+            const gearSelected = document.querySelector('select[name="gear"]').value !== 'None';
+
+            // Stock and image uploads
+            const stock = parseInt(document.querySelector('input[name="stock"]').value);
+            const mainImageUploaded = mainImageInput.files.length > 0;
+            const additionalImagesUploaded = additionalImagesDataTransfer.items.length > 0;
+
+            // Regular expression to check for at least one alphabetic character
+            const containsAlphabet = (str) => /[a-zA-Z]/.test(str);
+
+            // Validate inputs
+            if (!productName || !containsAlphabet(productName)) {
+                toastr.warning('Product name cannot be empty and must contain at least one alphabetic character.'); // Alert for product name
+            } else if (!productDescription || productDescription.length < 350 || !containsAlphabet(productDescription)) {
+                toastr.warning('Product description must be at least 350 characters long and contain at least one alphabetic character.'); // Alert for product description
+            } else if (!brandSelected) {
+                toastr.warning('Please select a brand.'); // Alert for brand selection
+            } else if (!typeSelected) {
+                toastr.warning('Please select a type.'); // Alert for type selection
+            } else if (!gearSelected) {
+                toastr.warning('Please select a gear.'); // Alert for gear selection
+            }else if(!price){
+                toastr.warning('Please fill in the price field.')
+            }else if (isNaN(price) || price < 0) {
+                toastr.warning('Price must be a non-negative number.'); // Alert for price
+            } else if (isNaN(stock) || stock < 0) {
+                toastr.warning('Stock must be a non-negative number.'); // Alert for stock
+            } else if (!mainImageUploaded) {
+                toastr.warning('Please upload a main image.'); // Alert for main image
+            } else if (!additionalImagesUploaded) {
+                toastr.warning('Please upload at least one additional image.'); // Alert for additional images
+            } else {
+                form.submit(); // Programmatically submit the form if validation passes
+            }
+        });
+
     });
-
-
 </script>

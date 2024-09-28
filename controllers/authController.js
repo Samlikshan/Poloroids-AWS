@@ -196,7 +196,7 @@ const postForgotPassword = async (req, res, next) => {
     if (user) {
       res.redirect("/auth/forgotVerify");
     } else {
-      throw new Error("Email is invalid");
+      res.render('user/forgot',{error:'invalid email'})
     }
   } catch (err) {
     console.log(err);

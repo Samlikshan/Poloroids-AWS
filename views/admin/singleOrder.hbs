@@ -11,9 +11,9 @@
     <div class="status-container">
         <button class="status-btn {{order.orderStatus}}">{{order.orderStatus}}</button>
         <div class="status-options">
-            <a data-status="pending" onclick="pending('{{order._id}}', '{{user.userId}}')">Pending</a>
-            <a data-status="canceled" onclick="canceled('{{order._id}}', '{{user.userId}}')">Canceled</a>
-            <a data-status="delivered" onclick="delivered('{{order._id}}', '{{user.userId}}')">Delivered</a>
+            <a data-status="pending" data-order-id="{{order._id}}" data-user-id="{{user.userId}}">Pending</a>
+            <a data-status="canceled"data-order-id="{{order._id}}" data-user-id="{{user.userId}}">Canceled</a>
+            <a data-status="delivered"data-order-id="{{order._id}}" data-user-id="{{user.userId}}">Delivered</a>
         </div>
     </div>
 </p>

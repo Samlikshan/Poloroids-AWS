@@ -14,7 +14,7 @@
             <img src="/images/icons/Search.svg" alt="Search" class="search-icon">
         </div>
         <a href="/wishlist"><img src="/images/icons/Wishlist.svg" alt="Wishlist" class="icon"></a>
-        <a href="/cart"><img src="/images/icons/Cart.svg" alt="Cart" class="icon"></a>
+        {{#if cart.items}}<a href="/cart"><img src="/images/icons/CartActive.svg" alt="Cart" class="icon"></a>{{else}}<a href="/cart"><img src="/images/icons/Cart.svg" alt="Cart" class="icon"></a>{{/if}}
         <a href="/account/profile"><img src="/images/icons/Account.svg" alt="Account" class="icon"></a>
         {{!-- <a href="/account/profile" style="text-decoration: none;"><span class="icon">Samlik</span></a> --}}
     </div>

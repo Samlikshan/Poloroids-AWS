@@ -6,7 +6,6 @@ const viewCoupons = async (req, res) => {
 };
 
 const postCoupon = async (req, res) => {
- 
   let {
     couponCode,
     discountValue,
@@ -15,9 +14,9 @@ const postCoupon = async (req, res) => {
     expiryDate,
     status,
   } = req.body;
-  const existCoupon = await Coupons.findOne({couponCode:couponCode})
-  if(existCoupon){
-    return res.status(409).json({ message: 'Coupon already exists.' }); 
+  const existCoupon = await Coupons.findOne({ couponCode: couponCode });
+  if (existCoupon) {
+    return res.status(409).json({ message: "Coupon already exists." });
   }
   discountValue = parseFloat(discountValue);
   minPurchase = parseFloat(minPurchase);
@@ -34,44 +33,52 @@ const postCoupon = async (req, res) => {
     status,
   });
   // res.redirect("/admin/coupons");
-  res.status(200).json('coupon created')
+  res.status(200).json("coupon created");
 };
 
 const applyCoupon = async (req, res) => {
   const { couponCode, subtotalAmount } = req.body;
-  const coupon = await Coupons.findOne({ couponCode: couponCode });
-  console.log(coupon)
+  const coupon = await Coupons.findOne({ couponCode: couponCode , status:true });
+  console.log(coupon);
   if (!coupon) {
     return res.status(400).json({ error: "Invalid Coupon code" });
   }
   if (!coupon.status) {
     return res.status(400).json({ error: "Invalid Coupon code" });
   }
-  if(subtotalAmount<coupon.minPurchase){
+  if (subtotalAmount < coupon.minPurchase) {
     return res.status(400).json({ error: "Min Purchase limit not meeted" });
   }
-  if(subtotalAmount>coupon.maxPurchase){
+  if (subtotalAmount > coupon.maxPurchase) {
     return res.status(400).json({ error: "Max Purchase limit Exeeded" });
   }
-  req.session.coupon = coupon
-  return res.status(200).json({coupon})
-  
+  req.session.coupon = coupon;
+  return res.status(200).json({ coupon });
 };
 
-const deleteCoupon = async (req,res) => {
-  try{
-    const {couponId} = req.body
-    await Coupons.deleteOne({_id:couponId})
-    res.status(200).json('coupon deleted successfully')
-  }catch(error){
-    console.log(error,'error deleting coupon')
+const deleteCoupon = async (req, res) => {
+  try {
+    const { couponId } = req.body;
+    await Coupons.deleteOne({ _id: couponId });
+    res.status(200).json("coupon deleted successfully");
+  } catch (error) {
+    console.log(error, "error deleting coupon");
   }
+};
 
-}
+const getCoupons = async (req, res) => {
+  try {
+    const coupons = await Coupons.find({ status: true });
+    res.render("user/coupons",{coupons});
+  } catch (error) {
+    console.log(error, "error fetching coupons");
+  }
+};
 
 module.exports = {
   viewCoupons,
   postCoupon,
   applyCoupon,
-  deleteCoupon
+  deleteCoupon,
+  getCoupons,
 };

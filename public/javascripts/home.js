@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // script.js
 
 document.addEventListener('DOMContentLoaded', function () {
+    console.log('req')
     const slides = document.querySelectorAll('.banner-slide');
     const dots = document.querySelectorAll('.dot');
     let currentIndex = 0;

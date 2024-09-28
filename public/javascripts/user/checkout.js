@@ -52,7 +52,6 @@ const updatePriceDisplay = () => {
   });
 };
 
-
 // const applyCoupon = async () => {
 //   const couponCode = document.getElementById("couponCode").value;
 //   const couponMessage = document.getElementById("couponMessage");
@@ -60,7 +59,7 @@ const updatePriceDisplay = () => {
 //   const discountElement = document.querySelector(".coupon-discount");
 //   const couponSpan = document.getElementById("coupon-code");
 //   const discountSpan = document.getElementById("discount");
-  
+
 //   // Reset message
 //   couponMessage.innerHTML = "";
 
@@ -118,7 +117,7 @@ const applyCoupon = async () => {
   subtotalAmount = parseInt(subtotalAmount.replace(/[^\d.]/g, ""));
 
   if (!couponCode) {
-    return toaster.error("Please enter a code");
+    return toastr.error("Please enter a code");
   }
 
   try {
@@ -154,7 +153,6 @@ const applyCoupon = async () => {
   }
 };
 
-
 const updateTotalAmount = (totalAmount) => {
   const formattedTotal = totalAmount.toLocaleString("en-IN", {
     style: "currency",
@@ -167,10 +165,58 @@ const updateTotalAmount = (totalAmount) => {
 };
 
 
+async function checkAddressAvailability(addressId) {
+  try {
+    const response = await fetch(`/check-address/${addressId}`); // Replace with your API endpoint
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data.exists; // Assuming the API returns an object with an 'exists' property
+  } catch (error) {
+    console.error("Error checking address availability:", error);
+    toastr.error("There was a problem checking the address. Please try again.");
+    return false;
+  }
+}
+
+const checkStockBeforeConfirm = async () => {
+  try {
+    // Fetch current cart items
+    const cartResponse = await fetch("/cart/response");
+    const cart = await cartResponse.json();
+
+    // Check each item in the cart for stock
+    for (const item of cart.items) {
+      const productResponse = await fetch(`/product/${item.productId}`);
+      const product = await productResponse.json();
+      console.log(product);
+      // If current quantity exceeds available stock, alert user
+      if (item.quantity > product.product.stock) {
+        toastr.info(
+          `The quantity of ${product.product.productName} exceeds the available stock.`
+        );
+        return false; // Insufficient stock found
+      }
+    }
+
+    return true; // All stock levels are sufficient
+  } catch (error) {
+    console.error("Error checking stock:", error);
+    toastr.error("An error occurred while checking stock. Please try again.");
+    return false; // Stock check failed
+  }
+};
+
 document
   .querySelector(".confirm-order")
   .addEventListener("click", async function () {
     // Check if a payment method is selected
+
+    const isStockAvailable = await checkStockBeforeConfirm();
+    if (!isStockAvailable) {
+      return; // Stop further execution if stock is insufficient
+    }
     const paymentMethod = document.querySelector(
       'input[name="payment-method"]:checked'
     );
@@ -186,8 +232,16 @@ document
     let addressData = null;
 
     if (selectedAddress) {
+
       // Retrieve the complete address details from the selected address
       const addressLabel = selectedAddress.closest(".address-option");
+      const addressId = addressLabel.dataset.addressId;
+      
+      const isAddressAvailable = await checkAddressAvailability(addressId);
+      if (!isAddressAvailable) {
+        toastr.error("The selected address is no longer available. Please choose a different address.");
+        return; // Stop further execution
+      }
 
       addressData = {
         addressId: addressLabel.dataset.addressId,
@@ -264,10 +318,9 @@ document
         totalPrice,
       });
     });
-    let finalPrice = document.getElementById('totalAmount')
-    finalPrice = finalPrice.textContent.replace(/[^\d.]/g, "")
+    let finalPrice = document.getElementById("totalAmount");
+    finalPrice = finalPrice.textContent.replace(/[^\d.]/g, "");
     // Format total amount
-    
 
     if (paymentMethod.value == "razorpay") {
       const response = await fetch("/create-order", {
@@ -283,6 +336,10 @@ document
           notes: {},
         }),
       });
+      if (!response.ok) {
+        const errorData = await response.json();
+        return toastr.warning(errorData.message);
+      }
       const order = await response.json();
       const options = {
         key: "rzp_test_XCHGauJ6DVoH7U", // Replace with your Razorpay key_id
@@ -330,31 +387,31 @@ document
 
       const rzp = new Razorpay(options);
 
-      rzp.on('payment.failed', async function (response) {
-        failedPayment()
+      rzp.on("payment.failed", async function (response) {
+        failedPayment();
       });
       rzp.open();
       return;
     } else if (paymentMethod.value == "cod") {
-      if(finalPrice>1000){
-        return toastr.warning(`COD can't be used over 1000`)
+      if (finalPrice > 1000) {
+        return toastr.warning(`COD can't be used over 1000`);
       }
       placeorder("pending");
-    }else if(paymentMethod.value == 'wallet'){
-        const response = await fetch('/order-wallet',{
-          method:'POST',
-          headers:{
-            'Content-type':'application/json'
-          },
-          body:JSON.stringify({finalPrice})
-        })
-        if(response.ok){
-          return placeorder('paid')
-        }
-        if(!response.ok){
-          const errorData = await response.json()
-          return toastr.warning(errorData.message)
-        }
+    } else if (paymentMethod.value == "wallet") {
+      const response = await fetch("/order-wallet", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ finalPrice }),
+      });
+      if (response.ok) {
+        return placeorder("paid");
+      }
+      if (!response.ok) {
+        const errorData = await response.json();
+        return toastr.warning(errorData.message);
+      }
     }
 
     async function placeorder(paymentStatus) {
@@ -383,20 +440,20 @@ document
         } else {
           const errorData = await response.json();
           // errorDisplay(errorData.message);
-         return toaster.error(errorData.message)
+          return toastr.error(errorData.message);
         }
       } catch (err) {
         console.log("error", err);
       }
     }
 
-    async function failedPayment(){
+    async function failedPayment() {
       const data = {
         address: addressData,
         items: products,
         totalAmount: totalAmount,
         finalPrice: finalPrice,
-        paymentStatus: 'failed ',
+        paymentStatus: "failed ",
         paymentMethod: paymentMethod.value,
       };
       try {
@@ -407,14 +464,14 @@ document
           },
           body: JSON.stringify(data),
         });
-        console.log(response)
+        console.log(response);
         if (response.ok) {
-          console.log('req')
+          console.log("req");
           const data = await response.json();
           // localStorage.setItem('Token',data.token)
           window.location.href = "/success";
         } else {
-          console.log('else in failed')
+          console.log("else in failed");
           const errorData = await response.json();
           window.location.href = "/failed";
         }
@@ -424,25 +481,24 @@ document
     }
   });
 
-  const removeCoupon = () => {
-    const couponElement = document.querySelector(".coupon-total");
-    const discountElement = document.querySelector(".coupon-discount");
-    const discountSpan = document.getElementById("discount");
-    const couponMessage = document.getElementById("couponMessage");
-  
-    // Reset the coupon details
-    couponElement.style.display = "none"; // Hide coupon section
-    discountElement.style.display = "none"; // Hide discount section
-    discountSpan.textContent = ''; // Clear discount text
-    couponMessage.innerHTML = ''; // Clear any coupon messages
-  
-    // Get the original subtotal amount
-    let subtotalAmount = document.getElementById("subtotalAmount").textContent;
-    subtotalAmount = parseInt(subtotalAmount.replace(/[^\d.]/g, ""));
-  
-    // Update the total amount back to the original subtotal
-    updateTotalAmount(subtotalAmount);
-    
-    // Optionally, you can send a request to the server to remove the coupon or clear it from the session.
-  };
-  
+const removeCoupon = () => {
+  const couponElement = document.querySelector(".coupon-total");
+  const discountElement = document.querySelector(".coupon-discount");
+  const discountSpan = document.getElementById("discount");
+  const couponMessage = document.getElementById("couponMessage");
+
+  // Reset the coupon details
+  couponElement.style.display = "none"; // Hide coupon section
+  discountElement.style.display = "none"; // Hide discount section
+  discountSpan.textContent = ""; // Clear discount text
+  couponMessage.innerHTML = ""; // Clear any coupon messages
+
+  // Get the original subtotal amount
+  let subtotalAmount = document.getElementById("subtotalAmount").textContent;
+  subtotalAmount = parseInt(subtotalAmount.replace(/[^\d.]/g, ""));
+
+  // Update the total amount back to the original subtotal
+  updateTotalAmount(subtotalAmount);
+
+  // Optionally, you can send a request to the server to remove the coupon or clear it from the session.
+};

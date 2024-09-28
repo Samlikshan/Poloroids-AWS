@@ -12,6 +12,9 @@ const hbs = exphbs.create();
 
 const viewOrders = async (req, res) => {
   const token = req.cookies["Token"];
+  if (!token) {
+    return res.redirect("/auth/login");
+  }
   const decoded = jwt.verify(token, process.env.SECRET_KEY);
   const user = await User.findOne({ username: decoded.username });
   const orders = await Orders.find({ userId: user._id })

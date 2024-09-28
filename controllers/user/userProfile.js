@@ -6,8 +6,11 @@ const getUserDetails = async(req,res) => {
 
         const token = req.cookies["Token"];
         const decoded = jwt.verify(token, process.env.SECRET_KEY);
-        const user = await User.findOne({ username: decoded.username })
-        console.log(user)
+        const user = await User.findOne({ username: decoded.username ,isActive:true})
+        if(!user){
+            res.clearCookie('Token');
+            return res.redirect('/auth/login')
+        }
         res.render('user/userDetails',{user})
     }catch(error){
         console.log(error,'error')

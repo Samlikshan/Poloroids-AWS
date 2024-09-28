@@ -30,7 +30,6 @@ document.addEventListener("DOMContentLoaded", function () {
   function populatetypeDropdown(options) {
     typeDropdown.innerHTML = ""; // Clear existing options
 
-    // Add a default placeholder option
     const placeholderOption = document.createElement("option");
     placeholderOption.value = "";
     placeholderOption.textContent = "Select an option";
@@ -38,7 +37,6 @@ document.addEventListener("DOMContentLoaded", function () {
     placeholderOption.selected = true;
     typeDropdown.appendChild(placeholderOption);
 
-    // Add new options
     options.forEach((option) => {
       const optionElement = document.createElement("option");
       optionElement.value = option._id;
@@ -47,7 +45,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Event listener for the offerType dropdown
   offerTypeDropdown.addEventListener("change", function (event) {
     const selectedValue = event.target.value;
 
@@ -63,60 +60,46 @@ document.addEventListener("DOMContentLoaded", function () {
   const editModal = document.getElementById("edit-offer-modal");
   const editCloseBtn = document.getElementById("edit-close");
 
-  // Show the edit modal and populate data
   document.querySelectorAll(".openEditOfferModal").forEach((link) => {
     link.addEventListener("click", async function (event) {
       event.preventDefault();
       const offerId = this.getAttribute("data-id");
 
-      // Fetch offer details
       try {
         const response = await fetch(`/admin/offers/edit/${offerId}`);
         const offer = await response.json();
         console.log(offer);
 
-        // Populate form fields
         document.getElementById("editOfferId").value = offer._id;
         document.getElementById("editOfferType").value = offer.offerType;
 
-        // Populate the typeId dropdown based on offerType
         const typeDropdown = document.getElementById("editTypeId");
         const options = offer.offerType === "product" ? products : brands;
         populateTypeDropdown(typeDropdown, options, offer.typeId);
 
-        document.getElementById("editDiscountPercentage").value =
-          offer.discountPercentage;
+        document.getElementById("editDiscountPercentage").value = offer.discountPercentage;
+
         function formatDate(isoDateString) {
           const date = new Date(isoDateString);
           const year = date.getFullYear();
-          const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+          const month = String(date.getMonth() + 1).padStart(2, "0");
           const day = String(date.getDate()).padStart(2, "0");
           return `${year}-${month}-${day}`;
         }
 
-        // Assuming offer.validFrom and offer.validTo are ISO date strings
-        document.getElementById("editValidFrom").value = formatDate(
-          offer.validFrom
-        );
-        document.getElementById("editValidTo").value = formatDate(
-          offer.validTo
-        );
+        document.getElementById("editValidFrom").value = formatDate(offer.validFrom);
+        document.getElementById("editValidTo").value = formatDate(offer.validTo);
         const statusDropdown = document.getElementById("editStatus");
         statusDropdown.value = offer.status ? "active" : "inactive";
-        // Show the modal
         editModal.style.display = "flex";
 
-        // Store the offer ID in the form or global variable if needed
-        document
-          .getElementById("editOfferForm")
-          .setAttribute("data-id", offerId);
+        document.getElementById("editOfferForm").setAttribute("data-id", offerId);
       } catch (error) {
         console.error("Error fetching offer details:", error);
       }
     });
   });
 
-  // Hide the edit modal
   editCloseBtn.onclick = function () {
     editModal.style.display = "none";
   };
@@ -127,7 +110,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
 
-  // Function to populate the typeId dropdown
   function populateTypeDropdown(dropdown, options, selectedValue) {
     dropdown.innerHTML = ""; // Clear existing options
 
@@ -148,75 +130,99 @@ document.addEventListener("DOMContentLoaded", function () {
       dropdown.appendChild(optionElement);
     });
   }
-});
 
-//form subbmission
-const form = document.getElementById("offerForm");
+  // Form submission for adding offers
+  const form = document.getElementById("offerForm");
+  const validFromInput = document.getElementById("validFrom");
+  const validToInput = document.getElementById("validTo");
 
-form.addEventListener("submit", async function (event) {
-  // Prevent the form from submitting the traditional way
-  event.preventDefault();
-  const formData = new FormData(form);
-  const data = {};
-  formData.forEach((value, key) => {
-    data[key] = value;
-  });
-  const response = await fetch("/admin/offers/add", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ data }),
-  });
-  if (response.ok) {
-   return  window.location.href = "/admin/offers";
-  }
-  if(!response.ok){
-    const errorData = await response.json();
-    toastr.warning(errorData.message)
-  }
-});
+  // Set minimum date for Valid From to today
+  const today = new Date().toISOString().split("T")[0];
+  validFromInput.setAttribute("min", today);
 
-const editForm = document.getElementById("editOfferForm");
-editForm.addEventListener("submit", async function (event) {
-  event.preventDefault();
-  const formData = new FormData(editForm);
-  const data = {};
-  formData.forEach((value, key) => {
-    data[key] = value;
-  });
-  console.log("req");
-  const response = await fetch("/admin/offers/edit", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ data }),
-  });
-  if (response.ok) {
-    window.location.href = "/admin/offers";
-  }
-});
-
-const deleteOffer = async (offerId,element) => {
-  Swal.fire({
-    title: "Do you want to delete this offer?",
-    showCancelButton: true,
-    confirmButtonText: "Yes",
-  }).then(async (result) => {
-   
-    /* Read more about isConfirmed, isDenied below */
-    if (result.isConfirmed) {
-        element.remove();
-        const response = await fetch("/admin/offers/delete", {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ offerId }),
-          });
-    } else if (result.isDenied) {
-      Swal.fire("Changes are not saved", "", "info");
+  // Validate Valid To based on Valid From
+  validFromInput.addEventListener("change", function () {
+    const validFromDate = new Date(validFromInput.value);
+    validToInput.setAttribute("min", validFromInput.value);
+    if (validToInput.value && new Date(validToInput.value) < validFromDate) {
+      validToInput.value = validFromInput.value; // Reset Valid To to Valid From
     }
   });
-};
+
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    const formData = new FormData(form);
+    const data = {};
+    formData.forEach((value, key) => {
+      data[key] = value;
+    });
+    const response = await fetch("/admin/offers/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ data }),
+    });
+    if (response.ok) {
+      return (window.location.href = "/admin/offers");
+    }
+    if (!response.ok) {
+      const errorData = await response.json();
+      toastr.warning(errorData.message);
+    }
+  });
+
+  // Form submission for editing offers
+  const editForm = document.getElementById("editOfferForm");
+  const editValidFromInput = document.getElementById("editValidFrom");
+  const editValidToInput = document.getElementById("editValidTo");
+
+  editValidFromInput.setAttribute("min", today);
+
+  editValidFromInput.addEventListener("change", function () {
+    const editValidFromDate = new Date(editValidFromInput.value);
+    editValidToInput.setAttribute("min", editValidFromInput.value);
+    if (editValidToInput.value && new Date(editValidToInput.value) < editValidFromDate) {
+      editValidToInput.value = editValidFromInput.value; // Reset Valid To to Valid From
+    }
+  });
+
+  editForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    const formData = new FormData(editForm);
+    const data = {};
+    formData.forEach((value, key) => {
+      data[key] = value;
+    });
+    const response = await fetch("/admin/offers/edit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ data }),
+    });
+    if (response.ok) {
+      window.location.href = "/admin/offers";
+    }
+  });
+
+  // Function to delete offers
+  const deleteOffer = async (offerId, element) => {
+    Swal.fire({
+      title: "Do you want to delete this offer?",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        element.remove();
+        const response = await fetch("/admin/offers/delete", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ offerId }),
+        });
+      }
+    });
+  };
+});

@@ -81,6 +81,7 @@ const changeCategoryStatus = async (req,res)=>{
 // }
 
 const addCategory = async (req, res) => {
+    console.log(req.body)
     try {
         const { categoryType, categories } = req.body;
 
@@ -98,7 +99,7 @@ const addCategory = async (req, res) => {
             // Check for duplicate entries
             const existingBrands = await Brand.find({ categoryName: { $in: categories.map(cat => cat.categoryName) } });
             if (existingBrands.length > 0) {
-                return res.status(409).json({ message: 'Some categories already exist' });
+                return res.status(409).json({ message: 'category already exist' });
             }
 
             // Insert categories
@@ -115,7 +116,7 @@ const addCategory = async (req, res) => {
             // Check for duplicate entries
             const existingBrands = await Type.find({ categoryName: { $in: categories.map(cat => cat.categoryName) } });
             if (existingBrands.length > 0) {
-                return res.status(409).json({ message: 'Some categories already exist' });
+                return res.status(409).json({ message: 'category already exist' });
             }
 
             // Insert categories
@@ -132,7 +133,7 @@ const addCategory = async (req, res) => {
             // Check for duplicate entries
             const existingBrands = await Gear.find({ categoryName: { $in: categories.map(cat => cat.categoryName) } });
             if (existingBrands.length > 0) {
-                return res.status(409).json({ message: 'Some categories already exist' });
+                return res.status(409).json({ message: 'category already exist' });
             }
 
             // Insert categories
@@ -170,7 +171,7 @@ const editCategory = async (req,res)=> {
             // Update the category
             existingBrand.categoryName = categoryName;
             await existingBrand.save();
-            return res.status(200).json('Category updated successfully');
+            return res.status(200).json({message:'Category updated successfully'});
     
         } else if (categoryType === 'Type') {
             // Handle Type categories

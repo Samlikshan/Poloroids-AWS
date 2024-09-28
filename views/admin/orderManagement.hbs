@@ -27,12 +27,13 @@
                 <div class="status-container">
                     <button class="status-btn {{orderStatus}}">{{orderStatus}}</button>
                     <div class="status-options">
-                        <a data-status="pending" onclick="pending('{{_id}}','{{userId}}')">Pending</a>
-                        <a data-status="canceled" onclick="canceled('{{_id}}','{{userId}}')">Canceled</a>
-                        <a data-status="delivered" onclick="delivered('{{_id}}','{{userId}}')">Delivered</a>
+                        <a data-status="pending" data-order-id="{{_id}}" data-user-id="{{userId}}">Pending</a>
+                        <a data-status="canceled" data-order-id="{{_id}}" data-user-id="{{userId}}">Canceled</a>
+                        <a data-status="delivered" data-order-id="{{_id}}" data-user-id="{{userId}}">Delivered</a>
                     </div>
                 </div>
             </td>
+
         </tr>
         {{/each}}
     </tbody>

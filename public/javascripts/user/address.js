@@ -1,25 +1,75 @@
 // Function to handle adding a new address
 function addAddress() {
   const form = document.getElementById("addAddressForm");
-  if (!form.checkValidity()) {
-    console.log("Form is not valid");
+
+  // Get input values
+  const phoneNumber = form.querySelector('input[type="number"]').value.trim();
+  const addressType = form.querySelector('input[name="addressType"]:checked');
+  const country = form.querySelector("select").value;
+  const firstName = form.querySelector('input[placeholder="First name"]').value.trim();
+  const lastName = form.querySelector('input[placeholder="Last name"]').value.trim();
+  const company = form.querySelector('input[placeholder="Company (optional)"]').value.trim();
+  const address = form.querySelector('input[placeholder="Address"]').value.trim();
+  const city = form.querySelector('input[placeholder="City/District/Town"]').value.trim();
+  const state = form.querySelector('input[placeholder="State"]').value.trim();
+  const email = form.querySelector('input[type="email"]').value.trim();
+  const pincode = form.querySelector('input[placeholder="Pincode"]').value.trim();
+  // Validate inputs
+  if (!phoneNumber || phoneNumber.length < 10) {
+    toastr.warning('Please enter a valid phone number (at least 10 digits).');
+    return;
+  }
+  if (!addressType) {
+    toastr.warning('Please select an address type.');
+    return;
+  }
+  if (!firstName) {
+    toastr.warning('First name cannot be empty.');
+    return;
+  }
+  if (!lastName) {
+    toastr.warning('Last name cannot be empty.');
+    return;
+  }
+  if (!country || country === 'None') {
+    toastr.warning('Please select a country.');
+    return;
+  }
+  if (!address) {
+    toastr.warning('Address cannot be empty.');
+    return;
+  }
+  if (!city) {
+    toastr.warning('City cannot be empty.');
+    return;
+  }
+  if (!state) {
+    toastr.warning('State cannot be empty.');
+    return;
+  }
+  if (!email || !/\S+@\S+\.\S+/.test(email)) {
+    toastr.warning('Please enter a valid email address.');
+    return;
+  }
+  if (!pincode || !/^\d{5,6}$/.test(pincode)) {
+    toastr.warning('Pincode must be a 5 or 6 digit number.');
     return;
   }
 
   const formData = {
-    phoneNumber: form.querySelector('input[type="number"]').value,
-    addressType: form.querySelector('input[name="addressType"]:checked').value,
-    country: form.querySelector("select").value,
-    firstName: form.querySelector('input[placeholder="First name"]').value,
-    lastName: form.querySelector('input[placeholder="Last name"]').value,
-    company: form.querySelector('input[placeholder="Company (optional)"]')
-      .value,
-    address: form.querySelector('input[placeholder="Address"]').value,
-    city: form.querySelector('input[placeholder="City/District/Town"]').value,
-    state: form.querySelector('input[placeholder="State"]').value,
-    email: form.querySelector('input[type="email"]').value,
-    pincode: form.querySelector('input[placeholder="Pincode"]').value,
+    phoneNumber,
+    addressType: addressType.value,
+    country,
+    firstName,
+    lastName,
+    company,
+    address,
+    city,
+    state,
+    email,
+    pincode,
   };
+
   fetch("/account/add-address", {
     method: "POST",
     headers: {
@@ -44,46 +94,96 @@ document.getElementById("addAddressForm").addEventListener(
     console.log("Form submitted");
     event.preventDefault(); // Prevent default form submission
     addAddress();
-  },
-  { once: true }
+  }
 );
 
 // Function to handle editing an existing address
 function editAddress() {
   const form = document.getElementById("editAddressForm");
 
-  if (!form.checkValidity()) {
-    console.log("Form is not valid");
+  // Get input values
+  const contact = form.querySelector("#editPhone").value.trim();
+  const addressType = form.querySelector('input[name="editAddressType"]:checked');
+  const country = form.querySelector("#editCountry").value;
+  const firstName = form.querySelector("#editFirstName").value.trim();
+  const lastName = form.querySelector("#editLastName").value.trim();
+  const company = form.querySelector("#editCompany").value.trim();
+  const address = form.querySelector("#editAddress").value.trim();
+  const city = form.querySelector("#editCity").value.trim();
+  const state = form.querySelector("#editState").value.trim();
+  const email = form.querySelector("#editEmail").value.trim();
+  const pincode = form.querySelector("#editPincode").value.trim();
+
+  // Validate inputs
+  if (!contact || contact.length < 10) {
+    toastr.warning('Please enter a valid phone number (at least 10 digits).');
+    return;
+  }
+  if (!addressType) {
+    toastr.warning('Please select an address type.');
+    return;
+  }
+  if (!firstName) {
+    toastr.warning('First name cannot be empty.');
+    return;
+  }
+  if (!lastName) {
+    toastr.warning('Last name cannot be empty.');
+    return;
+  }
+  if (!country || country === 'None') {
+    toastr.warning('Please select a country.');
+    return;
+  }
+  if (!address) {
+    toastr.warning('Address cannot be empty.');
+    return;
+  }
+  if (!city) {
+    toastr.warning('City cannot be empty.');
+    return;
+  }
+  if (!state) {
+    toastr.warning('State cannot be empty.');
+    return;
+  }
+  if (!email || !/\S+@\S+\.\S+/.test(email)) {
+    toastr.warning('Please enter a valid email address.');
+    return;
+  }
+  if (!pincode || !/^\d{5,6}$/.test(pincode)) {
+    toastr.warning('Pincode must be a 5 or 6 digit number.');
     return;
   }
 
   const formData = {
-    id: form.querySelector("#editEmail").dataset.id,
-    contact: form.querySelector("#editPhone").value,
-    addressType: form.querySelector('input[name="editAddressType"]:checked')
-      .value,
-    country: form.querySelector("#editCountry").value,
-    firstName: form.querySelector("#editFirstName").value,
-    lastName: form.querySelector("#editLastName").value,
-    company: form.querySelector("#editCompany").value,
-    address: form.querySelector("#editAddress").value,
-    city: form.querySelector("#editCity").value,
-    state: form.querySelector("#editState").value,
-    email: form.querySelector("#editEmail").value,
-    pincode: form.querySelector("#editPincode").value,
+    id: form.querySelector("#editId").value,
+    contact,
+    addressType: addressType.value,
+    country,
+    firstName,
+    lastName,
+    company,
+    address,
+    city,
+    state,
+    email,
+    pincode,
   };
-
-  fetch(`/api/address/${formData.id}`, {
-    method: "PUT",
+  fetch(`/account/update-address`, {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(formData),
   })
-    .then((response) => response.json())
-    .then((data) => {
+  .then((response) => response.json())
+  .then((data) => {
+      console.log('rq')
+
       console.log("Success:", data);
       document.getElementById("editAddressModal").style.display = "none";
+      toastr.success(data.message)
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -96,8 +196,7 @@ document.getElementById("editAddressForm").addEventListener(
   function (event) {
     event.preventDefault(); // Prevent default form submission
     editAddress();
-  },
-  { once: true }
+  }
 );
 
 async function deleteAdd(addressId, element) {
@@ -127,7 +226,7 @@ async function deleteAdd(addressId, element) {
           }
         } else {
           const errorData = await response.json();
-          errorDisplay(errorData.message);
+          toastr.warning(errorData.message)
         }
       } else if (result.isDenied) {
         Swal.fire("Changes are not saved", "", "info");
@@ -166,20 +265,17 @@ addBtn.onclick = function () {
 // Open Edit Modal and populate data
 editBtns.forEach((btn) => {
   btn.onclick = function () {
+    document.getElementById("editId").value = btn.getAttribute("data-id");
     document.getElementById("editEmail").value = btn.getAttribute("data-email");
-    document.getElementById("editFirstName").value =
-      btn.getAttribute("data-firstname");
-    document.getElementById("editLastName").value =
-      btn.getAttribute("data-lastname");
-    document.getElementById("editAddress").value =
-      btn.getAttribute("data-address");
+    document.getElementById("editFirstName").value = btn.getAttribute("data-firstname");
+    document.getElementById("editLastName").value = btn.getAttribute("data-lastname");
+    document.getElementById("editCompany").value = btn.getAttribute("data-company");
+    document.getElementById("editAddress").value = btn.getAttribute("data-address");
     document.getElementById("editCity").value = btn.getAttribute("data-city");
     document.getElementById("editPhone").value = btn.getAttribute("data-phone");
-    document.getElementById("editPincode").value =
-      btn.getAttribute("data-pincode");
-    document.getElementById("editCountry").value =
-      btn.getAttribute("data-country");
-    document.getElementById("editState").value = btn.getAttribute("data-state");
+    document.getElementById("editPincode").value = btn.getAttribute("data-pincode");
+    document.getElementById("editCountry").value = btn.getAttribute("data-country");
+    document.getElementById("editState").value = btn.getAttribute("data-state"); // Set state input
     const addressType = btn.getAttribute("data-addresstype");
     if (addressType === "home") {
       document.getElementById("editHome").checked = true;

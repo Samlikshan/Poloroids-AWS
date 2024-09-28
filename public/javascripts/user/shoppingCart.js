@@ -1,8 +1,42 @@
 document.addEventListener("DOMContentLoaded", () => {
   updatePriceDisplay();
   updateCartSummary(); // Update the cart summary on page load
+  const checkoutButton = document.querySelector('.checkout');
+  if (checkoutButton) {
+    checkoutButton.addEventListener('click', checkStockBeforeCheckout);
+  }
 });
 
+
+const checkStockBeforeCheckout = async (event) => {
+  event.preventDefault(); // Prevent default navigation
+  try {
+    // Fetch current cart items
+    const cartResponse = await fetch('/cart/response');
+    const cart = await cartResponse.json();
+    console.log(cart)
+
+    // Check each item in the cart
+    for (const item of cart.items) {
+      const productResponse = await fetch(`/product/${item.productId}`);
+      const product = await productResponse.json();
+      console.log(product)
+      // If current quantity exceeds available stock, alert user
+      if (item.quantity > product.product.stock) {
+        toastr.error(`The quantity of ${product.product.productName} exceeds the available stock.`);
+        // toastr.info('Reached the limit of the stock');
+        toastr.info('Consider changing the quantity');
+        return; // Exit if any item exceeds stock
+      }
+    }
+    
+    // If all checks pass, navigate to checkout
+    window.location.href = '/checkout';
+  } catch (error) {
+    console.error('Error checking stock:', error);
+    toastr.error('An error occurred while checking stock. Please try again.');
+  }
+};
 // Update Cart Summary
 const updateCartSummary = () => {
   let cartItems = document.querySelectorAll(".cart-item");

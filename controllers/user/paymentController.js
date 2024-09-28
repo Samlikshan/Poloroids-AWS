@@ -25,6 +25,9 @@ const createOrder = async (req, res) => {
     res.json(order);
 
   } catch (error) {
+    if(error.statusCode == 400){
+      return res.status(400).json({message:'Amount exceeds maximum amount allowed.'})
+    }
     console.log(error, "createOrder error");
   }
 };

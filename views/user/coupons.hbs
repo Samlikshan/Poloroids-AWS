@@ -1,0 +1,12 @@
+<link rel="stylesheet" href="/stylesheets/user/coupons.css">
+
+<h2>My Coupons</h2>
+<div class="coupon-list">
+    {{#each coupons}}
+    <div class="coupon-card">
+        <div class="coupon-code">{{couponCode}}</div>
+        <div class="coupon-details">Get {{discountValue}}% off on orders above ₹{{minPurchase}}</div>
+        <div class="coupon-expiry">Expires: {{formatDate expiryDate}}</div>
+    </div>
+    {{/each}}
+</div>

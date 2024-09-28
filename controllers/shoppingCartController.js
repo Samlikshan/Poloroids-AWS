@@ -87,6 +87,10 @@ const viewCart = async (req, res) => {
     isActive: true,
   });
 
+  if(!user){
+    res.clearCookie('Token');
+    return res.redirect('/auth/login')
+  }
   try {
     const cart = await ShoppingCart.findOne({ userId: user._id });
 

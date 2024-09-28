@@ -126,20 +126,33 @@ function closeModal() {
 }
 
 function saveCategories(event) {
-    event.preventDefault(); // Prevent the form from submitting in the traditional way
+    event.preventDefault();
 
     const fields = document.querySelectorAll('input[name="categoryName[]"]');
     const categories = Array.from(fields)
         .map(field => field.value.trim())
-        .filter(value => value) // Remove empty values
-        .map(value => ({ categoryName: value }));
+        .filter(value => value); // Remove empty values
+
+    // Validate each category
+    const invalidCategories = categories.filter(value => !/^[A-Za-z\s]+$/.test(value));
+
+    if (invalidCategories.length > 0) {
+        toastr.warning('Category names must contain only alphabetic characters and spaces.');
+        return;
+    }
 
     if (categories.length === 0) {
-        // Handle the case where no valid categories are provided
         const errorMessage = document.createElement('p');
         errorMessage.textContent = 'Please enter at least one valid category.';
         errorMessage.className = 'error-message';
         document.getElementById('keyFields').appendChild(errorMessage);
+        return;
+    }
+
+    // Check for duplicates
+    const uniqueCategories = [...new Set(categories)];
+    if (uniqueCategories.length !== categories.length) {
+        toastr.warning('Category names must be unique.');
         return;
     }
 
@@ -150,31 +163,28 @@ function saveCategories(event) {
         },
         body: JSON.stringify({
             categoryType: document.getElementById('categoryType').value,
-            categories: categories
+            categories: categories.map(name => ({ categoryName: name }))
         })
     })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message) {
-                // Show error message in the modal
-                const errorMessage = document.createElement('p');
-                errorMessage.textContent = data.message;
-                errorMessage.className = 'error-message'; // Style this as needed
-                document.getElementById('keyFields').appendChild(errorMessage);
-            } else {
-                // Close the modal and possibly update UI
-                closeModal();
-                // Optionally, refresh the categories list
-            }
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            const errorMessage = document.createElement('p');
-            errorMessage.textContent = 'An error occurred while saving the category.';
-            errorMessage.className = 'error-message';
-            document.getElementById('keyFields').appendChild(errorMessage);
-        });
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+           // const errorMessage = document.createElement('p');
+           // errorMessage.textContent = data.message;
+           // errorMessage.className = 'error-message';
+           // document.getElementById('keyFields').appendChild(errorMessage);
+           toastr.warning(data.message)
+        } else {
+            closeModal();
+            // Optionally refresh categories or update the UI
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        toastr.error('An error occurred while saving the category.');
+    });
 }
+
 
 function toggleStatus(event, id, isActive, categoryType) {
     event.preventDefault(); // Prevent the default link behavior
@@ -199,6 +209,7 @@ function toggleStatus(event, id, isActive, categoryType) {
                 // Update the link text based on new status
                 const link = event.target;
                 link.textContent = newStatus;
+                return location.reload();
             } else {
                 console.error('Error:', data.message);
             }
@@ -220,11 +231,16 @@ function closeEditCategoryModal() {
 }
 
 function updateCategory(event) {
-    event.preventDefault(); // Prevent the form from submitting in the traditional way
+    event.preventDefault();
 
     const id = document.getElementById('editCategoryId').value;
     const newName = document.getElementById('editCategoryName').value.trim();
-    const parentCategoryType = document.getElementById('editCategoryType').value; // Retrieve the parent category type
+    const parentCategoryType = document.getElementById('editCategoryType').value;
+
+    if (!/^[A-Za-z\s]+$/.test(newName)) {
+        toastr.warning('Category name must contain only alphabetic characters and spaces.');
+        return;
+    }
 
     if (newName === '') {
         toastr.warning('Category name cannot be empty.');
@@ -239,23 +255,26 @@ function updateCategory(event) {
         body: JSON.stringify({
             id: id,
             categoryName: newName,
-            categoryType: parentCategoryType // Correctly include the parent category type
+            categoryType: parentCategoryType
         })
     })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Update the category name in the UI
-                document.getElementById('category-name-' + id).textContent = newName;
-                closeEditCategoryModal();
-            } else {
-                console.error('Error:', data.message);
-            }
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+    .then(response => response.json())
+    .then(data => {
+            console.log('req')
+        if (data.message) {
+            return toastr.error(data.message);
+            closeEditCategoryModal();
+
+        } else {
+            return location.reload();
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        toastr.error('An error occurred while updating the category.');
+    });
 }
+
 
 function closeEditCategoryModal() {
     document.getElementById('editCategoryModal').style.display = 'none';
