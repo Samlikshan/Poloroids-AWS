@@ -27,7 +27,7 @@ const app = express();
 // CORS configuration
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://polaroids.site",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Authorization", "Content-Type"],
     credentials: true,

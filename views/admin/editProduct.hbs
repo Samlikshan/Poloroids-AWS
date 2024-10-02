@@ -89,19 +89,19 @@
             <div class="image-upload-grid">
                 <div class="image-upload-group">
                     <label for="imageUpload1" class="image-upload-label">
-                        <img src="{{product.mainImage}}" alt="Upload Image">
+                        <img src="/images/products/{{product.mainImage}}" alt="Upload Image">
                         <span>Main Image</span>
                     </label>
-                    {{!-- <input type="hidden" name="productImage" value="{{product.productImages.[0]}}"> --}}
+                    {{!-- <input type="hidden" name="productImage" value="/images/products/{{product.productImages.[0]}}"> --}}
                     <input type="file" id="imageUpload1" name="mainImage" style="display: none;" accept="image/jpeg, image/png">
                 </div>
                 {{#each product.additionalImages}}
                 <div class="image-upload-group">
                     <label for="imageUpload2" class="image-upload-label">
-                        <img src="{{this}}" alt="Upload Image">
+                        <img src="/images/products/{{this}}" alt="Upload Image">
                         {{!-- <span>Upload Image</span> --}}
                     </label>
-                    {{!-- <input type="hidden" name="productImage" value="{{product.productImages.[1]}}"> --}}
+                    {{!-- <input type="hidden" name="productImage" value="/images/products/{{product.productImages.[1]}}"> --}}
                     {{!-- <input type="file" id="imageUpload2" style="display: none;" name="replaceImage{{@index}}">
                     --}}
                     <input type="checkbox" name="deleteImage{{@index}}"> Delete this image
@@ -116,7 +116,7 @@
 
                 {{!-- <div class="image-upload-group">
                     <label for="imageUpload3" class="image-upload-label">
-                        <img src="{{product.productImages.[2]}}" alt="Upload Image">
+                        <img src="/images/products/{{product.productImages.[2]}}" alt="Upload Image">
                         <span>Upload Image</span>
                     </label>
                     <input type="file" id="imageUpload3" style="display: none;" name="productImage">
@@ -124,7 +124,7 @@
 
                 <div class="image-upload-group">
                     <label for="imageUpload4" class="image-upload-label">
-                        <img src="{{product.productImages.[3]}}" alt="Upload Image">
+                        <img src="/images/products/{{product.productImages.[3]}}" alt="Upload Image">
                         <span>Upload Image</span>
                     </label>
                     <input type="file" id="imageUpload4" style="display: none;" name="productImage">

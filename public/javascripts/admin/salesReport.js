@@ -15,8 +15,7 @@ document.getElementById('custom-filter-btn').addEventListener('click', function(
 document.getElementById('download-pdf-btn').addEventListener('click', function() {
     const filter = new URLSearchParams(window.location.search).get('filter');
     const startDate = new URLSearchParams(window.location.search).get('startDate');
-    const endDate = new URLSearchParams(window.location.search).get('endDate');
-    
+    const endDate = new URLSearchParams(window.location.search).get('endDate');    
     let url = `/admin/report?filter=${filter || ''}`;
     if (startDate && endDate) {
         url += `&startDate=${startDate}&endDate=${endDate}`;

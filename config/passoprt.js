@@ -13,7 +13,7 @@ const googleAuth = (req,res) => {
     passport.use(new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: "/auth/google/callback"
+        callbackURL: "https://polaroids.site/auth/google/callback"
       },
       function(accessToken, refreshToken, profile, done) {
         // This is where you would find or create a user in your database

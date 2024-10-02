@@ -41,10 +41,7 @@ const postEditProducts = async (req, res) => {
     if (req.body.deleteMainImage) {
       product.mainImage = null;
     } else if (req.files.mainImage) {
-      product.mainImage = req.files.mainImage[0].path.replace(
-        "..\\Polaroids\\public",
-        ""
-      );
+      product.mainImage = req.files.mainImage[0].filename
     }
 
     // Handle Additional Images
@@ -54,7 +51,7 @@ const postEditProducts = async (req, res) => {
       } else if (req.files[`replaceImage${i}`]) {
         product.additionalImages[i] = req.files[
           `replaceImage${i}`
-        ][0].path.replace("..\\Polaroids\\public", "");
+        ][0].filename;
       }
     }
 
@@ -62,7 +59,7 @@ const postEditProducts = async (req, res) => {
     if (req.files.newAdditionalImages) {
       req.files.newAdditionalImages.forEach((file) => {
         product.additionalImages.push(
-          file.path.replace("..\\Polaroids\\public", "")
+          file.filename
         );
       });
     }
@@ -110,7 +107,7 @@ const getAddProduct = async (req, res, next) => {
 // }
 
 const postAddProduct = async (req, res, next) => {
-  console.log(req.body, req.files);
+console.log(req.files,'images');
   try {
     const newProduct = new Product({
       productName: req.body.productName,
@@ -120,13 +117,8 @@ const postAddProduct = async (req, res, next) => {
       type: req.body.type,
       gear: req.body.gear,
       stock: req.body.stock,
-      mainImage: req.files.mainImage[0].path.replace(
-        "..\\Polaroids\\public",
-        ""
-      ), // Store the main image path
-      additionalImages: req.files.additionalImages.map((file) =>
-        file.path.replace("..\\Polaroids\\public", "")
-      ), // Store paths of additional images
+      mainImage: req.files.mainImage[0].filename,
+	additionalImages: req.files.additionalImages.map((file) => file.filename)
     });
 
     await newProduct.save();

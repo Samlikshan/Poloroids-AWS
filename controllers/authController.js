@@ -100,7 +100,6 @@ const postVerify = async (req, res, next) => {
           return res.status(400).json({message:'Invalid refferal code'})
         }
       await Wallet.create({userId:referredUser._id,balance:1000})
-      await Wallet.create({userId:user.id,balance:500})
       }
       const newReferralCode = generateReferralCode()
       const user = await User.create({
@@ -109,7 +108,7 @@ const postVerify = async (req, res, next) => {
         referralCode:newReferralCode,
         password: password,
       });
-      
+	await Wallet.create({userId:user.id,balance:500})      
       
       // let token = jwt.sign({username,email},process.env.SECRET_KEY)
       res.status(200).json({ message: "Succesfully Registered" });
@@ -162,6 +161,7 @@ const postLogin = async (req, res, next) => {
             .status(403)
             .json({ message: "Your account is temporarily Banned " });
         } else {
+	  username = user.username
           let token = jwt.sign(
             { username, role: "user" },
             process.env.SECRET_KEY,

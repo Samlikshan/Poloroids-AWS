@@ -50,7 +50,7 @@ const cartResponse = async (req, res) => {
   try {
     const token = req.cookies["Token"];
     if (!token) {
-      return res.redirect("/auth/login");
+      return res.status(403).json("No token provided")
     }
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     const user = await User.findOne({ username: decoded.username });

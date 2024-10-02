@@ -39,6 +39,11 @@ const addToCart = async (productId) => {
 
         // Check existing quantity in cart
         const cartResponse = await fetch('/cart/response');
+      	if(!cartResponse.ok){
+	  if(cartResponse.status == 403){
+		return window.location = '/auth/login'
+		}
+	}
         const cart = await cartResponse.json();
         console.log(cart,'cart')
         const existingItem = cart.items.find(item => item.productId === productId);

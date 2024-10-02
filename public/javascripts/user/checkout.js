@@ -184,6 +184,11 @@ const checkStockBeforeConfirm = async () => {
   try {
     // Fetch current cart items
     const cartResponse = await fetch("/cart/response");
+    if(!cartResponse.ok){
+            if(cartResponse.status == 403){
+                return window.location = '/auth/login'
+            }
+        }
     const cart = await cartResponse.json();
 
     // Check each item in the cart for stock
@@ -348,7 +353,7 @@ document
         name: "Polaroids",
         description: "Transaction",
         order_id: order.id, // This is the order_id created in the backend
-        callback_url: "http://localhost:3000/payment-success", // Your success URL
+        callback_url: "https://polaroids.site/success", // Your success URL
         prefill: {
           name: "samlik",
           email: "samlikshan123@gmail.com",

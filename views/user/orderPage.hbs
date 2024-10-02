@@ -6,14 +6,14 @@
         {{#each items}}
        <a href="/account/order/{{../_id}}" style="text-decoration: none;"><div class="order-item">
             <div class="order-image">
-                <img src="{{mainImage}}" alt="{{productName}}">
+                <img src="/images/products/{{mainImage}}" alt="{{productName}}">
             </div>
             <div class="order-details">
                 <h3>{{productName}}</h3>
                 <p>Quantity: {{quantity}}</p>
             </div>
             <div class="order-price">
-                ₹{{totalPrice}}.00
+                ₹{{../finalPrice}}
             </div>
             <div class="order-status">
                     <span class="status-dot delivered"></span>

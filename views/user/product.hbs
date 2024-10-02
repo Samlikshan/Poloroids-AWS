@@ -8,32 +8,32 @@
         <div class="product-images">
             <div class="hero-image-container" id="magnifier-container">
                 <div class="magnifier-thumb-wrapper">
-                    <img src="{{product.mainImage}}" 
+                    <img src="/images/products/{{product.mainImage}}" 
                          alt="Product Image" 
                          class="hero-image" 
                          id="main-image" 
-                         data-large-src="{{product.mainImage}}">
+                         data-large-src="/images/products/{{product.mainImage}}">
                     <div id="magnifier-lens"></div>
                 </div>
             </div>
 
             <div class="secondary-images">
                 {{#each product.additionalImages}}
-                <img src="{{this}}" alt="Thumbnail Image" class="thumbnail">
+                <img src="/images/products/{{this}}" alt="Thumbnail Image" class="thumbnail">
                 {{/each}}
             </div>
         </div>
 
         <div class="product-details">
             <h1>{{product.productName}}</h1>
-            <div class="ratings">
+       {{!--     <div class="ratings">
                 <span class="star">&#9733;</span>
                 <span class="star">&#9733;</span>
                 <span class="star">&#9733;</span>
                 <span class="star">&#9733;</span>
                 <span class="star">&#9733;</span>
                 <a href="#">Read reviews</a>
-            </div>
+            </div> --}}
             <p class="description">{{product.productDescription}}</p>
             <div class="price">
                 <span class="original-price">M.R.P:₹ {{product.price}}.00</span>
@@ -61,11 +61,11 @@
     <div class="cards">
         {{#each products}}
         <div class="card">
-            <img src="/images/icons/Wishlist.svg" alt="Wishlist Icon" class="wishlist-icon">
+         {{!--   <img src="/images/icons/Wishlist.svg" alt="Wishlist Icon" class="wishlist-icon"> --}}
             <a href="/shop/{{_id}}" style="text-decoration: none;">
-                <img src="{{mainImage}}" alt="Product Image" class="product-image">
+                <img src="/images/products/{{mainImage}}" alt="Product Image" class="product-image">
                 <div class="card-content-wrapper">
-                    {{!-- <p class="stock-status">in stock</p> --}}
+                    {{!-- <p class="stock-status">in stock</p> 
                     {{#if stock}}
                     <p class="stock-status">
                         In Stock
@@ -74,15 +74,15 @@
                     <p class="stock-status">
                         Out of Stock
                     </p>
-                    {{/if}}
+                    {{/if}} --}}
                     <h2 class="product-name">{{productName}}</h2>
-                    <div class="rating">
+                   {{!-- <div class="rating">
                         <span class="star">&#9733;</span>
                         <span class="star">&#9733;</span>
                         <span class="star">&#9733;</span>
                         <span class="star">&#9733;</span>
                         <span class="star">&#9733;</span>
-                    </div>
+                    </div> --}}
                     <div class="price">₹ {{price}}.00</div>
             </a>
             <button>Add to Cart</button>

@@ -9,7 +9,7 @@ const ExcelJS = require('exceljs');
 const getSalesReport = async (req, res) => {
     const { filter, startDate, endDate } = req.query; // get the filter and custom date range from the query
     let start, end;
-
+	console.log('sales report')
     // Set date ranges based on filter or custom date range
     if (startDate && endDate) {
         start = moment(startDate).startOf('day');
@@ -61,6 +61,7 @@ const getSalesReport = async (req, res) => {
 
 const generatePDFReport = async (req, res) => {
     try {
+	console.log('generating report')
         const { filter, startDate, endDate } = req.query; // Get the filter and date range from the query
         let start, end;
 
