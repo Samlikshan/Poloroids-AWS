@@ -1,53 +1,68 @@
+.wrapper {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Take full viewport height */
+}
 .thank-you-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: calc(100vh - 160px); /* Adjusted to fit within layout minus header and footer height */
-    background-color: #f5f5f5;
+    flex-direction: column;
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 90%;
+    width: 400px;
+    position: relative;
+    animation: fadeIn 0.5s ease-out;
 }
 
-.thank-you-content {
-    align-items: center;
-    background-color: #ffffff;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    max-width: 400px;
-    width: 100%;
-    position: relative; /* Allow absolute positioning of child elements */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .success-icon {
-    margin: 0 auto 20px auto;
+    margin: 0 auto 1.5rem;
     display: block;
+    animation: scaleIn 0.5s ease-out 0.3s both;
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
 }
 
 h1 {
-    font-size: 24px;
+    font-size: 1.5rem;
     font-weight: 900;
-    margin-bottom: 20px;
+    margin-bottom: 1.5rem;
     color: #333333;
 }
-
 button {
     background-color: #000000;
     color: #ffffff;
     border: none;
-    padding: 10px 20px;
+    padding: 0.75rem 1.25rem;
     border-radius: 5px;
     cursor: pointer;
-    font-weight: 900;
-    margin-bottom: 10px; /* Adjusted to space from the link */
-    max-width: 200px; /* Limit the button width */
-    width: 100%; /* Make button responsive to container width */
+    font-weight: 700;
+    margin-bottom: 1rem;
+    max-width: 200px; /* Limit max width */
+    width: 100%; /* Full width of the container */
+    transition: background-color 0.3s, transform 0.1s;
+    align-self: center; /* Center the button within the flex container */
 }
+
 
 button:hover {
     background-color: #333333;
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
 }
 
 .orders-link {
@@ -55,23 +70,33 @@ button:hover {
     color: #666666;
     text-decoration: none;
     font-weight: 600;
-    margin-bottom: 10px; /* Adjusted for spacing */
-    max-width: 200px; /* Limit the link width */
-    width: 100%; /* Make link responsive to container width */
-    /* text-align: right; */
+    transition: color 0.3s;
+}
+
+.orders-link:hover {
+    color: #000000;
 }
 
 .orders-link span {
     margin-left: 5px;
+    transition: transform 0.3s;
 }
 
-/* New styles for positioning */
-.footer-links {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    width: calc(100% - 40px); /* Ensure footer-links container doesn’t exceed content width */
+.orders-link:hover span {
+    transform: translateX(3px);
+}
+
+@media (max-width: 480px) {
+    .thank-you-container {
+        padding: 1.5rem;
+    }
+
+    h1 {
+        font-size: 1.25rem;
+    }
+
+    .success-icon svg {
+        width: 100px;
+        height: 100px;
+    }
 }

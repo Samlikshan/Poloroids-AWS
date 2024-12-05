@@ -8,7 +8,7 @@ const Wallet = require("../../models/walletModel");
 const path = require('path');
 const exphbs = require('express-handlebars');
 const hbs = exphbs.create(); 
-const pdf = require('html-pdf-node');
+
 
 const viewOrders = async (req, res) => {
   const token = req.cookies["Token"];
@@ -154,41 +154,23 @@ const getInvoice = async (req, res) => {
     if (!order) {
       return res.status(404).send('Order not found');
     }
-     res.render('user/invoice', { order }, async (err, html) => {
-            if (err) {
-                return res.status(500).send('Error generating HTML for PDF');
-            }
 
-            // Generate PDF from the rendered HTML using html-pdf-node
-            const file = { content: html };
-            const options = { format: 'A4' };
+    res.render('user/invoice', { order }, (err, html) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send('Error generating HTML for PDF');
+      }
 
-            try {
-                const pdfBuffer = await pdf.generatePdf(file, options);
-                res.setHeader('Content-Type', 'application/pdf');
-                res.setHeader('Content-Disposition', 'attachment; filename="Invoice.pdf"');
-                res.send(pdfBuffer);
-            } catch (pdfError) {
-                console.error('Error generating PDF:', pdfError);
-                res.status(500).send('Error generating PDF');
-            }
-        });
-//    res.render('user/invoice', { order }, (err, html) => {
-//      if (err) {
-//        console.error(err);
-//        return res.status(500).send('Error generating HTML for PDF');
-//      }
-
-//      pdf.create(html).toStream((err, stream) => {
-//        if (err) {
-//          console.error(err);
-//          return res.status(500).send('Error generating PDF');
-//        }
-//        res.setHeader('Content-Type', 'application/pdf');
-//        res.setHeader('Content-Disposition', 'attachment; filename="invoice.pdf"');
-//        stream.pipe(res); // Stream the PDF as a download
-//      });
-//    });
+      pdf.create(html).toStream((err, stream) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).send('Error generating PDF');
+        }
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename="invoice.pdf"');
+        stream.pipe(res); // Stream the PDF as a download
+      });
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).send('Error creating invoice');

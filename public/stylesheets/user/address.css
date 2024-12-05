@@ -3,6 +3,7 @@
     max-width: 500px;
     margin: 0 auto;
     font-family: Arial, sans-serif;
+    animation: fadeIn 0.5s ease-in-out; /* Fade-in effect for the section */
 }
 
 .add-address-btn {
@@ -16,11 +17,12 @@
     display: block;
     width: 100%;
     text-align: left;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.3s; /* Added transform for hover */
 }
 
 .add-address-btn:hover {
     background-color: #e0eaff;
+    transform: translateY(-2px); /* Slight lift on hover */
 }
 
 .address-card {
@@ -29,6 +31,11 @@
     padding: 16px;
     margin-top: 20px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease; /* Added shadow effect */
+}
+
+.address-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
 }
 
 .address-header {
@@ -62,6 +69,7 @@
     font-size: 24px;
     color: #999;
     cursor: pointer;
+    transition: color 0.3s ease; /* Smooth color change */
 }
 
 .options-btn:hover {
@@ -96,6 +104,7 @@
     width: 100%;
     cursor: pointer;
     color: #333;
+    transition: background-color 0.3s; /* Smooth background change */
 }
 
 .dropdown-content .dropdown-item:hover {
@@ -198,6 +207,7 @@ input[type="number"]:focus, input[type="email"]:focus {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     outline: none;
 }
+
 /* Adjust form-row to handle spacing and layout */
 .form-row {
     display: flex;
@@ -244,7 +254,7 @@ button.modal-btn {
 
 button.modal-btn:hover {
     background-color: #444;
-    transform: scale(1.05);
+    transform: scale(1.05); /* Slight scale on hover */
 }
 
 .options-btn {
@@ -257,5 +267,51 @@ button.modal-btn:hover {
 }
 
 .options-btn:hover {
-    color: #ff4542;
+    color: #ff4542; /* Color change on hover */
+}
+
+/* Media Queries for Responsiveness */
+@media screen and (max-width: 768px) {
+    .address-section {
+        padding: 15px;
+        max-width: 100%; /* Full width on smaller screens */
+    }
+
+    .add-address-btn {
+        font-size: 16px; /* Slightly smaller font on smaller screens */
+        padding: 10px; /* Adjust padding */
+    }
+
+    .address-card {
+        padding: 14px; /* Adjust padding for cards */
+    }
+
+    .address-header {
+        font-size: 12px; /* Smaller font size for header */
+    }
+
+    .address-content p {
+        font-size: 12px; /* Smaller font for content */
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    select {
+        font-size: 12px; /* Adjust font size for inputs */
+    }
+
+    button.modal-btn {
+        width: 80px; /* Smaller button on smaller screens */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .add-address-btn {
+        padding: 8px; /* Smaller padding */
+    }
+
+    button.modal-btn {
+        width: 70px; /* Further adjust button size */
+    }
 }

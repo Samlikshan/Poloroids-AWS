@@ -23,7 +23,6 @@
         </div>
     </div>
 
-    <hr>
 
     {{#each order.items}}
     <div class="order-item">
@@ -35,7 +34,7 @@
             <p>Quantity: {{quantity}}</p>
         </div>
         <div class="order-price">
-            ₹{{totalPrice}}
+            ₹ {{totalPrice}}
         </div>
         <div class="order-status">
             <span class="status-dot {{#if ../order.orderStatus}}{{../order.orderStatus}}{{else}}pending{{/if}}"></span>
@@ -46,7 +45,7 @@
         </div>
     </div>
     {{/each}}
-    <hr>
+   
     <div class="order-summary">
         <h4>Order Summary</h4>
         <p id="totalAmount"><strong>Amount:</strong> ₹{{order.totalAmount}}</p>

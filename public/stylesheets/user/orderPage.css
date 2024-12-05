@@ -1,3 +1,4 @@
+/* Orders Container */
 .orders-container {
     width: 80%;
     margin: 20px auto;
@@ -5,29 +6,43 @@
     background-color: #f8f8f8;
     border-radius: 8px;
     font-family: 'Inter', sans-serif;
+    animation: fadeIn 0.8s ease-in-out; /* Fade-in animation */
 }
 
 h2 {
-    font-size: 24px;
+    font-size: clamp(20px, 4vw, 24px);
     font-weight: 900;
     margin-bottom: 20px;
+    animation: fadeInDown 0.6s ease-in-out; /* Slide down animation */
 }
 
+/* Order Item */
 .order-item {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     padding: 20px 0;
     border-bottom: 1px solid #ddd;
+    opacity: 0; /* Initial opacity for animation */
+    animation: fadeInUp 0.6s ease-in-out forwards;
+    animation-delay: 0.3s;
+    transition: transform 0.3s ease; /* Hover effect */
+}
+
+.order-item:hover {
+    transform: scale(1.02); /* Slight scale on hover */
 }
 
 .order-item:last-child {
     border-bottom: none;
 }
 
+/* Order Image */
 .order-image {
-    width: 100px;
-    height: 100px;
+    width: clamp(80px, 15vw, 100px);
+    height: clamp(80px, 15vw, 100px);
     margin-right: 20px;
+    transition: transform 0.3s ease; /* Smooth hover scaling */
 }
 
 .order-image img {
@@ -37,35 +52,53 @@ h2 {
     border-radius: 8px;
 }
 
+.order-image:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+}
+
+/* Order Details */
 .order-details {
     flex: 1;
     margin-right: 20px;
+    min-width: 200px;
+    animation: fadeIn 0.8s ease-in-out;
 }
 
 .order-details h3 {
-    font-size: 18px;
+    font-size: clamp(16px, 3.5vw, 18px);
     font-weight: 900;
     margin: 0;
+    color: black;
 }
 
 .order-details p {
-    font-size: 14px;
+    font-size: clamp(12px, 2.5vw, 14px);
     color: #666;
     margin: 5px 0 0;
 }
 
+/* Order Price */
 .order-price {
-    font-size: 18px;
+    font-size: clamp(16px, 3.5vw, 18px);
     font-weight: 900;
     color: #000;
     margin-right: 20px;
+    transition: transform 0.3s ease, color 0.3s ease; /* Hover animation */
 }
 
+.order-price:hover {
+    transform: scale(1.05); /* Slight zoom effect */
+    color: #e53935; /* Color change on hover */
+}
+
+/* Order Status */
 .order-status {
     display: flex;
     align-items: center;
-    font-size: 14px;
+    font-size: clamp(12px, 2.5vw, 14px);
     color: #666;
+    text-transform: capitalize;
+    text-align: left;
 }
 
 .status-dot {
@@ -74,6 +107,7 @@ h2 {
     border-radius: 50%;
     display: inline-block;
     margin-right: 8px;
+    transition: transform 0.3s ease; /* Smooth hover */
 }
 
 .status-dot.delivered {
@@ -86,4 +120,98 @@ h2 {
 
 .status-dot.cancelled {
     background-color: #dc3545; /* Red */
+}
+
+.status-dot:hover {
+    transform: scale(1.2); /* Scale up on hover */
+}
+
+/* Fade-in animations */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Media Queries */
+@media screen and (max-width: 768px) {
+    .orders-container {
+        width: 95%;
+    }
+
+    .order-item {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px 0; /* Adjust padding for smaller screens */
+    }
+
+    .order-image {
+        margin-bottom: 10px;
+    }
+
+    .order-details {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .order-price {
+        margin-right: 0;
+        margin-bottom: 10px;
+        text-align: left;
+    }
+
+    .order-status {
+        text-align: left;
+    }
+
+    h2 {
+        font-size: clamp(18px, 4vw, 22px); /* Responsive h2 */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .orders-container {
+        padding: 15px;
+    }
+
+    .order-details h3,
+    .order-price,
+    .order-status {
+        text-align: left;
+    }
+
+    .order-details p {
+        font-size: 12px; /* Adjust paragraph font size */
+    }
+
+    h2 {
+        font-size: clamp(16px, 3.5vw, 20px); /* Smaller responsive h2 */
+    }
 }

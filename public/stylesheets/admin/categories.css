@@ -83,8 +83,7 @@ h1 {
     }
 }
 
-
-/* Modal Styles */
+/* Enhanced Modal Styles */
 .modal {
     display: none; 
     position: fixed; 
@@ -94,7 +93,7 @@ h1 {
     width: 100%; 
     height: 100%; 
     overflow: auto; 
-    background-color: rgba(0, 0, 0, 0.4); 
+    background-color: rgba(0, 0, 0, 0.6); /* Slightly darker background for better focus */
 }
 
 .modal-content {
@@ -103,11 +102,12 @@ h1 {
     padding: 20px;
     border: 1px solid #888;
     width: 400px; 
-    height: 150px; 
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3); /* Enhanced shadow for depth */
+    animation: slide-in 0.3s ease; /* Added animation for smoother appearance */
 }
 
+/* Close Button Styles */
 .close-btn {
     color: #aaaaaa;
     float: right;
@@ -118,9 +118,7 @@ h1 {
 
 .close-btn:hover,
 .close-btn:focus {
-    color: #000000;
-    text-decoration: none;
-    cursor: pointer;
+    color: #ff4d4d; /* Change color on hover for better feedback */
 }
 
 /* Form Field Styles */
@@ -137,33 +135,43 @@ h1 {
     flex-grow: 1;
     margin-right: 10px;
     font-size: 16px;
+    transition: border-color 0.3s;
 }
 
-.delete-btn {
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    padding: 5px 10px;
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 30px;
-    width: 30px;
+.key-field input[type="text"]:focus {
+    border-color: #4a4a4a; /* Change border color on focus */
+    outline: none; /* Remove default outline */
 }
 
-.add-btn {
+/* Save Button Styles */
+.save-btn {
     background-color: #4a4a4a;
-    color: white;
+    color: #ffffff;
     border: none;
     padding: 10px 15px;
     border-radius: 7.5px;
     cursor: pointer;
     font-size: 16px;
-    margin-top: 20px;
+    transition: background-color 0.3s;
+    margin-top: 10px; /* Spacing above the button */
 }
+
+.save-btn:hover {
+    background-color: #333; /* Darker shade on hover */
+}
+
+/* Animation for modal appearance */
+@keyframes slide-in {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
 
 /* Trigger Button Styles */
 .open-modal-btn {

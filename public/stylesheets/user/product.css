@@ -28,40 +28,18 @@
     flex-direction: column;
 }
 
-
-/* .hero-image-container {
-    flex-basis: 50%; 
-    text-align: center;
-}
-
-.hero-image {
-    width: 650px;
-    height: auto;
-    transition: transform 0.2s;
-}
-
-.hero-image:hover {
-    transform: scale(1.1);
-} */
-
-
 .hero-image-container {
     text-align: center;
     overflow: hidden; 
 }
 
 .hero-image {
-    width: 650px;
-    max-width: 650px;
-    /* height: auto; */
+    width: 650px; /* Original layout */
+    max-width: 100%; /* Allow responsiveness */
     height: 400px;
     object-fit: cover;
     transition: transform 0.3s ease-in-out; 
 }
-/* 
-.hero-image:hover {
-    transform: scale(1.05); 
-} */
 
 .secondary-images {
     align-self: center;
@@ -71,7 +49,6 @@
     width: 125px;
     height: auto;
     padding-inline: 20px;
-    /* margin-top: 10px; */
 }
 
 .thumbnail {
@@ -82,7 +59,6 @@
 .thumbnail:hover {
     transform: scale(1.05);
 }
-
 
 .product-details {
     flex-basis: 50%;
@@ -106,6 +82,7 @@ h1 {
     margin-left: 10px;
     font-weight: 700;
 }
+
 .star {
     color: #FF0000;
     font-size: 1.5em;
@@ -115,7 +92,7 @@ h1 {
 .description {
     font-size: 1em;
     font-weight: 800;
-    line-height: 1.;
+    line-height: 1.5; /* Adjusted for readability */
     margin-bottom: 20px;
 }
 
@@ -152,7 +129,6 @@ h1 {
     margin-bottom: 5px;
 }
 
-
 button {
     background-color: #151515;
     color: white;
@@ -173,37 +149,33 @@ button:hover {
     background-color: #A5A5A5;
 }
 
-
-
 .specs {
     margin-top: 10px;
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Create two equal columns */
-    gap: 10px; /* Adjust the gap between items */
+    grid-template-columns: 1fr 1fr; /* Original layout */
+    gap: 10px;
 }
 
 .features-list {
-    list-style-type: none; /* Remove default list styling */
-    padding: 0; /* Remove default padding */
-    margin: 0; /* Remove default margin */
-    display: contents; /* Display the list items as grid children */
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: contents;
 }
 
 .features-list li {
     display: flex;
     align-items: center;
-    margin-bottom: 10px; /* Space between list items */
+    margin-bottom: 10px;
     font-weight: 600;
 }
 
 .features-list li::before {
-    content: "•"; /* Custom bullet point */
-    color: red; /* Color of the bullet point */
-    font-size: 1.5em; /* Size of the bullet point */
-    margin-right: 10px; /* Space between bullet and text */
+    content: "•"; 
+    color: red; 
+    font-size: 1.5em; 
+    margin-right: 10px; 
 }
-
-
 
 .related-product-container {
     max-width: 90%;
@@ -219,14 +191,12 @@ button:hover {
     padding-bottom: 20px;
 }
 
-
 .cards {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
 }
-
 
 .card {
     position: relative;
@@ -241,20 +211,18 @@ button:hover {
     box-sizing: border-box;
     text-align: center;
     padding: 20px;
-    /* position: relative; */
 }
 
 .card-content-wrapper {
     position: absolute;
-    bottom: 20px; /* Adjust as needed */
-    left: 20px;   /* Adjust as needed */
-    right: 20px;  /* Adjust as needed */
+    bottom: 20px; 
+    left: 20px;   
+    right: 20px;  
     text-align: center;
     margin-bottom: 10px;
 }
 
 .product-image {
-    /* position: absolute; */
     max-width: 90%;
     border-radius: 10px 10px 0 0;
 }
@@ -273,7 +241,6 @@ button:hover {
     color: #7D7D7D;
     font-size: 0.9em;
     font-weight: 900;
-    /* margin: 10px 0; */
     text-align: left;
     padding-left: 15px;
 }
@@ -320,18 +287,34 @@ button:hover {
 
 .card button:hover {
     background-color: #333333;
-    
 }
 
-/* Responsive */
+/* Responsive Media Queries */
 @media (max-width: 768px) {
+    .product-container {
+        flex-direction: column; /* Stack layout */
+    }
+
+    .hero-image {
+        width: 100%; /* Full width on smaller screens */
+        height: auto; /* Adjust height */
+    }
+
+    .product-details {
+        padding-left: 0; /* Remove padding */
+    }
+
+    .specs {
+        grid-template-columns: 1fr; /* Stack specs on small screens */
+    }
+
     .card {
-        width: calc(50% - 20px);
+        width: calc(50% - 20px); /* Two cards in a row */
     }
 }
 
 @media (max-width: 480px) {
     .card {
-        width: calc(100% - 20px);
+        width: calc(100% - 20px); /* Full width on extra small screens */
     }
 }

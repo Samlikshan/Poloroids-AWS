@@ -1,11 +1,11 @@
-//const pdf = require('html-pdf');
+const pdf = require('html-pdf');
 const path = require('path');
 const exphbs = require('express-handlebars');
 const Orders = require('../models/orderModel');
 const moment = require('moment');
 const hbs = exphbs.create(); 
 const ExcelJS = require('exceljs');
-const pdf = require('html-pdf-node');
+const puppeteer = require('puppeteer');
 
 const getSalesReport = async (req, res) => {
     const { filter, startDate, endDate } = req.query; // get the filter and custom date range from the query
@@ -62,7 +62,8 @@ const getSalesReport = async (req, res) => {
 
 const generatePDFReport = async (req, res) => {
     try {
-        const { filter, startDate, endDate } = req.query;
+	console.log('generating report')
+        const { filter, startDate, endDate } = req.query; // Get the filter and date range from the query
         let start, end;
 
         // Set the date ranges based on the filter or custom date range
@@ -70,8 +71,8 @@ const generatePDFReport = async (req, res) => {
             start = moment(startDate).startOf('day');
             end = moment(endDate).endOf('day');
         } else if (filter == 'weekly') {
-            start = moment().startOf('isoWeek');
-            end = moment().endOf('isoWeek');
+            start = moment().startOf('isoWeek'); // Monday start of the week
+            end = moment().endOf('isoWeek');     // Sunday end of the week
         } else if (filter == 'monthly') {
             start = moment().startOf('month');
             end = moment().endOf('month');
@@ -79,6 +80,7 @@ const generatePDFReport = async (req, res) => {
             start = moment().startOf('year');
             end = moment().endOf('year');
         } else {
+            // Default to today's data
             start = moment().startOf('day');
             end = moment().endOf('day');
         }
@@ -97,30 +99,26 @@ const generatePDFReport = async (req, res) => {
         let discountedAmount = 0;
 
         orders.forEach(order => {
-            salesCount += order.items.reduce((acc, item) => acc + item.quantity, 0); 
+            salesCount += order.items.reduce((acc, item) => acc + item.quantity, 0); // total items sold
             totalAmount += parseFloat(order.finalPrice);
             discountedAmount += parseFloat(order.totalAmount) - parseFloat(order.finalPrice);
         });
 
         // Render HTML from Handlebars template
-        res.render('admin/report', { orders, salesCount, totalAmount, discountedAmount }, async (err, html) => {
+        res.render('admin/report', { orders, salesCount, totalAmount, discountedAmount }, (err, html) => {
             if (err) {
                 return res.status(500).send('Error generating HTML for PDF');
             }
 
-            // Generate PDF from the rendered HTML using html-pdf-node
-            const file = { content: html };
-            const options = { format: 'A4' };
-
-            try {
-                const pdfBuffer = await pdf.generatePdf(file, options);
+            // Generate PDF from the rendered HTML
+            pdf.create(html).toStream((err, stream) => {
+                if (err) {
+                    return res.status(500).send('Error generating PDF');
+                }
                 res.setHeader('Content-Type', 'application/pdf');
                 res.setHeader('Content-Disposition', 'attachment; filename="report.pdf"');
-                res.send(pdfBuffer);
-            } catch (pdfError) {
-                console.error('Error generating PDF:', pdfError);
-                res.status(500).send('Error generating PDF');
-            }
+                stream.pipe(res); // Stream the PDF as a download
+            });
         });
 
     } catch (error) {
@@ -128,8 +126,6 @@ const generatePDFReport = async (req, res) => {
         res.status(500).send('Error generating PDF report');
     }
 };
-
-
 
 
 const generateExcelReport = async (req, res) => {

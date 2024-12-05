@@ -26,7 +26,7 @@ input[type="email"] {
     display: block;
     width: 100%;
     padding: 10px;
-    background-color: #f00;
+    background-color: #e53935;
     color: white;
     border: none;
     border-radius: 5px;
@@ -35,7 +35,7 @@ input[type="email"] {
 }
 
 .edit-button:hover {
-    background-color: #c00;
+    background-color: #e53935;
 }
 
 /* Modal Styles */
@@ -114,7 +114,7 @@ input[type="email"] {
 
 .share-button {
     padding: 10px 20px;
-    background-color: #25D366;
+    background-color: #888;
     color: white;
     border: none;
     border-radius: 5px;
@@ -123,5 +123,5 @@ input[type="email"] {
 }
 
 .share-button:hover {
-    background-color: #1DAF57;
+    background-color: #888;
 }

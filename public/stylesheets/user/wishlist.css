@@ -113,3 +113,19 @@
     transition: ease 0.3s;
 
   }
+@media (max-width: 600px) {
+  .wishlist-item {
+      flex-direction: column; /* Stack items on small screens */
+      align-items: flex-start; /* Align items to the start */
+  }
+
+  .delete-btn {
+      align-self: flex-start; /* Align delete button at the end of the item */
+      margin-top: 10px; /* Space above the delete button */
+  }
+
+  .cart-btn {
+      width: 30%; /* Make button full-width on small screens */
+      margin-top: 20px; /* Space above the button */
+  }
+}

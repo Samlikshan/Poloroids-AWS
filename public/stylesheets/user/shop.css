@@ -1,6 +1,8 @@
+/* Original styles */
 .nav-links a.active {
-    color: red; /* Change the active link color */
+    color: red;
 }
+
 .container {
     max-width: 1200px;
     margin: 20px auto;
@@ -20,25 +22,10 @@
 
 .header {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     align-items: center;
     margin-bottom: 20px;
 }
-
-/* .header h1 {
-    font-weight: 900;
-    color: #E00707;
-    margin: 0;
-} */
-
-/* .sort-by {
-    font-weight: 900;
-}
-
-.sort-by a {
-    color: #E00707;
-    text-decoration: none;
-} */
 
 .sort-by {
     font-weight: 900;
@@ -68,16 +55,13 @@
     background-color: white;
     border-radius: 7px;
     border: 1px solid #ccc;
-    border: none;
     list-style-type: none;
     padding: 0;
     margin: 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     width: 123px;
-    /* min-width: 129px; */
     left: 0px;
-    /* top: 52px; */
 }
 
 .sort-options li {
@@ -92,14 +76,11 @@
 
 .sort-options li:hover {
     background-color: transparent;
-
 }
 
 .sort-options li a:hover {
     text-decoration: underline;
 }
-
-
 
 .content {
     display: flex;
@@ -148,7 +129,7 @@
 }
 
 .card {
-    position: relative; /* Add this */
+    position: relative;
     background-color: #FFFFFF;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -162,18 +143,17 @@
     justify-content: space-between;
     padding: 20px;
 }
+
 .card-content-wrapper {
-    margin-top: auto; /* Ensures the content stays at the bottom */
+    margin-top: auto;
     text-align: center;
-    padding-bottom: 10px; /* Space between content and the price */
+    padding-bottom: 10px;
 }
 
 .product-image {
     max-width: 100%;
     border-radius: 10px 10px 0 0;
-    /* Removed position relative from here */
 }
-
 
 .wishlist-icon {
     position: absolute;
@@ -195,17 +175,11 @@
     font-weight: 900;
 }
 
-/* .card p {
-    font-weight: 700;
-    margin: 10px 0;
-} */
-
 .stock-status {
     display: block;
     color: #7D7D7D;
     font-size: 0.9em;
     font-weight: 900;
-    /* margin: 10px 0; */
     text-align: left;
     padding-left: 15px;
 }
@@ -228,11 +202,11 @@
     margin: 10px 0;
 }
 
-
 .price-container {
-    margin-top: 10px; /* Ensure some space between content and price */
+    margin-top: 10px;
     text-align: center;
 }
+
 .price-container p {
     margin: 5px 0;
 }
@@ -245,23 +219,8 @@
 .final-price {
     color: #E00707;
     font-weight: 900;
-    font-size: 1.25em; /* Adjust font size as needed */
+    font-size: 1.25em;
 }
-
-/* .card button {
-    background-color: #000000;
-    color: #FFFFFF;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 900;
-    transition: ease 0.3s;
-}
-
-.card button:hover {
-    background-color: #A5A5A5;
-} */
 
 .card button {
     background-color: #000000;
@@ -278,22 +237,19 @@
     background-color: #A5A5A5;
 }
 
-/* New styles for disabled button */
 .card button[disabled] {
-    background-color: #D3D3D3; /* Light grey */
-    color: #A9A9A9; /* Darker grey for text */
+    background-color: #D3D3D3;
+    color: #A9A9A9;
     cursor: not-allowed;
     border: none;
-    transition: none; /* Remove hover transition for disabled state */
+    transition: none;
 }
 
-/* Optional: If you want to change hover effects for disabled buttons */
 .card button[disabled]:hover {
-    background-color: #D3D3D3; /* Keep the same light grey color */
-    color: #A9A9A9; /* Same text color */
-    cursor: not-allowed; /* Ensure the cursor remains as not-allowed */
+    background-color: #D3D3D3;
+    color: #A9A9A9;
+    cursor: not-allowed;
 }
-
 
 .pagination {
     display: flex;
@@ -312,15 +268,91 @@
     color: #E00707;
 }
 
-/* Responsive */
+/* New styles for responsiveness */
+.filter-toggle {
+    display: none;
+    width: 20%;
+    padding: 10px;
+    background-color: #000000;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+/* Media Queries */
 @media (max-width: 768px) {
+    .content {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 20px;
+        display: none;
+    }
+
+    .sidebar.active {
+        display: block;
+    }
+
+    .main-content {
+        width: 100%;
+    }
+
     .card {
         width: calc(50% - 20px);
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .sort-by {
+        margin-top: 10px;
+    }
+
+    .sort-options {
+        width: 100%;
+        left: 0;
+    }
+
+    .sort-options li {
+        padding: 12px;
+    }
+
+    .filter-toggle {
+        display: block;
     }
 }
 
 @media (max-width: 480px) {
     .card {
-        width: calc(100% - 20px);
+        width: 100%;
+        padding: 15px;
+    }
+
+    .card h2 {
+        font-size: 1.1em;
+    }
+
+    .price-container {
+        flex-direction: column;
+    }
+
+    .breadcrumbs {
+        font-size: 0.9em;
+    }
+
+    .sidebar h2 {
+        font-size: 1.5em;
+    }
+
+    .pagination {
+        justify-content: center;
     }
 }

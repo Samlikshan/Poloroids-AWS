@@ -1,8 +1,16 @@
+/* Order Details Page */
 .order-details-page {
     padding: 20px;
     background-color: #f8f8f8;
+    transition: background-color 0.3s ease;
+    animation: fadeIn 0.5s ease-in-out; /* Fade-in effect */
 }
 
+.order-details-page:hover {
+    background-color: #f1f1f1;
+}
+
+/* Order Address */
 .order-address {
     display: flex;
     justify-content: space-between;
@@ -10,14 +18,23 @@
     padding: 20px;
     background-color: white;
     margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 7.5px;
+    transition: box-shadow 0.3s ease;
+}
+
+.order-address:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .address-details p {
+    text-transform: capitalize;
     margin: 5px 0;
     color: #aaa;
     font-weight: bold;
 }
 
+/* Order Actions */
 .order-actions {
     display: flex;
     flex-direction: column;
@@ -32,12 +49,18 @@
     cursor: pointer;
     font-weight: bold;
     border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Added transform transition */
 }
 
 .order-actions button:hover {
     background-color: #444;
 }
 
+.order-actions button:active {
+    transform: scale(0.95); /* Press effect */
+}
+
+/* Order Item */
 .order-item {
     display: flex;
     justify-content: space-between;
@@ -45,14 +68,27 @@
     background-color: white;
     padding: 20px;
     margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+    border-radius: 7.5px;
+}
+
+.order-item:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .order-image img {
     max-width: 150px;
     height: auto;
     margin-right: 20px;
+    transition: transform 0.3s ease;
 }
 
+.order-image img:hover {
+    transform: scale(1.05);
+}
+
+/* Order Details */
 .order-details h3 {
     margin: 0;
     color: black;
@@ -64,12 +100,19 @@
     color: #888;
 }
 
+/* Order Price */
 .order-price {
-    font-weight: bold;
     color: black;
+    transition: color 0.3s ease;
 }
 
+.order-price:hover {
+    color: #555;
+}
+
+/* Order Status */
 .order-status {
+    text-transform: capitalize;
     display: flex;
     align-items: center;
 }
@@ -93,11 +136,20 @@
     background-color: orange;
 }
 
+/* Order Summary */
 .order-summary {
     padding: 20px;
     background-color: white;
     margin-top: 20px;
     border-top: 1px solid #ddd;
+    border-radius: 7.5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.order-summary:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px); /* Slight lift on hover */
 }
 
 .order-summary h4 {
@@ -111,13 +163,121 @@
     color: #888;
 }
 
+/* Back Link */
 .back-link {
     display: inline-block;
     margin-top: 20px;
     color: #888;
     text-decoration: none;
+    transition: color 0.3s ease;
 }
 
 .back-link:hover {
+    color: #555;
     text-decoration: underline;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1024px) {
+    .order-address, .order-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .order-image img {
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .order-actions {
+        align-items: flex-start; /* Align buttons to the left */
+    }
+
+    .order-actions button {
+        width: 100%; /* Make buttons full-width */
+        padding: 12px; /* Increase padding for better touch targets */
+    }
+
+    .order-summary {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .order-address, .order-item {
+        padding: 15px;
+    }
+
+    .order-actions button {
+        padding: 10px;
+        margin: 10px 0; /* Increased margin for better spacing */
+    }
+
+    .order-summary {
+        padding: 10px;
+    }
+
+    .order-image img {
+        max-width: 100%;
+        margin-bottom: 10px; /* Adjusted margin */
+    }
+
+    .address-details p {
+        font-size: 14px; /* Smaller font size */
+    }
+}
+
+@media (max-width: 480px) {
+    .order-address, .order-item {
+        padding: 10px;
+    }
+
+    .order-image img {
+        max-width: 100%; /* Full-width images for small devices */
+        margin-bottom: 10px; /* Reduced margin */
+    }
+
+    .order-actions button {
+        padding: 10px; /* Reduced padding */
+        font-size: 14px; /* Adjusted font size */
+    }
+
+    .order-summary {
+        padding: 10px; /* Reduced padding */
+    }
+
+    .back-link {
+        font-size: 14px; /* Adjusted font size for back link */
+    }
+
+    .order-details h3 {
+        font-size: 18px; /* Smaller font size */
+    }
+
+    .order-details p {
+        font-size: 12px; /* Smaller font size */
+    }
+
+    .order-price {
+        font-size: 16px; /* Adjust price font size */
+    }
+
+    /* Introduce hover effects on mobile for better interaction */
+    .order-item {
+        transition: transform 0.2s ease; /* Subtle scaling on touch */
+    }
+
+    .order-item:active {
+        transform: scale(0.98); /* Press effect */
+    }
 }

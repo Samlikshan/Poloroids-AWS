@@ -1,3 +1,15 @@
+
+document.addEventListener('DOMContentLoaded', function() {
+    const filterToggle = document.getElementById('filter-toggle');
+    const sidebar = document.querySelector('.sidebar');
+
+    filterToggle.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+        filterToggle.textContent = sidebar.classList.contains('active') ? 'Hide Filters' : 'Show Filters';
+    });
+});
+
+
 const addToCart = async (productId) => {
     try {
         // Fetch product details to check stock

@@ -1,30 +1,133 @@
-<link rel="stylesheet" href="/stylesheets/partials/footer.css">
-<footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section brand-section">
-                <h2 class="footer-heading">Polaroids</h2>
-            </div>
-            <div class="footer-section about-us">
-                <h3 class="footer-subheading">About Us</h3>
-                <p>We are dedicated to capturing memories with our high-quality Polaroid cameras and accessories.</p>
-            </div>
-            <div class="footer-section quick-links">
-                <h3 class="footer-subheading">Quick Links</h3>
+    <style>
+
+        /* Footer styles */
+        .footer {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            padding: 40px 0;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .footer-section {
+            flex: 1;
+            margin-bottom: 20px;
+            min-width: 200px;
+        }
+
+        .footer-section h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #f2f2f2;
+        }
+
+        .footer-section ul {
+            list-style-type: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: #cccccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: #ffffff;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .social-icons a {
+            color: #cccccc;
+            font-size: 20px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #ffffff;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 20px;
+            border-top: 1px solid #333;
+        }
+
+        @media (max-width: 768px) {
+            .footer-container {
+                flex-direction: column;
+            }
+
+            .footer-section {
+                width: 100%;
+            }
+        }
+    </style>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Shop</h3>
                 <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/shop">Shop</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">DSLR Cameras</a></li>
+                    <li><a href="#">Mirrorless Cameras</a></li>
+                    <li><a href="#">Lenses</a></li>
+                    <li><a href="#">Accessories</a></li>
                 </ul>
             </div>
-            <div class="footer-section customer-services">
-                <h3 class="footer-subheading">Customer Services</h3>
+            <div class="footer-section">
+                <h3>Customer Service</h3>
                 <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Shipping & Returns</a></li>
                     <li><a href="#">FAQ</a></li>
-                    <li><a href="#">Returns</a></li>
-                    <li><a href="#">Shipping</a></li>
-                    <li><a href="#">Support</a></li>
+                    <li><a href="#">Order Status</a></li>
                 </ul>
             </div>
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <ul>
+                    <li><a href="#">Our Story</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <div class="social-icons">
+                    <a href="#" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" aria-label="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Camera E-commerce. All rights reserved.</p>
         </div>
     </footer>

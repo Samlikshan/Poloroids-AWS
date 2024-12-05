@@ -1,3 +1,137 @@
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    background-color: #E8E8E8;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 90px;
+    padding: 0 20px;
+    background-color: #f8f8f8;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+}
+
+.brand {
+    font-size: 1.6em;
+    font-weight: 900;
+    position: relative;
+    left: 10px;
+    top: -10px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 50px;
+    /* margin-left: 60%;  */
+    margin-left: 170px;
+    padding: 0;
+}
+
+.nav-links li {
+    display: inline; 
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-size: 1em;
+    font-weight: 900;
+    transition: color 0.3s; /* Add a transition for smooth color change */
+}
+
+.nav-links a.active {
+    color: red; /* Change the active link color */
+}
+
+
+.nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-right: 10px;
+}
+
+.search-bar {
+    background: transparent;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 300px; 
+    height: 40px; 
+    box-sizing: border-box; 
+}
+
+.search-icon {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
+    top: 50%;
+    transform: translateY(-50%); 
+}
+
+.icon {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+}
+
+.wishlist-icon {
+    width: 32px;
+    height: 32px;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-wrap: wrap;
+    }
+
+    .nav-links,
+    .nav-icons {
+        flex-grow: 1;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .search-bar {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-wrap: wrap;
+        justify-content: center; 
+        padding: 10px 20px; 
+    }
+
+    .nav-links {
+        margin-left: 0; 
+    }
+
+    .search-bar {
+        width: 100%; 
+        max-width: 300px; 
+    }
+}
 
 
 /* Banner styles */
@@ -180,3 +314,12 @@ h1 {
     }
 }
 
+  
+
+  .card button[disabled] {
+    background-color: #D3D3D3;
+    color: #A9A9A9;
+    cursor: not-allowed;
+    border: none;
+    transition: none;
+}
