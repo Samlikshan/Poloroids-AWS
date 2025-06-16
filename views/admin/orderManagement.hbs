@@ -1,11 +1,10 @@
+<!-- orderManagement.handlebars -->
 <link rel="stylesheet" href="/stylesheets/admin/orderManagement.css">
 
 <div class="header">
     <h1>Order Management</h1>
-    {{!-- <div class="search-container">
-        <input type="text" class="search-input" placeholder="Search...">
-    </div> --}}
 </div>
+
 <table class="order-table">
     <thead>
         <tr>
@@ -26,14 +25,15 @@
             <td>
                 <div class="status-container">
                     <button class="status-btn {{orderStatus}}">{{orderStatus}}</button>
+                    {{#unless (eq orderStatus "canceled")}}
                     <div class="status-options">
                         <a data-status="pending" data-order-id="{{_id}}" data-user-id="{{userId}}">Pending</a>
                         <a data-status="canceled" data-order-id="{{_id}}" data-user-id="{{userId}}">Canceled</a>
                         <a data-status="delivered" data-order-id="{{_id}}" data-user-id="{{userId}}">Delivered</a>
                     </div>
+                    {{/unless}}
                 </div>
             </td>
-
         </tr>
         {{/each}}
     </tbody>

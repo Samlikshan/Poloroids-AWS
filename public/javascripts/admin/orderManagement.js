@@ -1,93 +1,114 @@
 document.addEventListener("DOMContentLoaded", function () {
   const statusButtons = document.querySelectorAll(
-      ".status-container .status-btn"
+    ".status-container .status-btn"
   );
 
   statusButtons.forEach((button) => {
-      button.addEventListener("click", function (event) {
-          event.preventDefault();
-          const statusOptions = this.nextElementSibling;
+    button.addEventListener("click", function (event) {
+      event.preventDefault();
+      const statusOptions = this.nextElementSibling;
+      const currentStatus = this.textContent.trim();
 
-          // Close all other status options
-          document.querySelectorAll(".status-options").forEach((option) => {
-              if (option !== statusOptions) {
-                  option.style.display = "none";
-              }
-          });
+      // Prevent dropdown from opening if canceled
+      if (currentStatus === "canceled") {
+        toastr.warning("This order has been canceled and cannot be updated.");
+        return;
+      }
 
-          statusOptions.style.display =
-              statusOptions.style.display === "block" ? "none" : "block";
+      // Close all other dropdowns
+      document.querySelectorAll(".status-options").forEach((option) => {
+        if (option !== statusOptions) {
+          option.style.display = "none";
+        }
       });
+
+      // Toggle current dropdown
+      statusOptions.style.display =
+        statusOptions.style.display === "block" ? "none" : "block";
+    });
   });
 
   const statusOptionsLinks = document.querySelectorAll(".status-options a");
 
   statusOptionsLinks.forEach((link) => {
-      link.addEventListener("click", function (event) {
-          event.preventDefault();
-          const newStatus = this.getAttribute("data-status");
-          const statusBtn =
-              this.closest(".status-container").querySelector(".status-btn");
-          const currentStatus = statusBtn.textContent.trim(); // Get current status
+    link.addEventListener("click", function (event) {
+      event.preventDefault();
+      const newStatus = this.getAttribute("data-status");
+      const statusBtn =
+        this.closest(".status-container").querySelector(".status-btn");
+      const currentStatus = statusBtn.textContent.trim();
 
-          // Prevent changing status if already canceled
-          if (currentStatus === "canceled") {
-              toastr.warning('This order has been canceled and cannot be updated.');
-              return; // Exit the function to prevent further actions
-          }
+      if (currentStatus === "canceled") {
+        toastr.warning("This order has been canceled and cannot be updated.");
+        return;
+      }
+      if (currentStatus === "returned") {
+        toastr.warning("This order has been returned and cannot be updated.");
+        return;
+      }
 
-          // Prevent changing status back to pending if already delivered
-          if (currentStatus === "delivered" && newStatus === "pending") {
-              toastr.warning('This order has been delivered and cannot be changed back to pending.');
-              return; // Exit the function to prevent further actions
-          }
+      if (currentStatus === "delivered" && newStatus === "pending") {
+        toastr.warning(
+          "This order has been delivered and cannot be changed back to pending."
+        );
+        return;
+      }
 
-          // Update the status display
-          statusBtn.textContent = newStatus;
-          statusBtn.className = `status-btn ${newStatus}`;
-          this.closest(".status-options").style.display = "none";
+      if (currentStatus === "canceled" && newStatus === "delivered") {
+        toastr.warning(
+          "This order has been canceled and cannot be marked as delivered."
+        );
+        return;
+      }
 
-          // Get orderId and userId from data attributes
-          const orderId = this.getAttribute("data-order-id");
-          const userId = this.getAttribute("data-user-id");
+      // Update button UI
+      statusBtn.textContent = newStatus;
+      statusBtn.className = `status-btn ${newStatus}`;
+      this.closest(".status-options").style.display = "none";
 
-          // Call the corresponding function based on new status
-          if (newStatus === "pending") {
-              pending(orderId, userId);
-          } else if (newStatus === "canceled") {
-              canceled(orderId, userId);
-          } else if (newStatus === "delivered") {
-              delivered(orderId, userId);
-          }
-      });
+      // Get IDs
+      const orderId = this.getAttribute("data-order-id");
+      const userId = this.getAttribute("data-user-id");
+
+      // Trigger server update
+      if (newStatus === "pending") {
+        pending(orderId, userId);
+      } else if (newStatus === "canceled") {
+        canceled(orderId, userId);
+      } else if (newStatus === "delivered") {
+        delivered(orderId, userId);
+      }
+    });
   });
 
-  // Close the dropdown if clicked outside
+  // Close dropdown on outside click
   document.addEventListener("click", function (event) {
-      if (!event.target.matches(".status-btn")) {
-          const statusOptions = document.querySelectorAll(".status-options");
-          statusOptions.forEach((options) => (options.style.display = "none"));
-      }
+    if (!event.target.matches(".status-btn")) {
+      document.querySelectorAll(".status-options").forEach((options) => {
+        options.style.display = "none";
+      });
+    }
   });
 });
 
-
-const pending = async (orderId,userId) => {
-  const response = await fetch("/admin/update-orders", {
+const pending = async (orderId, userId) => {
+  await fetch("/admin/update-orders", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ orderId, userId, action: "pending" }),
   });
 };
-const canceled = async (orderId,userId) => {
-  const response = await fetch("/admin/update-orders", {
+
+const canceled = async (orderId, userId) => {
+  await fetch("/admin/update-orders", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ orderId, userId, action: "canceled" }),
   });
 };
-const delivered = async (orderId,userId) => {
-  const response = await fetch("/admin/update-orders", {
+
+const delivered = async (orderId, userId) => {
+  await fetch("/admin/update-orders", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ orderId, userId, action: "delivered" }),
