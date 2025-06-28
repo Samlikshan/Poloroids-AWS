@@ -12,7 +12,7 @@ const viewCheckout = async (req, res) => {
 
   if (!token) {
     // return res.status(401).send("Unauthorized");
-    return  res.redirect('/auth/login')
+    return res.redirect("/auth/login");
   }
 
   const decoded = jwt.verify(token, process.env.SECRET_KEY);
@@ -20,14 +20,14 @@ const viewCheckout = async (req, res) => {
 
   if (!user) {
     // return res.status(404).send("User not found");
-    return  res.redirect('/auth/login')
+    return res.redirect("/auth/login");
   }
 
   const cart = await Cart.findOne({ userId: user._id });
 
   if (!cart || cart.items.length === 0) {
     // return res.status(400).send("Cart is empty");
-    return res.redirect('/cart')
+    return res.redirect("/cart");
   }
 
   try {
@@ -97,6 +97,7 @@ const viewCheckout = async (req, res) => {
       coupon = req.session.coupon;
     }
 
+    console.log(coupon, req.session);
     // Render checkout page with user, products (with final prices), and coupon info
     res.render("user/checkout", { user, products, coupon });
   } catch (err) {
@@ -111,11 +112,12 @@ const postCheckout = async (req, res) => {
     if (!token) {
       return res.redirect("/auth/login");
     }
+
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     const user = await User.findOne({ username: decoded.username });
     const order = new Order({
       userId: user._id,
-      items: req.body.items,
+      // items: req.body.items,
       address: req.body.address,
       paymentMethod: req.body.paymentMethod,
       totalAmount: req.body.totalAmount,
@@ -125,6 +127,11 @@ const postCheckout = async (req, res) => {
       createdAt: Date.now(),
     });
 
+    const coupon = req.session.coupon;
+    console.log(coupon, "coupon");
+    let discountPercentage = coupon ? coupon.discountValue : 0;
+
+    let processedItems = [];
     // Validate and update product stock
     for (const item of req.body.items) {
       const product = await Product.findById(item.productId);
@@ -141,15 +148,31 @@ const postCheckout = async (req, res) => {
           { $inc: { stock: -item.quantity } }
         );
       }
+
+      const baseTotal = item.unitPrice * item.quantity;
+      const discountedTotal = discountPercentage
+        ? Math.round(baseTotal - (baseTotal * discountPercentage) / 100)
+        : baseTotal;
+
+      processedItems.push({
+        ...item,
+        totalPrice: discountedTotal,
+      });
     }
 
+    order.items = processedItems;
     // Clear the cart after processing items
     await Cart.updateOne({ userId: user._id }, { $set: { items: [] } });
 
+    if (coupon) {
+      order.couponCode = coupon.couponCode;
+      order.couponDiscountPercentage = coupon.discountValue;
+    }
+
     // Save the order
     const latestOrder = await order.save();
-    console.log(latestOrder._id);
-    // const orders = Orders.findOne({})
+
+    req.session.coupon = null;
     if (req.body.paymentMethod == "wallet") {
       await Wallet.findOneAndUpdate(
         { userId: user._id },
@@ -187,7 +210,7 @@ const checkWallet = async (req, res) => {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     const user = await User.findOne({ username: decoded.username });
     const wallet = await Wallet.findOne({ userId: user._id });
-    console.log(wallet);
+
     if (wallet && wallet.balance >= finalPrice) {
       return res.status(200).json("Suficient Balance");
     } else {
@@ -241,7 +264,7 @@ const failedPayment = async (req, res) => {
 const retryPayment = async (req, res) => {
   try {
     const { orderId } = req.body;
-    const order = await Order.findById(orderId)
+    const order = await Order.findById(orderId);
     for (const item of order.items) {
       const product = await Product.findById(item.productId);
 

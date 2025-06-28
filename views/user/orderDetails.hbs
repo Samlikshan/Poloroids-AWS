@@ -12,14 +12,11 @@
         <div class="order-actions">
             {{!-- <button class="return-button" data-order-id="{{order._id}}">Return</button> --}}
             {{#if (eq order.orderStatus 'delivered')}}
-            <button class="return-button" data-order-id="{{order._id}}">Return</button>
             <button class="invoice-button" data-order-id="{{order._id}}">Invoice</button>
-            {{else if (eq order.orderStatus 'pending')}}
-            <button class="cancel-button" data-order-id="{{order._id}}">Cancel</button>
             {{else if (eq order.orderStatus 'failed')}}
             <button class="retry-button" id="retry-button" data-order-id="{{order._id}}">Retry</button>
             {{/if}}
-            {{!-- <button class="invoice-button">Invoice</button> --}}
+
         </div>
     </div>
 
@@ -32,27 +29,94 @@
         <div class="order-details">
             <h3>{{productName}}</h3>
             <p>Quantity: {{quantity}}</p>
+            <p>Price/Per: ₹{{unitPrice}}</p>
+            {{#if (eq returnStatus 'none')}}
+            <p>Status: {{status}}</p>
+            {{else if (eq returnStatus 'requested')}}
+            <p>Status: Return {{returnStatus}}</p>
+            {{else if (eq returnStatus 'approved')}}
+            <p>Status: Return {{returnStatus}}</p>
+            {{else if (eq returnStatus 'rejected')}}
+            <p>Status: Return {{returnStatus}}</p>
+            {{/if}}
         </div>
         <div class="order-price">
             ₹ {{totalPrice}}
         </div>
         <div class="order-status">
-            <span class="status-dot {{#if ../order.orderStatus}}{{../order.orderStatus}}{{else}}pending{{/if}}"></span>
-            <span>{{../order.orderStatus}}</span>
+
+            {{!-- <span class="status-dot {{#if ../order.orderStatus}}{{../order.orderStatus}}{{else}}pending{{/if}}"></span> --}}
+            {{#if (eq status 'pending')}}
+            <button class="order-status" data-order-id="{{../order._id}}"
+                data-order-items-productId="{{productId}}">Cancel</button>
+            {{/if}}
+            {{#if (and (eq status 'delivered') (eq returnStatus 'none'))}}
+            <button class="order-status" data-order-id="{{../order._id}}" data-order-itemId="{{_id}}">Return</button>
+            {{/if}}
+
             {{#if ../order.updatedAt}}
             <span class="Date" style="margin-left:10px">{{formatDate ../order.updatedAt}}</span>
             {{/if}}
         </div>
     </div>
     {{/each}}
-   
+
     <div class="order-summary">
         <h4>Order Summary</h4>
-        <p id="totalAmount"><strong>Amount:</strong> ₹{{order.totalAmount}}</p>
-        <p id="totalAmount"><strong>Final Amount:</strong> ₹{{order.finalPrice}}</p>
+        <p id="totalAmount"><strong>Subtotal:</strong> ₹{{order.totalAmount}}</p>
+        <p id="totalAmount"><strong>Total Amount:</strong> ₹{{order.finalPrice}}</p>
         <p><strong>Payment Status:</strong> {{order.paymentStatus}}</p>
     </div>
 </div>
+
+<!-- Return Reason Modal -->
+<div id="returnReasonModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <h3>Return Item</h3>
+        <textarea id="returnReasonText" placeholder="Enter reason for return..."></textarea>
+        <div class="modal-buttons">
+            <button id="submitReturnReason">Submit</button>
+            <button id="cancelReturnReason">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .modal {
+        position: fixed;
+        z-index: 100;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-content {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 400px;
+    }
+
+    .modal-content textarea {
+        width: 100%;
+        height: 80px;
+        margin-bottom: 10px;
+        padding: 8px;
+    }
+
+    .modal-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+</style>
+
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -125,9 +189,11 @@
         document.querySelectorAll('.cancel-button').forEach(button => {
             button.addEventListener('click', function () {
                 const orderId = button.getAttribute('data-order-id');
+                const productId = button.getAttribute('data-order-items-productId')
 
                 const requestData = {
                     orderId: orderId,
+                    productId: productId,
                     action: 'cancel'
                 };
                 Swal.fire({
@@ -176,7 +242,7 @@
         const retryBtn = document.getElementById('retry-button')
         if (retryBtn) {
             retryBtn.addEventListener('click', async () => {
-            const finalPrice = JSON.stringify({{ order.finalPrice }})
+                const finalPrice = JSON.stringify({{ order.finalPrice }})
 
             // Create order by calling the server endpoint
             const response = await fetch('/create-order', {
@@ -240,12 +306,12 @@
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body:JSON.stringify({orderId})
+                    body: JSON.stringify({ orderId })
                 })
-                if(response.ok){
+                if (response.ok) {
                     return location.reload()
                 }
-                if(!response.ok){
+                if (!response.ok) {
                     const errorData = await response.json();
                     toastr.error(errorData.message);
                 }
@@ -255,6 +321,63 @@
             rzp.open();
         })
         }
+
+
+    let selectedOrderId = null;
+    let selectedItemId = null;
+
+    document.querySelectorAll('.request-return-button').forEach(button => {
+        button.addEventListener('click', function () {
+            selectedOrderId = button.getAttribute('data-order-id');
+            selectedItemId = button.getAttribute('data-order-itemId');
+            document.getElementById('returnReasonModal').style.display = 'flex';
+        });
+    });
+
+    document.getElementById('cancelReturnReason').addEventListener('click', () => {
+        document.getElementById('returnReasonModal').style.display = 'none';
+        document.getElementById('returnReasonText').value = '';
+    });
+
+    document.getElementById('submitReturnReason').addEventListener('click', () => {
+        const reason = document.getElementById('returnReasonText').value.trim();
+        if (!reason) {
+            return toastr.error('Please enter a reason for return.');
+        }
+
+        Swal.fire({
+            title: "Confirm return?",
+            text: "Are you sure you want to request a return for this item?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, request return",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch('/account/order/request-return', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        orderId: selectedOrderId,
+                        itemId: selectedItemId,
+                        reason: reason
+                    })
+                }).then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire("Request sent!", data.message, "success");
+                            document.getElementById('returnReasonModal').style.display = 'none';
+                            document.getElementById('returnReasonText').value = '';
+                            setTimeout(() => window.location.reload(), 1000);
+                        } else {
+                            toastr.error(data.message || 'Something went wrong');
+                        }
+                    }).catch(err => {
+                        console.error(err);
+                        toastr.error('Server error while submitting request.');
+                    });
+            }
+        });
+    });
 
     });
 </script>

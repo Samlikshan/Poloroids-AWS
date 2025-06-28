@@ -1,40 +1,41 @@
 document.addEventListener("DOMContentLoaded", () => {
   updatePriceDisplay();
   updateCartSummary(); // Update the cart summary on page load
-  const checkoutButton = document.querySelector('.checkout');
+  const checkoutButton = document.querySelector(".checkout");
   if (checkoutButton) {
-    checkoutButton.addEventListener('click', checkStockBeforeCheckout);
+    checkoutButton.addEventListener("click", checkStockBeforeCheckout);
   }
 });
-
 
 const checkStockBeforeCheckout = async (event) => {
   event.preventDefault(); // Prevent default navigation
   try {
     // Fetch current cart items
-    const cartResponse = await fetch('/cart/response');
+    const cartResponse = await fetch("/cart/response");
     const cart = await cartResponse.json();
-    console.log(cart)
+    console.log(cart);
 
     // Check each item in the cart
     for (const item of cart.items) {
       const productResponse = await fetch(`/product/${item.productId}`);
       const product = await productResponse.json();
-      console.log(product)
+      console.log(product);
       // If current quantity exceeds available stock, alert user
       if (item.quantity > product.product.stock) {
-        toastr.error(`The quantity of ${product.product.productName} exceeds the available stock.`);
+        toastr.error(
+          `The quantity of ${product.product.productName} exceeds the available stock.`
+        );
         // toastr.info('Reached the limit of the stock');
-        toastr.info('Consider changing the quantity');
+        toastr.info("Consider changing the quantity");
         return; // Exit if any item exceeds stock
       }
     }
-    
+
     // If all checks pass, navigate to checkout
-    window.location.href = '/checkout';
+    window.location.href = "/checkout";
   } catch (error) {
-    console.error('Error checking stock:', error);
-    toastr.error('An error occurred while checking stock. Please try again.');
+    console.error("Error checking stock:", error);
+    toastr.error("An error occurred while checking stock. Please try again.");
   }
 };
 // Update Cart Summary
@@ -92,8 +93,10 @@ const MAX_QUANTITY = 10;
 // Update Button State
 const updateButtonState = (productId) => {
   const cartItem = document.querySelector(`.cart-item[data-id="${productId}"]`);
-  const quantityElement = cartItem.querySelector('.item-quantity');
-  const decButton = cartItem.querySelector('.quantity-control button:first-of-type');
+  const quantityElement = cartItem.querySelector(".item-quantity");
+  const decButton = cartItem.querySelector(
+    ".quantity-control button:first-of-type"
+  );
   const currentQuantity = parseInt(quantityElement.textContent);
 
   // Disable the decrement button if quantity is 1
@@ -103,18 +106,20 @@ const updateButtonState = (productId) => {
 // Increment Quantity
 const quantityInc = async (productId) => {
   try {
-    const cartItem = document.querySelector(`.cart-item[data-id="${productId}"]`);
-    const quantityElement = cartItem.querySelector('.item-quantity');
-    const stockElement = cartItem.querySelector('.item-stock'); // Query for stock element in the same item
+    const cartItem = document.querySelector(
+      `.cart-item[data-id="${productId}"]`
+    );
+    const quantityElement = cartItem.querySelector(".item-quantity");
+    const stockElement = cartItem.querySelector(".item-stock"); // Query for stock element in the same item
     let currentQuantity = parseInt(quantityElement.textContent);
     let stockQuantity = parseInt(stockElement.textContent);
-    
+
     if (currentQuantity >= MAX_QUANTITY) {
-      toastr.info('Max limit reached for per product');
+      toastr.info("Max limit reached for per product");
       return;
     }
     if (currentQuantity >= stockQuantity) {
-      toastr.info('Reached the limit of the stock');
+      toastr.info("Reached the limit of the stock");
       return;
     }
 
@@ -140,8 +145,10 @@ const quantityInc = async (productId) => {
 // Decrement Quantity
 const quantityDec = async (productId) => {
   try {
-    const cartItem = document.querySelector(`.cart-item[data-id="${productId}"]`);
-    const quantityElement = cartItem.querySelector('.item-quantity');
+    const cartItem = document.querySelector(
+      `.cart-item[data-id="${productId}"]`
+    );
+    const quantityElement = cartItem.querySelector(".item-quantity");
     let currentQuantity = parseInt(quantityElement.textContent);
 
     if (currentQuantity <= 1) {
@@ -166,8 +173,6 @@ const quantityDec = async (productId) => {
     console.error(error);
   }
 };
-
-// Remove Item
 const removeItem = async (productId) => {
   try {
     Swal.fire({
@@ -175,20 +180,34 @@ const removeItem = async (productId) => {
       showCancelButton: true,
       confirmButtonText: "Yes",
     }).then(async (result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         const response = await fetch("/cart/updateItem", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ productId, action: "remove" }),
         });
+
         if (response.ok) {
-          // Remove the item from the cart display
-          const itemElement = document.querySelector(`.cart-item[data-id="${productId}"]`);
+          const itemElement = document.querySelector(
+            `.cart-item[data-id="${productId}"]`
+          );
           if (itemElement) {
             itemElement.remove();
           }
-          updateCartSummary(); // Optionally update the cart summary
+
+          updateCartSummary();
+
+          // Check if any cart items are left
+          const cartItems = document.querySelectorAll(".cart-item");
+          if (cartItems.length === 0) {
+            // Replace cart content with empty message
+            const cartContainer = document.querySelector(".cart-container");
+            cartContainer.innerHTML = `
+              <div class="empty-cart-container">
+                <p class="empty-cart-message">Cart is Empty</p>
+              </div>
+            `;
+          }
         } else {
           console.error("Failed to remove item");
         }
@@ -196,16 +215,16 @@ const removeItem = async (productId) => {
         Swal.fire("Changes are not saved", "", "info");
       }
     });
-
   } catch (error) {
     console.error(error);
   }
 };
 
-
 // Update Quantity Display
 const updateQuantityDisplay = (productId, newQuantity) => {
-  const quantityElement = document.querySelector(`.cart-item[data-id="${productId}"] .item-quantity`);
+  const quantityElement = document.querySelector(
+    `.cart-item[data-id="${productId}"] .item-quantity`
+  );
   if (quantityElement) {
     quantityElement.textContent = newQuantity;
     updateButtonState(productId); // Ensure button state is updated after quantity change

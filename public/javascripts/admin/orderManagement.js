@@ -69,14 +69,14 @@ document.addEventListener("DOMContentLoaded", function () {
       // Get IDs
       const orderId = this.getAttribute("data-order-id");
       const userId = this.getAttribute("data-user-id");
-
+      const itemId = this.getAttribute("data-order-itemId");
       // Trigger server update
       if (newStatus === "pending") {
-        pending(orderId, userId);
+        updateStatus(orderId, userId, "pending", itemId);
       } else if (newStatus === "canceled") {
-        canceled(orderId, userId);
+        updateStatus(orderId, userId, "canceled", itemId);
       } else if (newStatus === "delivered") {
-        delivered(orderId, userId);
+        updateStatus(orderId, userId, "delivered", itemId);
       }
     });
   });
@@ -91,7 +91,8 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-const pending = async (orderId, userId) => {
+const pending = async (orderId, userId, itemId) => {
+  console.log("requesting...");
   await fetch("/admin/update-orders", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -99,7 +100,8 @@ const pending = async (orderId, userId) => {
   });
 };
 
-const canceled = async (orderId, userId) => {
+const canceled = async (orderId, userId, itemId) => {
+  console.log("requesting...");
   await fetch("/admin/update-orders", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -107,10 +109,20 @@ const canceled = async (orderId, userId) => {
   });
 };
 
-const delivered = async (orderId, userId) => {
+const delivered = async (orderId, userId, itemId) => {
+  console.log("requesting...");
   await fetch("/admin/update-orders", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ orderId, userId, action: "delivered" }),
+  });
+};
+
+const updateStatus = async (orderId, userId, action, itemId) => {
+  console.log("requesting...");
+  await fetch("/admin/update-orders", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ orderId, userId, action, itemId }),
   });
 };

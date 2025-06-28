@@ -75,6 +75,9 @@ app.engine(
       or: function (a, b) {
         return a || b;
       },
+      and: function (a, b) {
+        return a && b;
+      },
       range: function (start, end) {
         let arr = [];
         for (let i = start; i <= end; i++) {
@@ -82,9 +85,9 @@ app.engine(
         }
         return arr;
       },
-      ifEquals:function(arg1, arg2, options) {
-        return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
-    }
+      ifEquals: function (arg1, arg2, options) {
+        return arg1 === arg2 ? options.fn(this) : options.inverse(this);
+      },
     },
     handlebars: allowInsecurePrototypeAccess(Handlebars),
   })
@@ -100,21 +103,20 @@ app.use((req, res, next) => {
     req.path === "/admin/login" ||
     req.path === "/admin/reset-password" ||
     req.path === "/admin/new-password" ||
-    req.path === "/admin/forgot-password" 
-    // req.path === "/admin/report"  
+    req.path === "/admin/forgot-password"
+    // req.path === "/admin/report"
   ) {
     res.locals.layout = "auth"; // Use auth layout for specific admin auth routes
-  } else if(req.path.startsWith('/invoice')|| req.path == '/admin/report'){
-    res.locals.layout = 'pdf'
+  } else if (req.path.startsWith("/invoice") || req.path == "/admin/report") {
+    res.locals.layout = "pdf";
   } else if (req.path.startsWith("/admin")) {
     res.locals.layout = "admin"; // Use admin layout for other admin routes
   } else if (req.path.startsWith("/auth")) {
     res.locals.layout = "auth"; // Use auth layout for user auth routes
   } else if (req.path.startsWith("/account")) {
     res.locals.layout = "accounts";
-  }else {
+  } else {
     res.locals.layout = "user"; // Use user layout for other routes
-
   }
   next();
 });
@@ -134,8 +136,12 @@ app.use("/admin", adminRoute);
 app.use("/cart", shoppingCart);
 
 // Catch 404 and forward to error handler
-app.use((req, res, next) => {
-  next(createError(404));
+// app.use((req, res, next) => {
+//   next(createError(404));
+// });
+
+app.use((req, res) => {
+  res.status(404).render("404", { layout: false });
 });
 
 // Error handler

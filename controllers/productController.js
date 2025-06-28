@@ -35,13 +35,12 @@ const getEditProducts = async (req, res, next) => {
 const postEditProducts = async (req, res) => {
   try {
     let product = await Product.findById(req.params.id);
-    console.log(req.body,'body')
-    console.log(req.files,'files')
+
     // Handle Main Image
     if (req.body.deleteMainImage) {
       product.mainImage = null;
     } else if (req.files.mainImage) {
-      product.mainImage = req.files.mainImage[0].filename
+      product.mainImage = req.files.mainImage[0].filename;
     }
 
     // Handle Additional Images
@@ -49,18 +48,14 @@ const postEditProducts = async (req, res) => {
       if (req.body[`deleteImage${i}`]) {
         product.additionalImages.splice(i, 1);
       } else if (req.files[`replaceImage${i}`]) {
-        product.additionalImages[i] = req.files[
-          `replaceImage${i}`
-        ][0].filename;
+        product.additionalImages[i] = req.files[`replaceImage${i}`][0].filename;
       }
     }
 
     // Add New Additional Images
     if (req.files.newAdditionalImages) {
       req.files.newAdditionalImages.forEach((file) => {
-        product.additionalImages.push(
-          file.filename
-        );
+        product.additionalImages.push(file.filename);
       });
     }
 
@@ -107,7 +102,7 @@ const getAddProduct = async (req, res, next) => {
 // }
 
 const postAddProduct = async (req, res, next) => {
-console.log(req.files,'images');
+  console.log(req.files, "images");
   try {
     const newProduct = new Product({
       productName: req.body.productName,
@@ -118,7 +113,7 @@ console.log(req.files,'images');
       gear: req.body.gear,
       stock: req.body.stock,
       mainImage: req.files.mainImage[0].filename,
-	additionalImages: req.files.additionalImages.map((file) => file.filename)
+      additionalImages: req.files.additionalImages.map((file) => file.filename),
     });
 
     await newProduct.save();

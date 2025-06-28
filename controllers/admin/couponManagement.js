@@ -38,8 +38,11 @@ const postCoupon = async (req, res) => {
 
 const applyCoupon = async (req, res) => {
   const { couponCode, subtotalAmount } = req.body;
-  const coupon = await Coupons.findOne({ couponCode: couponCode , status:true });
-  console.log(coupon);
+  const coupon = await Coupons.findOne({
+    couponCode: couponCode,
+    status: true,
+  });
+
   if (!coupon) {
     return res.status(400).json({ error: "Invalid Coupon code" });
   }
@@ -69,7 +72,7 @@ const deleteCoupon = async (req, res) => {
 const getCoupons = async (req, res) => {
   try {
     const coupons = await Coupons.find({ status: true });
-    res.render("user/coupons",{coupons});
+    res.render("user/coupons", { coupons });
   } catch (error) {
     console.log(error, "error fetching coupons");
   }

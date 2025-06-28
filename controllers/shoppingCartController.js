@@ -10,10 +10,10 @@ const addToCart = async (req, res) => {
   const token = req.cookies["Token"];
   // console.log('token',token)
   if (!token) {
-  // return res.status(401).json({ message: "user not logged in" });
-	console.log('req')
-  return res.redirect('/auth/login')  
-}
+    // return res.status(401).json({ message: "user not logged in" });
+
+    return res.redirect("/auth/login");
+  }
   const decoded = jwt.verify(token, process.env.SECRET_KEY);
   const user = await User.findOne({
     username: decoded.username,
@@ -89,16 +89,16 @@ const viewCart = async (req, res) => {
     isActive: true,
   });
 
-  if(!user){
-    res.clearCookie('Token');
-    return res.redirect('/auth/login')
+  if (!user) {
+    res.clearCookie("Token");
+    return res.redirect("/auth/login");
   }
   try {
     const cart = await ShoppingCart.findOne({ userId: user._id });
 
     // Check if cart exists and has items
     if (!cart || cart.items.length === 0) {
-      return res.render('user/shoppingCart', { isEmpty: true });
+      return res.render("user/shoppingCart", { isEmpty: true });
     }
 
     // Fetch product details and apply any applicable offers
@@ -108,23 +108,27 @@ const viewCart = async (req, res) => {
       // Fetch product-specific offer
       const productOffer = await Offer.findOne({
         typeId: product._id,
-        offerType: 'product',
+        offerType: "product",
         validFrom: { $lte: new Date() },
         validTo: { $gte: new Date() },
-        status: true
+        status: true,
       });
 
       // Fetch brand-specific offer and populate the `typeId` field to access `categoryName`
       const brandOffer = await Offer.findOne({
-        offerType: 'brand',
+        offerType: "brand",
         validFrom: { $lte: new Date() },
         validTo: { $gte: new Date() },
-        status: true
-      }).populate('typeId');  // Populating typeId for brand
+        status: true,
+      }).populate("typeId"); // Populating typeId for brand
 
       // Check if the populated brandOffer's `categoryName` matches the product's `brand`
       let finalBrandOffer = null;
-      if (brandOffer && brandOffer.typeId && brandOffer.typeId.categoryName === product.brand) {
+      if (
+        brandOffer &&
+        brandOffer.typeId &&
+        brandOffer.typeId.categoryName === product.brand
+      ) {
         finalBrandOffer = brandOffer;
       }
 
@@ -132,18 +136,25 @@ const viewCart = async (req, res) => {
       let price = product.price;
       if (productOffer && finalBrandOffer) {
         // Choose the offer with the higher discount percentage
-        const maxDiscount = Math.max(productOffer.discountPercentage, finalBrandOffer.discountPercentage);
-        price = product.price - (product.price * maxDiscount / 100);
+        const maxDiscount = Math.max(
+          productOffer.discountPercentage,
+          finalBrandOffer.discountPercentage
+        );
+        price = product.price - (product.price * maxDiscount) / 100;
       } else if (productOffer) {
-        price = product.price - (product.price * productOffer.discountPercentage / 100);
+        price =
+          product.price -
+          (product.price * productOffer.discountPercentage) / 100;
       } else if (finalBrandOffer) {
-        price = product.price - (product.price * finalBrandOffer.discountPercentage / 100);
+        price =
+          product.price -
+          (product.price * finalBrandOffer.discountPercentage) / 100;
       }
 
       return {
         ...product.toObject(),
-        price,                // The final price after applying the offer (if any)
-        quantity: item.quantity,  // Product quantity in the cart
+        price, // The final price after applying the offer (if any)
+        quantity: item.quantity, // Product quantity in the cart
       };
     });
 
@@ -156,8 +167,6 @@ const viewCart = async (req, res) => {
     res.status(500).json("Something went wrong");
   }
 };
-
-
 
 const updateitem = async (req, res) => {
   const { productId, action } = req.body;

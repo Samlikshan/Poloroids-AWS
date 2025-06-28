@@ -1,217 +1,264 @@
 /* Orders Container */
 .orders-container {
-    width: 80%;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #f8f8f8;
-    border-radius: 8px;
-    font-family: 'Inter', sans-serif;
-    animation: fadeIn 0.8s ease-in-out; /* Fade-in animation */
+  width: 80%;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  font-family: "Inter", sans-serif;
+  animation: fadeIn 0.8s ease-in-out;
 }
 
 h2 {
-    font-size: clamp(20px, 4vw, 24px);
-    font-weight: 900;
-    margin-bottom: 20px;
-    animation: fadeInDown 0.6s ease-in-out; /* Slide down animation */
+  font-size: clamp(20px, 4vw, 24px);
+  font-weight: 900;
+  margin-bottom: 25px;
+  animation: fadeInDown 0.6s ease-in-out;
+}
+
+/* Order Card */
+.order {
+  width: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 15px 20px;
+  margin-bottom: 25px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+}
+
+.order:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Header Section */
+.order .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 8px;
+}
+
+.order .header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  color: #333;
+}
+
+.order .header a {
+  font-size: 14px;
+  text-decoration: none;
+  color: #007bff;
+  background-color: #f0f8ff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.order .header a:hover {
+  background-color: #007bff;
+  color: white;
 }
 
 /* Order Item */
 .order-item {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    padding: 20px 0;
-    border-bottom: 1px solid #ddd;
-    opacity: 0; /* Initial opacity for animation */
-    animation: fadeInUp 0.6s ease-in-out forwards;
-    animation-delay: 0.3s;
-    transition: transform 0.3s ease; /* Hover effect */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 2px solid #f1f1f1;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-in-out forwards;
+  animation-delay: 0.2s;
+  transition: transform 0.3s ease;
 }
 
 .order-item:hover {
-    transform: scale(1.02); /* Slight scale on hover */
+  transform: scale(1.02);
 }
 
 .order-item:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 /* Order Image */
 .order-image {
-    width: clamp(80px, 15vw, 100px);
-    height: clamp(80px, 15vw, 100px);
-    margin-right: 20px;
-    transition: transform 0.3s ease; /* Smooth hover scaling */
+  width: clamp(80px, 15vw, 100px);
+  height: clamp(80px, 15vw, 100px);
+  margin-right: 20px;
+  transition: transform 0.3s ease;
 }
 
 .order-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
 }
 
 .order-image:hover {
-    transform: scale(1.05); /* Slight zoom on hover */
+  transform: scale(1.05);
 }
 
 /* Order Details */
 .order-details {
-    flex: 1;
-    margin-right: 20px;
-    min-width: 200px;
-    animation: fadeIn 0.8s ease-in-out;
+  flex: 1;
+  margin-right: 20px;
+  min-width: 200px;
+  animation: fadeIn 0.8s ease-in-out;
 }
 
 .order-details h3 {
-    font-size: clamp(16px, 3.5vw, 18px);
-    font-weight: 900;
-    margin: 0;
-    color: black;
+  font-size: clamp(16px, 3.5vw, 18px);
+  font-weight: 900;
+  margin: 0;
+  color: #333;
 }
 
 .order-details p {
-    font-size: clamp(12px, 2.5vw, 14px);
-    color: #666;
-    margin: 5px 0 0;
+  font-size: clamp(12px, 2.5vw, 14px);
+  color: #666;
+  margin: 5px 0 0;
 }
 
 /* Order Price */
 .order-price {
-    font-size: clamp(16px, 3.5vw, 18px);
-    font-weight: 900;
-    color: #000;
-    margin-right: 20px;
-    transition: transform 0.3s ease, color 0.3s ease; /* Hover animation */
+  font-size: clamp(16px, 3.5vw, 18px);
+  font-weight: 900;
+  color: #000;
+  margin-right: 20px;
+  transition: transform 0.3s ease, color 0.3s ease;
 }
 
 .order-price:hover {
-    transform: scale(1.05); /* Slight zoom effect */
-    color: #e53935; /* Color change on hover */
+  transform: scale(1.05);
+  color: #e53935;
 }
 
 /* Order Status */
 .order-status {
-    display: flex;
-    align-items: center;
-    font-size: clamp(12px, 2.5vw, 14px);
-    color: #666;
-    text-transform: capitalize;
-    text-align: left;
+  display: flex;
+  align-items: center;
+  font-size: clamp(12px, 2.5vw, 14px);
+  color: #666;
+  text-transform: capitalize;
 }
 
 .status-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 8px;
-    transition: transform 0.3s ease; /* Smooth hover */
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+  transition: transform 0.3s ease;
 }
 
 .status-dot.delivered {
-    background-color: #28a745; /* Green */
+  background-color: #28a745;
 }
 
 .status-dot.pending {
-    background-color: #007bff; /* Blue */
+  background-color: #007bff;
 }
 
 .status-dot.cancelled {
-    background-color: #dc3545; /* Red */
+  background-color: #dc3545;
 }
 
 .status-dot:hover {
-    transform: scale(1.2); /* Scale up on hover */
+  transform: scale(1.2);
 }
 
-/* Fade-in animations */
+/* Animations */
 @keyframes fadeIn {
-    0% {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeInDown {
-    0% {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeInUp {
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Media Queries */
+/* Responsive Design */
 @media screen and (max-width: 768px) {
-    .orders-container {
-        width: 95%;
-    }
+  .orders-container {
+    width: 95%;
+  }
 
-    .order-item {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 15px 0; /* Adjust padding for smaller screens */
-    }
+  .order-item {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px 0;
+  }
 
-    .order-image {
-        margin-bottom: 10px;
-    }
+  .order-image {
+    margin-bottom: 10px;
+  }
 
-    .order-details {
-        margin-right: 0;
-        margin-bottom: 10px;
-    }
+  .order-details {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
 
-    .order-price {
-        margin-right: 0;
-        margin-bottom: 10px;
-        text-align: left;
-    }
+  .order-price {
+    margin-right: 0;
+    margin-bottom: 10px;
+    text-align: left;
+  }
 
-    .order-status {
-        text-align: left;
-    }
+  .order-status {
+    text-align: left;
+  }
 
-    h2 {
-        font-size: clamp(18px, 4vw, 22px); /* Responsive h2 */
-    }
+  h2 {
+    font-size: clamp(18px, 4vw, 22px);
+  }
 }
 
 @media screen and (max-width: 480px) {
-    .orders-container {
-        padding: 15px;
-    }
+  .orders-container {
+    padding: 15px;
+  }
 
-    .order-details h3,
-    .order-price,
-    .order-status {
-        text-align: left;
-    }
+  .order-details h3,
+  .order-price,
+  .order-status {
+    text-align: left;
+  }
 
-    .order-details p {
-        font-size: 12px; /* Adjust paragraph font size */
-    }
+  .order-details p {
+    font-size: 12px;
+  }
 
-    h2 {
-        font-size: clamp(16px, 3.5vw, 20px); /* Smaller responsive h2 */
-    }
+  h2 {
+    font-size: clamp(16px, 3.5vw, 20px);
+  }
 }

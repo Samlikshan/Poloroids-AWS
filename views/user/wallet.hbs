@@ -14,7 +14,7 @@
             {{#each transactions}}
             <li class="transaction-item">
                 <span class="transaction-date">{{formatDate createdAt}}</span>
-                <span class="transaction-description">{{_id}}</span>
+                <span class="transaction-description">{{productId.productName}}</span>
                 <span class="transaction-amount credit">+ ₹{{amount}}.00</span>
             </li>
             {{/each}}

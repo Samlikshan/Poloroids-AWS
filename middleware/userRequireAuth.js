@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const userRequireAuth = async (req, res, next) => {
   let token = await req.cookies["Token"];
-  console.log(token)
+
   try {
     if (!token) {
       return res.redirect("/auth/login");
@@ -17,7 +17,7 @@ const userRequireAuth = async (req, res, next) => {
       } else if (decoded.role == "admin") {
         return res.redirect("/admin");
       } else {
-        return res.redirect("/auth/login")
+        return res.redirect("/auth/login");
         // return res.status(401).json('Token is invalid')
       }
     }

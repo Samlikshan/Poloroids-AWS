@@ -31,7 +31,6 @@ const fetchAddress = async (req, res) => {
 };
 
 const addAddress = async (req, res) => {
-  console.log(req.body);
   const {
     firstName,
     lastName,
@@ -52,8 +51,6 @@ const addAddress = async (req, res) => {
     isActive: true,
   });
 
-  console.log(decoded);
-  console.log(user);
   try {
     if (user) {
       await User.updateOne(
@@ -86,7 +83,6 @@ const addAddress = async (req, res) => {
 
 const updateAddress = async (req, res) => {
   try {
-
     const token = req.cookies["Token"];
     if (!token) {
       return res.redirect("/auth/login");
@@ -111,7 +107,7 @@ const updateAddress = async (req, res) => {
         },
       }
     );
-    res.status(200).json({message:'Address updated Successfully'})
+    res.status(200).json({ message: "Address updated Successfully" });
   } catch (error) {
     console.log(error, "error updating address");
   }
@@ -136,7 +132,7 @@ const deleteAddress = async (req, res) => {
   }
 };
 
-const availableAdderss = async(req,res) => {
+const availableAdderss = async (req, res) => {
   const { addressId } = req.params; // Extract addressId and userId from the request parameters
 
   try {
@@ -146,20 +142,22 @@ const availableAdderss = async(req,res) => {
     }
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     const user = await User.findOne({ username: decoded.username });
-    
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
     // Check if the specified addressId exists in the user's addresses
-    const addressExists = user.address.some(address => address._id.toString() === addressId);
-    
+    const addressExists = user.address.some(
+      (address) => address._id.toString() === addressId
+    );
+
     return res.status(200).json({ exists: addressExists });
   } catch (error) {
     console.error("Error checking address availability:", error);
     return res.status(500).json({ message: "Server error" });
   }
-}
+};
 
 module.exports = {
   addAddress,
@@ -167,5 +165,5 @@ module.exports = {
   viewAddress,
   updateAddress,
   deleteAddress,
-  availableAdderss
+  availableAdderss,
 };

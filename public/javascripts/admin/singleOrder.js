@@ -53,14 +53,22 @@ document.addEventListener("DOMContentLoaded", function () {
       // Get orderId and userId from data attributes
       const orderId = this.getAttribute("data-order-id");
       const userId = this.getAttribute("data-user-id");
+      const itemId = this.getAttribute("data-order-itemId");
 
       // Call the corresponding function based on new status
+      // if (newStatus === "pending") {
+      //   pending(orderId, userId);
+      // } else if (newStatus === "canceled") {
+      //   canceled(orderId, userId);
+      // } else if (newStatus === "delivered") {
+      //   delivered(orderId, userId);
+      // }
       if (newStatus === "pending") {
-        pending(orderId, userId);
+        updateStatus(orderId, userId, "pending", itemId);
       } else if (newStatus === "canceled") {
-        canceled(orderId, userId);
+        updateStatus(orderId, userId, "canceled", itemId);
       } else if (newStatus === "delivered") {
-        delivered(orderId, userId);
+        updateStatus(orderId, userId, "delivered", itemId);
       }
     });
   });
@@ -71,6 +79,38 @@ document.addEventListener("DOMContentLoaded", function () {
       const statusOptions = document.querySelectorAll(".status-options");
       statusOptions.forEach((options) => (options.style.display = "none"));
     }
+  });
+
+  document.querySelectorAll(".return-action-btn").forEach((btn) => {
+    btn.addEventListener("click", async function () {
+      const orderId = btn.dataset.orderId;
+      const itemId = btn.dataset.itemId;
+      const action = btn.dataset.action;
+
+      const result = await Swal.fire({
+        title: `Are you sure you want to ${action} this return?`,
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+      });
+
+      if (!result.isConfirmed) return;
+
+      const res = await fetch("/admin/order/return", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderId, itemId, action }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        Swal.fire(`Return ${action} successfully`, "", "success");
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
+      } else {
+        toastr.error(data.message || "Error processing request");
+      }
+    });
   });
 });
 
@@ -96,4 +136,39 @@ const delivered = async (orderId, userId) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ orderId, userId, action: "delivered" }),
   });
+};
+
+const updateStatus = async (orderId, userId, action, itemId) => {
+  console.log("requesting...");
+  const response = await fetch("/admin/update-orders", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ orderId, userId, action, itemId }),
+  });
+
+  if (response.ok) {
+    // Update the status button (already done)
+    const statusBtn = document.querySelector(
+      `.status-btn[data-order-id="${orderId}"]`
+    );
+    if (statusBtn) {
+      statusBtn.textContent = action;
+      statusBtn.className = `status-btn ${action}`;
+    }
+
+    // Update the product item status in the product section
+    const itemStatusEl = document.querySelector(
+      `.item-status[data-item-id="${itemId}"]`
+    );
+    if (itemStatusEl) {
+      itemStatusEl.innerHTML = `<span>Status :</span> ${action}`;
+    }
+
+    // Hide all status dropdowns
+    document.querySelectorAll(".status-options").forEach((el) => {
+      el.style.display = "none";
+    });
+
+    toastr.success("Order status updated successfully.");
+  }
 };

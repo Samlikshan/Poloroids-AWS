@@ -4,8 +4,8 @@ const bcrypt = require("bcrypt");
 const validator = require("validator");
 const jwt = require("jsonwebtoken");
 const { generateOTP, sendMail } = require("../services/emailVerification");
-const generateReferralCode = require('../services/referralCode')
-const Wallet = require('../models/walletModel')
+const generateReferralCode = require("../services/referralCode");
+const Wallet = require("../models/walletModel");
 // const verifyOtp = async (req,res,next,email) => {
 //     try {
 //         const otp = await generateOTP()
@@ -23,7 +23,8 @@ const getSignup = (req, res) => {
 
 const postSingup = async (req, res) => {
   try {
-    const { username, email, password , confirmPassword,referralCode} = req.body;
+    const { username, email, password, confirmPassword, referralCode } =
+      req.body;
     if (!username || !username.trim()) {
       return res
         .status(400)
@@ -35,10 +36,10 @@ const postSingup = async (req, res) => {
     let user = await User.findOne({
       $or: [{ username: username.toLowerCase() }, { email: email }],
     });
-    if(referralCode){
-      const referredUser = await User.findOne({referralCode:referralCode})
-      if(!referredUser){
-        return res.status(400).json({message:'Invalid refferal code'})
+    if (referralCode) {
+      const referredUser = await User.findOne({ referralCode: referralCode });
+      if (!referredUser) {
+        return res.status(400).json({ message: "Invalid refferal code" });
       }
     }
     let isEmail = validator.isEmail(email);
@@ -73,7 +74,7 @@ const postSingup = async (req, res) => {
     }
   } catch (error) {
     // res.render('signup',{error})
-    console.log(error,'error post signup')
+    console.log(error, "error post signup");
     res.status(509).json({ message: "Oops server error" });
   }
 };
@@ -93,33 +94,33 @@ const postVerify = async (req, res, next) => {
   try {
     let otp = req.body;
     if (req.session.otp && otp.otp == req.session.otp.otp) {
-      const { username, email, password,referralCode } = req.session.user;
-      if(referralCode){
-        const referredUser = await User.findOne({referralCode:referralCode})
-        if(!referredUser){
-          return res.status(400).json({message:'Invalid refferal code'})
+      const { username, email, password, referralCode } = req.session.user;
+      if (referralCode) {
+        const referredUser = await User.findOne({ referralCode: referralCode });
+        if (!referredUser) {
+          return res.status(400).json({ message: "Invalid refferal code" });
         }
-      await Wallet.create({userId:referredUser._id,balance:1000})
+        await Wallet.create({ userId: referredUser._id, balance: 1000 });
       }
-      const newReferralCode = generateReferralCode()
+      const newReferralCode = generateReferralCode();
       const user = await User.create({
         username: username.toLowerCase(),
         email: email.toLowerCase(),
-        referralCode:newReferralCode,
+        referralCode: newReferralCode,
         password: password,
       });
-	await Wallet.create({userId:user.id,balance:500})      
-      
+      await Wallet.create({ userId: user.id, balance: 500 });
+
       // let token = jwt.sign({username,email},process.env.SECRET_KEY)
       res.status(200).json({ message: "Succesfully Registered" });
       // res.redirect('/auth/login')
     } else {
       // throw new Error("Invalid otp");
-      console.log("req");
+
       return res.status(401).json({ message: "Invalid otp" });
     }
   } catch (error) {
-    console.log(error,'error creating user')
+    console.log(error, "error creating user");
     res.render("user/verify", { error });
   }
 };
@@ -161,7 +162,7 @@ const postLogin = async (req, res, next) => {
             .status(403)
             .json({ message: "Your account is temporarily Banned " });
         } else {
-	  username = user.username
+          username = user.username;
           let token = jwt.sign(
             { username, role: "user" },
             process.env.SECRET_KEY,
@@ -196,7 +197,7 @@ const postForgotPassword = async (req, res, next) => {
     if (user) {
       res.redirect("/auth/forgotVerify");
     } else {
-      res.render('user/forgot',{error:'invalid email'})
+      res.render("user/forgot", { error: "invalid email" });
     }
   } catch (err) {
     console.log(err);
@@ -264,7 +265,7 @@ const postResetPassword = async (req, res, next) => {
           { username: req.session.user.username },
           { $set: { password: password } }
         );
-        console.log("password changed");
+
         return res
           .status(200)
           .json({ success: true, message: "Password changed successfully" });

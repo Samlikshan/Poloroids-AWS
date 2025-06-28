@@ -164,10 +164,9 @@ const updateTotalAmount = (totalAmount) => {
   }
 };
 
-
 async function checkAddressAvailability(addressId) {
   try {
-    const response = await fetch(`/check-address/${addressId}`); // Replace with your API endpoint
+    const response = await fetch(`/check-address/${addressId}`);
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
@@ -184,11 +183,11 @@ const checkStockBeforeConfirm = async () => {
   try {
     // Fetch current cart items
     const cartResponse = await fetch("/cart/response");
-    if(!cartResponse.ok){
-            if(cartResponse.status == 403){
-                return window.location = '/auth/login'
-            }
-        }
+    if (!cartResponse.ok) {
+      if (cartResponse.status == 403) {
+        return (window.location = "/auth/login");
+      }
+    }
     const cart = await cartResponse.json();
 
     // Check each item in the cart for stock
@@ -237,14 +236,15 @@ document
     let addressData = null;
 
     if (selectedAddress) {
-
       // Retrieve the complete address details from the selected address
       const addressLabel = selectedAddress.closest(".address-option");
       const addressId = addressLabel.dataset.addressId;
-      
+
       const isAddressAvailable = await checkAddressAvailability(addressId);
       if (!isAddressAvailable) {
-        toastr.error("The selected address is no longer available. Please choose a different address.");
+        toastr.error(
+          "The selected address is no longer available. Please choose a different address."
+        );
         return; // Stop further execution
       }
 

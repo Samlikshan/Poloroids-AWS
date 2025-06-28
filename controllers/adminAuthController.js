@@ -37,7 +37,6 @@ const getResetPassword = async (req, res) => {
   let user = await Admin.findOne({ username: decoded.username });
 
   let otp = await generateOTP();
-  console.log(otp.otp);
 
   req.session.otp = otp.otp;
   await sendMail(user.email, otp.otp);
