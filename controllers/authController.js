@@ -164,7 +164,7 @@ const postLogin = async (req, res, next) => {
         } else {
           username = user.username;
           let token = jwt.sign(
-            { username, role: "user" },
+            { username, role: "user", userId: user._id },
             process.env.SECRET_KEY,
             { expiresIn: "1d" }
           );

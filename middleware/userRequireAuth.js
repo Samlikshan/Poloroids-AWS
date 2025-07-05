@@ -11,7 +11,9 @@ const userRequireAuth = async (req, res, next) => {
       // return res.status(401).json('token not found')
     } else {
       const decoded = jwt.verify(token, process.env.SECRET_KEY);
-
+      if (decoded) {
+        req.user = decoded;
+      }
       if (decoded.role == "user") {
         return next();
       } else if (decoded.role == "admin") {

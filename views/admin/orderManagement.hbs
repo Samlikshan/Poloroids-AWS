@@ -20,9 +20,9 @@
         {{#each items}}
         <tr>
             <td><a href="/admin/order/{{../_id}}/{{_id}}">{{../_id}}</a></td>
-            <td><a href="/admin/order/{{../_id}}">{{../address.firstName}}</a></td>
+            <td><a href="/admin/order/{{../_id}}/{{_id}}">{{../address.firstName}}</a></td>
             <td>{{formatDate ../createdAt}}</td>
-            <td><a href="/admin/order/{{_id}}">{{totalPrice}}</a></td>
+            <td><a href="/admin/order/{{../_id}}/{{_id}}">{{totalPrice}}</a></td>
             <td>
                 <div class="status-container">
                     <button class="status-btn {{status}}">{{status}}</button>

@@ -4,6 +4,9 @@ const {
   validateWebhookSignature,
 } = require("razorpay/dist/utils/razorpay-utils");
 
+const PaymentSession = require("../../models/paymentSession");
+const Cart = require("../../models/shoppingCartModel");
+
 const createOrder = async (req, res) => {
   try {
     const { totalAmount, finalPrice, currency, receipt, notes } = req.body;
@@ -14,6 +17,31 @@ const createOrder = async (req, res) => {
       notes,
     };
 
+    if (!req.user) {
+      return res
+        .status(401)
+        .json({ message: "User not found please login again." });
+    }
+    const cart = await Cart.findOne({ userId: req.user?.userId });
+
+    if (cart?.items && cart.items.length <= 0) {
+      return res.status(400).json({
+        message: "Cart Is empty",
+      });
+    }
+
+    const isPaymentSessionActive = await PaymentSession.findOne({
+      user: req.user?.userId,
+      status: "pending",
+    });
+
+    if (isPaymentSessionActive) {
+      return res.status(400).json({
+        message:
+          "Payment session active. Please try to finish pending payment session",
+      });
+    }
+
     const order = await razorpay.orders.create(options);
     const orders = readData();
     orders.push({
@@ -23,8 +51,14 @@ const createOrder = async (req, res) => {
       receipt: order.receipt,
       status: "created",
     });
+
     writeData(orders);
     res.json(order);
+
+    await PaymentSession.create({
+      rzr_order_id: order.id,
+      user: req.user?.userId,
+    });
   } catch (error) {
     if (error.statusCode == 400) {
       return res
@@ -39,7 +73,13 @@ const paymentSuccess = (req, res) => {
   res.render("user/successPage");
 };
 
-const verifyPayment = (req, res) => {
+const verifyPayment = async (req, res) => {
+  if (!req.user) {
+    return res
+      .status(401)
+      .json({ message: "User not found please login again." });
+  }
+
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
     req.body;
 
@@ -61,7 +101,16 @@ const verifyPayment = (req, res) => {
         order.payment_id = razorpay_payment_id;
         writeData(orders);
       }
-      console.log(orders, order, 1);
+
+      await PaymentSession.updateOne(
+        {
+          user: req.user.userId,
+          rzr_order_id: razorpay_order_id,
+          status: "pending",
+        },
+        { $set: { status: "completed" } }
+      );
+
       res.status(200).json({ status: "ok" });
       console.log("Payment verification successful");
     } else {

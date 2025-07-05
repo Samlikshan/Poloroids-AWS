@@ -4,9 +4,25 @@ const Brand = require("../models/brandModel");
 const Type = require("../models/typeModel");
 const Gear = require("../models/gearModel");
 
-const showProducts = async (req, res, next) => {
-  let products = await Product.find();
-  // console.log(products);
+const showProducts = async (req, res) => {
+  const searchQuery = req.query.q || "";
+  const isAjax = req.headers["x-requested-with"] === "fetch";
+
+  let query = {};
+  if (searchQuery) {
+    query = {
+      $or: [
+        { productName: { $regex: searchQuery, $options: "i" } },
+        { brand: { $regex: searchQuery, $options: "i" } },
+        { type: { $regex: searchQuery, $options: "i" } },
+      ],
+    };
+  }
+
+  const products = await Product.find(query).lean();
+  if (isAjax) {
+    return res.json({ products });
+  }
 
   res.render("admin/products", { products });
 };
@@ -124,16 +140,16 @@ const postAddProduct = async (req, res, next) => {
   }
 };
 
-const disableProduct = async (req, res, next) => {
-  let id = req.params.id;
-  let product = await Product.findById({ _id: id });
-  if (product.availability == true) {
-    await Product.updateOne({ _id: id }, { $set: { availability: false } });
-  } else {
-    await Product.updateOne({ _id: id }, { $set: { availability: true } });
+const toggleProductAvailability = async (req, res) => {
+  const id = req.params.id;
+  const { availability } = req.body;
+
+  try {
+    await Product.updateOne({ _id: id }, { $set: { availability } });
+    res.status(200).json({ message: "Updated successfully" });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to update" });
   }
-  // res.send('availabilty changed')
-  res.redirect("/admin/products");
 };
 
 module.exports = {
@@ -142,5 +158,5 @@ module.exports = {
   postEditProducts,
   getAddProduct,
   postAddProduct,
-  disableProduct,
+  toggleProductAvailability,
 };

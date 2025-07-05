@@ -17,7 +17,7 @@ const postLogin = async (req, res) => {
 
     if (password) {
       let token = jwt.sign(
-        { username, role: "admin" },
+        { username, role: "admin", userId: admin._id },
         process.env.SECRET_KEY,
         { expiresIn: "1d" }
       );

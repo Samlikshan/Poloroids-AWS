@@ -45,13 +45,16 @@
         </div>
         <div class="order-status">
 
-            {{!-- <span class="status-dot {{#if ../order.orderStatus}}{{../order.orderStatus}}{{else}}pending{{/if}}"></span> --}}
+            {{!-- <span
+                class="status-dot {{#if ../order.orderStatus}}{{../order.orderStatus}}{{else}}pending{{/if}}"></span>
+            --}}
             {{#if (eq status 'pending')}}
-            <button class="order-status" data-order-id="{{../order._id}}"
+            <button class="cancel-button" data-order-id="{{../order._id}}"
                 data-order-items-productId="{{productId}}">Cancel</button>
             {{/if}}
             {{#if (and (eq status 'delivered') (eq returnStatus 'none'))}}
-            <button class="order-status" data-order-id="{{../order._id}}" data-order-itemId="{{_id}}">Return</button>
+            <button class="request-return-button" data-order-id="{{../order._id}}"
+                data-order-itemId="{{_id}}">Return</button>
             {{/if}}
 
             {{#if ../order.updatedAt}}
@@ -123,22 +126,6 @@
         // Format date
 
 
-        // Update status dots
-        document.querySelectorAll('.order-status').forEach(statusElement => {
-            const statusDot = statusElement.querySelector('.status-dot');
-            const statusText = statusElement.querySelector('span').textContent.trim().toLowerCase();
-            // Remove all status classes first
-            statusDot.classList.remove('delivered', 'pending', 'cancelled');
-
-            // Apply the appropriate status class
-            if (statusText === 'delivered') {
-                statusDot.classList.add('delivered');
-            } else if (statusText === 'pending') {
-                statusDot.classList.add('pending');
-            } else if (statusText === 'cancelled') {
-                statusDot.classList.add('cancelled');
-            }
-        });
 
         // Handle return button click
         document.querySelectorAll('.return-button').forEach(button => {

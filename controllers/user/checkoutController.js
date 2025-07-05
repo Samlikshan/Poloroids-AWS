@@ -5,6 +5,7 @@ const Order = require("../../models/orderModel");
 const jwt = require("jsonwebtoken");
 const Offer = require("../../models/offerModel");
 const Wallet = require("../../models/walletModel");
+const PaymentSession = require("../../models/paymentSession");
 
 const viewCheckout = async (req, res) => {
   let coupon;
@@ -230,6 +231,7 @@ const failedPayment = async (req, res) => {
   if (!token) {
     return res.redirect("/auth/login");
   }
+
   const decoded = jwt.verify(token, process.env.SECRET_KEY);
   const user = await User.findOne({ username: decoded.username });
 
@@ -256,6 +258,26 @@ const failedPayment = async (req, res) => {
       });
     }
   }
+
+  if (req.body.rzr_order_id) {
+    await PaymentSession.updateOne(
+      {
+        user: user._id,
+        rzr_order_id: req.body.rzr_order_id,
+        status: "pending",
+      },
+      { $set: { status: "failed" } }
+    );
+  } else {
+    await PaymentSession.updateOne(
+      {
+        user: user._id,
+        status: "pending",
+      },
+      { $set: { status: "failed" } }
+    );
+  }
+
   await Cart.updateOne({ userId: user._id }, { $set: { items: [] } });
   const latestOrder = await order.save();
   return res.status(400).json({ message: "Payment failed" });

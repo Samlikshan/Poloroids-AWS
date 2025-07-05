@@ -1,4 +1,4 @@
-const generateReferralCode = require('../services/referralCode')
+const generateReferralCode = require("../services/referralCode");
 
 let express = require("express");
 let router = express.Router();
@@ -35,7 +35,6 @@ router.get(
   passport.authenticate("google", { failureRedirect: "/" }),
   async (req, res) => {
     // Successful authentication, generate JWT
-    // console.log(req.user);
 
     let { displayName, email, id } = req.user;
     let user = await User.findOne({
@@ -44,11 +43,16 @@ router.get(
     // console.log(user,"user");
 
     if (!user) {
-      const referralCode = generateReferralCode()
-      await User.create({ googleId: id, username: displayName, referralCode:referralCode, email: email });
+      const referralCode = generateReferralCode();
+      await User.create({
+        googleId: id,
+        username: displayName,
+        referralCode: referralCode,
+        email: email,
+      });
       let username = displayName;
       const token = jwt.sign(
-        { id, username, email, role: "user" },
+        { id, username, email, role: "user", userId: user._id },
         process.env.SECRET_KEY,
         { expiresIn: "1d" }
       );
@@ -57,9 +61,9 @@ router.get(
       res.redirect("/");
     } else if (user) {
       if (user.isActive == true) {
-        let { googleId, username, email } = user;
+        let { googleId, username, email, _id } = user;
         const token = jwt.sign(
-          { googleId, username, email,role:'user' },
+          { googleId, username, email, role: "user", userId: _id },
           process.env.SECRET_KEY,
           { expiresIn: "1d" }
         );
@@ -88,8 +92,7 @@ router.get("/forgotVerify", getForgotPasswordVerification);
 router.post("/forgotVerify", postForgotPasswordVerification);
 router.get("/resetPassword", getResetPassword);
 router.post("/resetPassword", postResetPassword);
-router.get('/previous-password',getpreviousPassword)
-router.post('/previous-password',postpreviousPassword)
-
+router.get("/previous-password", getpreviousPassword);
+router.post("/previous-password", postpreviousPassword);
 
 module.exports = router;

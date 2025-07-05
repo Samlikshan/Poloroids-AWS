@@ -14,15 +14,16 @@ const {
   paymentSuccess,
   verifyPayment,
 } = require("../controllers/user/paymentController");
+const userRequireAuth = require("../middleware/userRequireAuth");
 
 router.get("/checkout", viewCheckout);
-router.post("/chekout", postCheckout);
+router.post("/chekout", userRequireAuth, postCheckout);
 router.post("/order-wallet", checkWallet);
-router.get("/success", successPage);
-router.post("/failed-payment", failedPayment);
-router.post("/retry-payment", retryPayment);
+router.get("/success", userRequireAuth, successPage);
+router.post("/failed-payment", userRequireAuth, failedPayment);
+router.post("/retry-payment", userRequireAuth, retryPayment);
 router.get("/failed", failedPage);
-router.post("/create-order", createOrder);
-router.post("/verify-payment", verifyPayment);
+router.post("/create-order", userRequireAuth, createOrder);
+router.post("/verify-payment", userRequireAuth, verifyPayment);
 // router.get('/success',createOrder)
 module.exports = router;

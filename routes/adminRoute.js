@@ -14,7 +14,7 @@ const {
 } = require("../controllers/salesReportController");
 const {
   listUsers,
-  blockUser,
+  toggleUserStatus,
   userDetails,
 } = require("../controllers/userController");
 const {
@@ -29,7 +29,7 @@ const {
   postEditProducts,
   getAddProduct,
   postAddProduct,
-  disableProduct,
+  toggleProductAvailability,
 } = require("../controllers/productController");
 const {
   getLogin,
@@ -88,7 +88,7 @@ router.get("/excelReport", generateExcelReport);
 
 //users management
 router.get("/users", listUsers);
-router.get("/users/:id", blockUser);
+router.patch("/users/:id/toggle", toggleUserStatus);
 router.get("/users/:id", userDetails);
 
 //Category Management
@@ -113,6 +113,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.get("/products", showProducts);
+router.patch("/products/:id/toggle", toggleProductAvailability);
+
 router.get("/add-product", getAddProduct);
 router.post(
   "/add-product",
@@ -134,7 +136,6 @@ router.post(
   ]),
   postEditProducts
 );
-router.get("/disable-product/:id", disableProduct);
 
 //order Management
 router.get("/orders", viewOrder);

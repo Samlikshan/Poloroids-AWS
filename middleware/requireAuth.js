@@ -10,10 +10,10 @@ const requireAuth = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
-
+    if (decoded) {
+      req.user = decoded;
+    }
     if (decoded.role == "admin") {
-      // console.log(decoded);
-
       next();
     } else if (decoded.role == "user") {
       res.redirect("/");

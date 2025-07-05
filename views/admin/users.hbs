@@ -12,27 +12,27 @@
             <th>User ID</th>
             <th>Username</th>
             <th>Email Address</th>
-            <th>Order count</th>
             <th>Status</th>
             <th>Change Status</th>
         </tr>
     </thead>
     <tbody>
         {{#each users}}
-        <tr>
-            <td><a href="user-details.html?id=1">01</a></td>
-            <td><a href="user-details.html?id=1">{{username}}</a></td>
-            <td><a href="mailto:name@gmail.com">{{email}}</a></td>
-            <td><a href="order-history.html?id=1">01</a></td>
-            <td><a href="user-details.html?id=1" class="status">{{#if isActive}}Active{{else}}Inactive{{/if}}
-                    </a></td>
-            <td><a href="/admin/users/{{_id}}"><button class="status-btn" data-status="{{isActive}}">
-        {{#if isActive}}Deactivate{{else}}Activate{{/if}}
-    </button></a></td>
+        <tr data-username="{{username}}" data-email="{{email}}">
+            <td><a href="/admin/users/{{_id}}">{{_id}}</a></td>
+            <td><a href="/admin/users/{{_id}}">{{username}}</a></td>
+            <td><a href="mailto:{{email}}">{{email}}</a></td>
+            {{!-- <td><a href="/admin/orders/{{_id}}">{{orderCount}}</a></td> --}}
+            <td class="status-text">{{#if isActive}}Active{{else}}Inactive{{/if}}</td>
+            <td>
+                <button class="status-btn" data-id="{{_id}}" data-status="{{isActive}}">
+                    {{#if isActive}}Deactivate{{else}}Activate{{/if}}
+                </button>
+            </td>
         </tr>
         {{/each}}
-
     </tbody>
+
 </table>
 
 <script src="/javascripts/admin/users.js"></script>

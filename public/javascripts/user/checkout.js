@@ -303,6 +303,8 @@ document
     const products = [];
     let totalAmount = 0;
 
+    let rzr_order_id = null;
+
     document.querySelectorAll(".cart-item").forEach((item) => {
       const productId = item.dataset.productId; // Ensure to include data-product-id in HTML
       const productName = item.querySelector(".product-name").textContent;
@@ -363,6 +365,7 @@ document
           color: "#F37254",
         },
         handler: function (response) {
+          rzr_order_id = response.razorpay_order_id;
           fetch("/verify-payment", {
             method: "POST",
             headers: {
@@ -460,6 +463,7 @@ document
         finalPrice: finalPrice,
         paymentStatus: "failed ",
         paymentMethod: paymentMethod.value,
+        rzr_order_id: rzr_order_id,
       };
       try {
         const response = await fetch("/failed-payment", {
