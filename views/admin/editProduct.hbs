@@ -9,12 +9,12 @@
             {{!-- <h2>Description</h2> --}}
             <div class="form-group">
                 <label for="productName">Product Name</label>
-                <input type="text" id="productName" value="{{product.productName}}" name="productName" >
+                <input type="text" id="productName" value="{{product.productName}}" name="productName">
             </div>
 
             <div class="form-group">
                 <label for="description">Product Description</label>
-                <textarea id="description" name="productDescription" >{{product.productDescription}}</textarea>
+                <textarea id="description" name="productDescription">{{product.productDescription}}</textarea>
             </div>
         </div>
 
@@ -67,7 +67,7 @@
         <div class="section">
             <h2>Price</h2>
             <div class="form-group">
-                <input type="number" name="price" value="{{product.price}}" >
+                <input type="number" name="price" value="{{product.price}}">
             </div>
         </div>
 
@@ -89,25 +89,27 @@
             <div class="image-upload-grid">
                 <div class="image-upload-group">
                     <label for="imageUpload1" class="image-upload-label">
-                        <img src="/images/products/{{product.mainImage}}" alt="Upload Image">
+                        <img id="mainImagePreview" src="/images/products/{{product.mainImage}}"
+                            alt="Main Image Preview">
                         <span>Main Image</span>
                     </label>
-                    {{!-- <input type="hidden" name="productImage" value="/images/products/{{product.productImages.[0]}}"> --}}
-                    <input type="file" id="imageUpload1" name="mainImage" style="display: none;" accept="image/jpeg, image/png">
+                    <input type="file" id="imageUpload1" name="mainImage" style="display: none;"
+                        accept="image/jpeg, image/png">
                 </div>
+
                 {{#each product.additionalImages}}
                 <div class="image-upload-group">
-                    <label for="imageUpload2" class="image-upload-label">
-                        <img src="/images/products/{{this}}" alt="Upload Image">
-                        {{!-- <span>Upload Image</span> --}}
+                    <label class="image-upload-label">
+                        <img class="additional-preview" data-index="{{@index}}" src="/images/products/{{this}}" />
                     </label>
-                    {{!-- <input type="hidden" name="productImage" value="/images/products/{{product.productImages.[1]}}"> --}}
-                    {{!-- <input type="file" id="imageUpload2" style="display: none;" name="replaceImage{{@index}}">
-                    --}}
-                    <input type="checkbox" name="deleteImage{{@index}}"> Delete this image
-                    <input type="file" name="replaceImage{{@index}}" accept="image/jpeg, image/png">
+
+                    <input type="checkbox" name="deleteImage{{@index}}" />
+                    <input type="file" name="replaceImage{{@index}}" class="replace-image" data-index="{{@index}}"
+                        accept="image/jpeg, image/png" />
                 </div>
                 {{/each}}
+
+
                 <div>
                     <label for="newAdditionalImages">Add New Additional Images:</label>
                     <input type="file" name="newAdditionalImages" id="newAdditionalImages" multiple>
@@ -138,5 +140,23 @@
         </div>
     </form>
 </div>
+<!-- Cropper Modal -->
+<div id="cropperModal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:9999;">
+    <div style="background:white; padding:20px; border-radius:10px; max-width:90%; max-height:90%;">
+        <h3>Crop Image</h3>
+        <div>
+            <img id="imageToCrop" style="max-width:100%; max-height:60vh;" />
+        </div>
+        <div style="margin-top:15px;">
+            <button id="cropBtn">Crop</button>
+            <button onclick="closeCropper()">Cancel</button>
+        </div>
+    </div>
+</div>
+{{!--
+<link href="https://unpkg.com/cropperjs/dist/cropper.min.css" rel="stylesheet" /> --}}
+{{!--
+<script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script> --}}
 
 <script src="/javascripts/admin/editProduct.js"></script>

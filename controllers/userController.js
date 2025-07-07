@@ -15,7 +15,7 @@ const listUsers = async (req, res) => {
     };
   }
 
-  const users = await User.find(query).lean();
+  const users = await User.find(query).lean().select('_id username email isActive');
 
   if (isAjax) {
     return res.json({ users });

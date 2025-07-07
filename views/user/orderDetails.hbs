@@ -237,10 +237,16 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ finalPrice, currency: 'INR', receipt: 'receipt#1', notes: {} })
+                body: JSON.stringify({ finalPrice, currency: 'INR', receipt: 'receipt#1', notes: {}, isRetry: true })
             });
 
+
             const order = await response.json();
+
+            if (response.status != 200) {
+                toastr.error(order.message)
+                return
+            }
 
             // Open Razorpay Checkout
             const options = {
@@ -277,6 +283,7 @@
                                 // window.location.href = '/success';
                                 retryPayment("paid");
                             } else {
+
                                 toastr.error("Payment verification failed");
                             }
                         })

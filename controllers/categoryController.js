@@ -14,33 +14,28 @@ const categories = async (req, res, next) => {
 };
 
 const changeCategoryStatus = async (req, res) => {
-  if (req.body.categoryType == "Brand") {
-    let category = await Brand.findById({ _id: req.body.id });
-    if (category.isActive) {
-      await Brand.updateOne(
-        { _id: req.body.id },
-        { $set: { isActive: false } }
-      );
-    } else {
-      await Brand.updateOne({ _id: req.body.id }, { $set: { isActive: true } });
-    }
-  }
-  if (req.body.categoryType == "Type") {
-    let category = await Type.findById({ _id: req.body.id });
-    if (category.isActive) {
-      await Type.updateOne({ _id: req.body.id }, { $set: { isActive: false } });
-    } else {
-      await Type.updateOne({ _id: req.body.id }, { $set: { isActive: true } });
-    }
-  }
-  if (req.body.categoryType == "Gear") {
-    let category = await Gear.findById({ _id: req.body.id });
-    if (category.isActive) {
-      await Gear.updateOne({ _id: req.body.id }, { $set: { isActive: false } });
-    } else {
-      await Gear.updateOne({ _id: req.body.id }, { $set: { isActive: true } });
-    }
-  }
+  let Model;
+  if (req.body.categoryType == "Brand") Model = Brand;
+  else if (req.body.categoryType == "Type") Model = Type;
+  else if (req.body.categoryType == "Gear") Model = Gear;
+  else
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid categoryType" });
+
+  const category = await Model.findById({ _id: req.body.id });
+  if (!category)
+    return res
+      .status(404)
+      .json({ success: false, message: "Category not found" });
+
+  const newStatus = !category.isActive;
+  await Model.updateOne(
+    { _id: req.body.id },
+    { $set: { isActive: newStatus } }
+  );
+
+  res.status(200).json({ success: true, newStatus });
 };
 
 // const getEditCategories = async (req,res,next) => {
@@ -71,67 +66,30 @@ const changeCategoryStatus = async (req, res) => {
 //     await Category.create({categoryName:category.categoryName,subCategories:category.subCategories})
 //     res.redirect('/admin/categories')
 // }
-
 const addCategory = async (req, res) => {
   try {
     const { categoryType, categories } = req.body;
-
-    if (!categoryType || !categories) {
+    if (!categoryType || !Array.isArray(categories)) {
       return res.status(400).send("Invalid data");
     }
 
-    if (categoryType === "Brand") {
-      // Validate categories data
-      if (!Array.isArray(categories)) {
-        return res.status(400).send("Categories must be an array");
-      }
+    let Model;
+    if (categoryType === "Brand") Model = Brand;
+    else if (categoryType === "Type") Model = Type;
+    else if (categoryType === "Gear") Model = Gear;
+    else return res.status(400).send("Invalid category type");
 
-      // Check for duplicate entries
-      const existingBrands = await Brand.find({
-        categoryName: { $in: categories.map((cat) => cat.categoryName) },
-      });
-      if (existingBrands.length > 0) {
-        return res.status(409).json({ message: "category already exist" });
-      }
-
-      // Insert categories
-      await Brand.insertMany(categories);
-      res.status(201).json("Categories added successfully");
-    } else if (categoryType === "Type") {
-      // Handle Type categories
-      if (!Array.isArray(categories)) {
-        return res.status(400).send("Categories must be an array");
-      }
-
-      // Check for duplicate entries
-      const existingBrands = await Type.find({
-        categoryName: { $in: categories.map((cat) => cat.categoryName) },
-      });
-      if (existingBrands.length > 0) {
-        return res.status(409).json({ message: "category already exist" });
-      }
-
-      // Insert categories
-      await Type.insertMany(categories);
-      res.status(201).json("Categories added successfully");
-    } else {
-      // Handle Gear categories
-      if (!Array.isArray(categories)) {
-        return res.status(400).json("Categories must be an array");
-      }
-
-      // Check for duplicate entries
-      const existingBrands = await Gear.find({
-        categoryName: { $in: categories.map((cat) => cat.categoryName) },
-      });
-      if (existingBrands.length > 0) {
-        return res.status(409).json({ message: "category already exist" });
-      }
-
-      // Insert categories
-      await Gear.insertMany(categories);
-      res.status(201).json("Categories added successfully");
+    // Check for duplicates
+    const existing = await Model.find({
+      categoryName: { $in: categories.map((c) => c.categoryName) },
+    });
+    if (existing.length > 0) {
+      return res.status(409).json({ message: "category already exist" });
     }
+
+    // Insert
+    const inserted = await Model.insertMany(categories);
+    res.status(201).json({ success: true, newCategories: inserted });
   } catch (error) {
     console.error("Error adding category:", error);
     res.status(500).send("Server error");
@@ -165,7 +123,10 @@ const editCategory = async (req, res) => {
       // Update the category
       existingBrand.categoryName = categoryName;
       await existingBrand.save();
-      return res.status(200).json({ message: "Category updated successfully" });
+      // return res.status(200).json({ message: "Category updated successfully" });
+      return res
+        .status(200)
+        .json({ success: true, updatedCategory: existingBrand });
     } else if (categoryType === "Type") {
       // Handle Type categories
       const existingType = await Type.findById(id);
@@ -185,7 +146,11 @@ const editCategory = async (req, res) => {
       // Update the category
       existingType.categoryName = categoryName;
       await existingType.save();
-      return res.status(200).json("Category updated successfully");
+      return res
+        .status(200)
+        .json({ success: true, updatedCategory: existingBrand });
+
+      // return res.status(200).json("Category updated successfully");
     } else if (categoryType === "Gear") {
       // Handle Gear categories
       const existingGear = await Gear.findById(id);

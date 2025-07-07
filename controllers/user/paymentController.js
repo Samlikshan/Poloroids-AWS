@@ -9,7 +9,14 @@ const Cart = require("../../models/shoppingCartModel");
 
 const createOrder = async (req, res) => {
   try {
-    const { totalAmount, finalPrice, currency, receipt, notes } = req.body;
+    const {
+      totalAmount,
+      finalPrice,
+      currency,
+      receipt,
+      notes,
+      isRetry = false,
+    } = req.body;
     const options = {
       amount: finalPrice * 100, // Convert amount to paise
       currency,
@@ -23,8 +30,11 @@ const createOrder = async (req, res) => {
         .json({ message: "User not found please login again." });
     }
     const cart = await Cart.findOne({ userId: req.user?.userId });
-
-    if (cart?.items && cart.items.length <= 0) {
+    if (!isRetry && !cart?.items && cart.items.length <= 0) {
+      return res.status(400).json({
+        message: "Cart Is empty",
+      });
+    } else if (!isRetry && cart.items.length <= 0) {
       return res.status(400).json({
         message: "Cart Is empty",
       });
